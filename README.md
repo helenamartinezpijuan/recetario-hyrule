@@ -5,6 +5,8 @@
 [![Estado del proyecto](https://img.shields.io/badge/estado-en%20desarrollo-yellow)]()
 [![PHP](https://img.shields.io/badge/PHP-8.x-777BB4)]()
 
+![logo diseñado a partir de la propiedad intelectual de Nintendo. Muestra un círculo rodeado por el título "Recetario de Hyrule" y en el interior un tocón de arbol rodeado de comida. Debajo del logo hay una cara chibi de Link diciendo: "We need to cook, Zelda": ](app-recetario-hyrule/resources/img/logo-draft-1.png)
+
 ## 📖 Índice
 
 - [Acerca del proyecto](#acerca-del-proyecto)
