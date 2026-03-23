@@ -199,9 +199,10 @@ La base de datos está diseñada para reflejar las relaciones del juego:
 ## 📄 Licencia
 
 Este proyecto es de código abierto bajo la licencia **CC BY-NC-SA**.
-<a href="recetario-hyrule.infinityfreeapp.com">Recetario Hyrule</a> © 2026 by <a href="github.com/helenamartinezpijuan">Helena Martinez Pijuan</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
 
 **Nota sobre propiedad intelectual**: Todo el contenido relacionado con *The Legend of Zelda* (nombres, imágenes, conceptos) pertenece a **Nintendo**. Este proyecto es un **trabajo educativo** sin ánimo de lucro, creado con fines de aprendizaje y como homenaje a la comunidad de jugadores.
+
+<br><a href="recetario-hyrule.infinityfreeapp.com">Recetario Hyrule</a> © 2026 by <a href="github.com/helenamartinezpijuan">Helena Martinez Pijuan</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
 
 ---
 
