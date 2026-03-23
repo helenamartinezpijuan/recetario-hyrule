@@ -1,0 +1,31 @@
+body, h1, h2, p {
+    font-family: OpenDyslexic, sans-serif;
+}
+
+@font-face {
+    font-family: OpenDyslexic;
+    src: url('../resources/fonts/OpenDyslexic/OpenDyslexic-Regular.otf') format('otf'),
+         url('../resource/fonts/OpenDyslexic/__MACOSX/._OpenDyslexic-Regular.oft') format('otf');
+}
+
+@font-face {
+    font-family: OpenDyslexic;
+    src: url('../resources/fonts/OpenDyslexic/OpenDyslexic-Bold.otf') format('otf'),
+         url('../resource/fonts/OpenDyslexic/__MACOSX/._OpenDyslexic-Bold.oft') format('otf');
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: OpenDyslexic;
+    src: url('../resources/fonts/OpenDyslexic/OpenDyslexic-Italic.otf') format('otf'),
+         url('../resource/fonts/OpenDyslexic/__MACOSX/._OpenDyslexic-Italic.oft') format('otf');
+    font-style: italic;
+}
+
+@font-face {
+    font-family: OpenDyslexic;
+    src: url('../resources/fonts/OpenDyslexic/OpenDyslexic-BoldItalic.otf') format('otf'),
+         url('../resource/fonts/OpenDyslexic/__MACOSX/._OpenDyslexic-BoldItalic.oft') format('otf');
+    font-weight: 700;
+    font-style: italic;
+}
