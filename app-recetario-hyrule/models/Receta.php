@@ -15,7 +15,7 @@ class Receta {
    ***************/
 
   /**
-   * Constructor de la clase Cliente
+   * Constructor de la clase Receta
    * @param int $id_receta Identificador único (clave primaria) de la receta
    * @param string $nombre Nombre de la receta
    * @param string $imagen Ruta a la imagen de la receta

@@ -16,7 +16,7 @@ class Localizacion {
    ***************/
 
   /**
-   * Constructor de la clase Cliente
+   * Constructor de la clase Localizacion
    * @param int $id_localizacion Identificador único (clave primaria) de la localización
    * @param string $nombre Nombre de la localización
    * @param string $imagen Ruta a la imagen de la localización

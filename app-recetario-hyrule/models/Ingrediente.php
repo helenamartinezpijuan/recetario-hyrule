@@ -15,7 +15,7 @@ class Ingrediente {
    ***************/
 
   /**
-   * Constructor de la clase Cliente
+   * Constructor de la clase Ingrediente
    * @param int $id_ingrediente Identificador único (clave primaria) del ingrediente
    * @param string $nombre Nombre del ingrediente
    * @param string $imagen Ruta a la imagen del ingrediente
