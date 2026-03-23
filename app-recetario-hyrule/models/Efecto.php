@@ -1,13 +1,12 @@
 <?php 
 namespace models;
 
-/**
- * La clase Efecto almacena todos los atributos de las tablas 'efectos' y 'tipos_efectos' de la base de datos
+/** 
+ * La clase Efecto almacena todos los atributos de la tabla 'efectos' de la base de datos
  */
 class Efecto {
   protected $id_efecto;
-  protected $id_tipo_efecto;
-  protected $nombre;
+  protected $tipo_efecto;
   protected $descripcion;
 
   /***************
@@ -17,14 +16,12 @@ class Efecto {
   /**
    * Constructor de la clase Efecto
    * @param int $id_efecto Identificador único (clave primaria) del efecto
-   * @param int $id_tipo_efecto Identificador único (clave primaria) del tipo de efecto
-   * @param string $nombre Nombre del efecto
+   * @param TipoEfecto $tipo_efecto Nombre del efecto
    * @param string $descripcion Breve descripción del efecto
    */
-  public function __construct($id_efecto, $id_tipo_efecto, $nombre, $descripcion) {
+  public function __construct($id_efecto, TipoEfecto $tipo_efecto, $descripcion) {
     $this->setIdEfecto($id_efecto);
-    $this->setIdTipoEfecto($id_tipo_efecto);
-    $this->setNombre($nombre);
+    $this->setTipoEfecto($tipo_efecto);
     $this->setDescripcion($descripcion);
   }
 
@@ -40,18 +37,11 @@ class Efecto {
     return $this->id_efecto;
   }
   /**
-   * Función que devuelve el ID del tipo de efecto
-   * @return int
+   * Función que devuelve el tipo del efecto
+   * @return TipoEfecto
    */
-  public function getIdTipoEfecto(): int {
-    return $this->id_tipo_efecto;
-  }
-  /**
-   * Función que devuelve el nombre del efecto
-   * @return string
-   */
-  public function getNombre(): string {
-    return $this->nombre;
+  public function getTipoEfecto(): TipoEfecto {
+    return $this->tipo_efecto;
   }
    /**
    * Función que devuelve la descripción del efecto
@@ -74,18 +64,11 @@ class Efecto {
     $this->id_efecto = $id_efecto;
   }
   /**
-   * Función que asigna el ID al tipo de efecto
-   * @param int $id_tipo_efecto
+   * Función que asigna el tipo al efecto
+   * @param TipoEfecto $tipo_efecto
    */
-  protected function setIdTipoEfecto($id_tipo_efecto): void {
-    $this->id_tipo_efecto = $id_tipo_efecto;
-  }
-  /**
-   * Función que asigna el nombre al efecto
-   * @param string $nombre
-   */
-  protected function setNombre($nombre): void {
-      $this->nombre = $nombre;
+  protected function setTipoEfecto($tipo_efecto): void {
+      $this->tipo_efecto = $tipo_efecto;
   }
   /**
    * Función que asigna la descripción del efecto

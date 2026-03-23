@@ -1,31 +1,95 @@
-body, h1, h2, p {
-    font-family: OpenDyslexic, sans-serif;
+.openDyslexic {
+    font-family: 'OpenDyslexic';
+}
+.permanentMarker {
+    font-family: 'PermanentMarker';
+}
+.patrickHand {
+    font-family: 'PatrickHand';
+}
+.lexend {
+    font-family: 'Lexend';
+}
+.datatype {
+    font-family: 'Datatype';
+}
+.amaticSC {
+    font-family: 'AmaticSC';
 }
 
-@font-face {
-    font-family: OpenDyslexic;
-    src: url('../resources/fonts/OpenDyslexic/OpenDyslexic-Regular.otf') format('otf'),
-         url('../resource/fonts/OpenDyslexic/__MACOSX/._OpenDyslexic-Regular.oft') format('otf');
-}
 
-@font-face {
-    font-family: OpenDyslexic;
-    src: url('../resources/fonts/OpenDyslexic/OpenDyslexic-Bold.otf') format('otf'),
-         url('../resource/fonts/OpenDyslexic/__MACOSX/._OpenDyslexic-Bold.oft') format('otf');
-    font-weight: 700;
-}
+/********
+* FONTS *
+*********/
 
+/* Open Dyslexic - REGULAR */
 @font-face {
-    font-family: OpenDyslexic;
-    src: url('../resources/fonts/OpenDyslexic/OpenDyslexic-Italic.otf') format('otf'),
-         url('../resource/fonts/OpenDyslexic/__MACOSX/._OpenDyslexic-Italic.oft') format('otf');
+    font-family: 'OpenDyslexic';
+    src: url('../resources/fonts/OpenDyslexic/OpenDyslexic-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+/* Open Dyslexic - BOLD */
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('../resources/fonts/OpenDyslexic/OpenDyslexic-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+/* Open Dyslexic - ITALIC */
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('../resources/fonts/OpenDyslexic/OpenDyslexic-Italic.otf') format('opentype');
+    font-weight: normal;
+    font-style: italic;
+}
+/* Open Dyslexic - BOLD ITALIC */
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('../resources/fonts/OpenDyslexic/OpenDyslexic-BoldItalic.otf') format('opentype');
+    font-weight: bold;
     font-style: italic;
 }
 
+/* Permanent Marker - REGULAR */
 @font-face {
-    font-family: OpenDyslexic;
-    src: url('../resources/fonts/OpenDyslexic/OpenDyslexic-BoldItalic.otf') format('otf'),
-         url('../resource/fonts/OpenDyslexic/__MACOSX/._OpenDyslexic-BoldItalic.oft') format('otf');
-    font-weight: 700;
-    font-style: italic;
+    font-family: 'PermanentMarker';
+    src: url('../resources/fonts/Permanent_Marker/PermanentMarker-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Patrick Hand - REGULAR */
+@font-face {
+    font-family: 'PatrickHand';
+    src: url('../resources/fonts/Patrick_Hand/PatrickHand-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Lexend - [Variable] */
+@font-face {
+    font-family: 'Lexend';
+    src: url('../resources/fonts/Lexend/Lexend-VariableFont_wght.ttf') format('truetype');
+}
+
+/* Datatype - [Variable] */
+@font-face {
+    font-family: 'Datatype';
+    src: url('../resources/fonts/Datatype/Datatype-VariableFont_wdth,wght.ttf') format('truetype');
+}
+
+/* Amatic SC - REGULAR */
+@font-face {
+    font-family: 'AmaticSC';
+    src: url('../resources/fonts/Amatic_SC/AmaticSC-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+/* Amatic SC - BOLD */
+@font-face {
+    font-family: 'AmaticSC';
+    src: url('../resources/fonts/Amatic_SC/AmaticSC-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
 }
