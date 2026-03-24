@@ -18,9 +18,8 @@ class RecetaService {
      */
     private const DATA_PATH = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'clientes' . DIRECTORY_SEPARATOR;
 
-    public function prepararFiltrosBusqueda($dni, $nombre, $direccion, $numCuenta): array {
+    public function prepararFiltrosBusqueda($ingredientes, $efectos): array {
         $filtros = [];
-        if (!empty($dni)) $filtros['dni'] = '%' . $dni . '%';
         if (!empty($nombre)) $filtros['nombre'] = '%' . $nombre . '%';
         if (!empty($direccion)) $filtros['direccion'] = '%' . $direccion . '%';
         if (!empty($numCuenta)) $filtros['num_cuenta'] = '%' . $numCuenta . '%';
