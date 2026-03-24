@@ -3,6 +3,7 @@
     <?php 
     // Definir página activa para el header
     $activePage = 'recetas';
+    $titulo = 'Recetas';
     include __DIR__ . '/../layout/header.php';
     ?>
     
