@@ -2,11 +2,11 @@
 
 namespace repositories;
 
-use models\Cliente;
+use models\Inventario;
 use Exception;
 
 /**
- * La clase ClienteRepository se encarga de manejar la lógica de las consultas SQL para la tabla 'clientes' de la base de datos. Por norma general, las funciones siguen el siguiente orden lógico:
+ * La clase RecetaRepository se encarga de manejar la lógica de las consultas SQL para la tabla 'recetas' de la base de datos. Por norma general, las funciones siguen el siguiente orden lógico:
  *  1. VALIDAR los parámetros de la función
  *  2. OBTENER CONEXIÓN a la base de datos
  *  3. CONSTRUIR CONSULTA SQL
@@ -14,21 +14,20 @@ use Exception;
  *  5. VINCULAR PARÁMETROS a la consulta parametrizada
  *  6. EJECUTAR CONSULTA con manejo de errores
  *  7. OBTENER RESULTADOS o VERIFICAR MODIFICACIÓN
- *  8. CREAR nuevo objeto (o array de objetos) Cliente
+ *  8. CREAR nuevo objeto (o array de objetos) Receta
  *  9. LIMPIEZA de la conexión
  */
-class ClienteRepository extends BaseRepository {
+class InventarioRepository extends BaseRepository {
 
     /**
-     * El array COLUMNAS_PERMITIDAS especifica las columnas existentes en la tabla 'clientes' de la base de datos
-     * @var array Strings con los nombres de las columnas de la tabla 'clientes'
+     * El array COLUMNAS_PERMITIDAS especifica las columnas existentes en la tabla 'recetas' de la base de datos
+     * @var array Strings con los nombres de las columnas de la tabla 'recetas'
      */
     public const COLUMNAS_PERMITIDAS = [
-        'id_cliente', 
-        'dni', 
+        'id_receta', 
         'nombre', 
-        'direccion_postal', 
-        'num_cuenta'
+        'imagen', 
+        'descripcion'
     ];
 
 
@@ -36,10 +35,10 @@ class ClienteRepository extends BaseRepository {
      * BUSCAR - Consulta SELECT sin WHERE *
      **************************************/
     /**
-     * Buscar clientes sin aplicar filtros
+     * Buscar recetas sin aplicar filtros
      * @param string $orden Columna de la tabla de la base de datos por la que ordenar el resultado de la consulta
      * @throws Exception Si hay error en la consultas
-     * @return Cliente[] Array de objetos Cliente
+     * @return Receta[] Array de objetos Receta
      */
     public function obtenerTodos(string $orden = 'nombre'): array {
         // 1. VALIDAR parámetros de entrada
@@ -51,59 +50,58 @@ class ClienteRepository extends BaseRepository {
         $conn = $this->getConnection();
 
         // 3. CONSTRUIR CONSULTA
-        $sql = "SELECT id_cliente, dni, nombre, direccion_postal, num_cuenta FROM clientes ORDER BY $orden";
+        $sql = "SELECT id_receta, nombre, imagen, descripcion FROM recetas ORDER BY $orden";
 
         // 4. EJECUTAR CONSULTA con manejo de errores
         $resultado = $conn->query($sql);
-        if (!$resultado) { $this->handleError($conn, "consultando todos los clientes"); }
+        if (!$resultado) { $this->handleError($conn, "consultando todas las recetas"); }
 
         // 5. OBTENER RESULTADOS
-        $clientes = [];
+        $recetas = [];
 
-        // 6. CREAR objeto Cliente
+        // 6. CREAR objeto Receta
         while ($registro = $resultado->fetch_assoc()) {
-            $cliente = new Cliente(
-                $registro["id_cliente"],
-                $registro["dni"],
+            $receta = new Receta(
+                $registro["id_receta"],
                 $registro["nombre"],
-                $registro["direccion_postal"],
-                $registro["num_cuenta"]
+                $registro["imagen"],
+                $registro["descripcion"]
             );
-            $clientes[] = $cliente;
+            $recetas[] = $receta;
         }
 
         // 7. LIMPIEZA
         $resultado->close();
         $conn->close();
     
-        return $clientes;
+        return $recetas;
     }
 
     /*********************************************
      * BUSCAR - Consulta SELECT con WHERE id=$id *
      *********************************************/
     /**
-     * Buscar cliente por su ID
-     * @param int $id_cliente Identificador único del cliente
+     * Buscar receta por su ID
+     * @param int $id_receta Identificador único de la receta
      * @throws Exception Si hay error en la consulta
-     * @return Cliente Objeto Cliente con ID = $id_cliente
+     * @return Receta Objeto Receta con ID = $id_receta
      */
-    public function buscarPorId(int $id_cliente): ?Cliente {
+    public function buscarPorId(int $id_receta): ?Receta {
         // 1. VALIDAR parámetros de entrada
-        if ($id_cliente <= 0) { throw new Exception("No se puede buscar un cliente sin ID"); }
+        if ($id_receta <= 0) { throw new Exception("No se puede buscar una receta sin ID"); }
 
         // 2. OBTENER CONEXIÓN
         $conn = $this->getConnection();
 
         // 3. CONSTRUIR CONSULTA
-        $sql = "SELECT dni, nombre, direccion_postal, num_cuenta FROM clientes WHERE id_cliente=?;";
+        $sql = "SELECT nombre, imagen, descripcion FROM recetas WHERE id_receta=?;";
 
         // 4. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);
         if (!$statement) { $this->handleError($conn, "preparando búsqueda por ID"); }
 
         // 5. VINCULAR PARÁMETROS a la consulta
-        $statement->bind_param("i", $id_cliente);
+        $statement->bind_param("i", $id_receta);
 
         // 6. EJECUTAR CONSULTA con manejo de errores
         if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda por ID"); }
@@ -123,41 +121,40 @@ class ClienteRepository extends BaseRepository {
         $fila = $resultado->fetch_assoc();
 
         // 10. CREAR objeto cliente
-        $cliente = new Cliente(
-            $id_cliente,
-            $fila['dni'],
+        $receta = new Receta(
+            $id_receta,
             $fila['nombre'],
-            $fila['direccion_postal'],
-            $fila['num_cuenta']
+            $fila['imagen'],
+            $fila['descripcion']
         );
 
         // 11. LIMPIEZA
         $statement->close();
         $conn->close();
     
-        return $cliente;
+        return $receta;
     }
 
     /**************************************
      * BUSCAR - Consulta SELECT con WHERE *
      **************************************/
     /**
-     * Busca clientes aplicando filtros
+     * Busca recetas aplicando filtros
      * @param array $filtros Array asociativo con filtros validados
      * @throws Exception Si hay error en la consulta
-     * @return array Array de objetos Cliente
+     * @return array Array de objetos Receta
      */
     public function buscarPorFiltros(array $filtros): array {
         // 1. OBTENER CONEXIÓN
         $conn = $this->getConnection();
         
         // 2. CONSTRUIR CONSULTA
-        $sql = "SELECT id_cliente, dni, nombre, direccion_postal, num_cuenta FROM clientes WHERE 1=1";
+        $sql = "SELECT id_receta, nombre, imagen, descripcion FROM recetas WHERE 1=1";
         $tipos = "";
         $valores = [];
 
         // 3. AÑADIR FILTROS validados
-        foreach ($filtros as $columna => $valor) {
+        foreach ($filtros as $columna => $valor) { 
             // Validar que la columna existe en la tabla
             if (in_array($columna, self::COLUMNAS_PERMITIDAS)) {
                 $sql .= " AND $columna LIKE ?";
@@ -173,7 +170,7 @@ class ClienteRepository extends BaseRepository {
         
         // 5. VINCULAR PARÁMETROS si hay filtros
         if (!empty($valores)) {
-            // Utilizamos el operador splat (...) para evitar un switch(count($valores))
+            // Uso de operador splat (...) para evitar un switch(count($valores))
             $statement->bind_param($tipos, ...$valores);
         }
         
@@ -182,146 +179,92 @@ class ClienteRepository extends BaseRepository {
         
         // 7. OBTENER RESULTADOS
         $resultado = $statement->get_result();
-        $clientes = [];
+        $recetas = [];
         
-        // 8. CREAR objetos Cliente
+        // 8. CREAR objetos Receta
         while ($registro = $resultado->fetch_assoc()) {
-            $cliente = new Cliente(
-                $registro["id_cliente"],
-                $registro["dni"],
+            $receta = new Receta(
+                $registro["id_receta"],
                 $registro["nombre"],
-                $registro["direccion_postal"],
-                $registro["num_cuenta"]
+                $registro["imagen"],
+                $registro["descripcion"]
             );
-            $clientes[] = $cliente;
+            $recetas[] = $receta;
         }
         
         // 9. LIMPIEZA
         $statement->close();
         $conn->close();
         
-        return $clientes;
+        return $recetas;
     }
 
     /********************************
      * CREAR - Consulta INSERT INTO *
      ********************************/
     /**
-     * Crear nuevo registro de cliente
-     * @param Cliente $cliente Objeto Cliente a insertar en la base de 
+     * Crear nuevo registro de receta en el inventario del usuario
+     * @param Receta $receta Objeto Receta a insertar en la base de datos
      * @throws Exception Si hay error en la consulta
-     * @return Cliente Objeto Cliente con el ID_cliente
+     * @return Receta Objeto Receta con el id_receta
      */
-    public function insertar(Cliente $cliente): ?Cliente {
+    public function crearReceta(Receta $receta): ?Receta {
         // 1. OBTENER CONEXIÓN
         $conn = $this->getConnection();
 
         // 2. CONSTRUIR CONSULTA
-        $sql = "INSERT INTO clientes (dni, nombre, direccion_postal, num_cuenta) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO recetas (nombre, imagen, descripcion) VALUES (?, ?, ?)";
 
         // 3. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);
-        if (!$statement) { $this->handleError($conn, "preparando inserción de cliente"); }
+        if (!$statement) { $this->handleError($conn, "preparando inserción de receta en el inventario del usuario"); }
 
-        // 4. EXTRAER VALORES del objeto Cliente (necesario para bind_param no lance un warning porque necesita una referencia a la variable original, no solo el valor de retorno de una función)
-        $dni = $cliente->getDni();
-        $nombre = $cliente->getNombre();
-        $direccion = $cliente->getDireccionPostal();
-        $cuenta = $cliente->getNumCuenta();
+        // 4. EXTRAER VALORES del objeto Receta (necesario para bind_param no lance un warning porque necesita una referencia a la variable original, no solo el valor de retorno de una función)
+        $nombre = $receta->getNombre();
+        $imagen = $receta->getImagen();
+        $descripcion = $receta->getDescripcion();
 
-        // 5. VINCULAR PARÁMETROS obtenidos del objeto Cliente a la consulta parametrizada
-        $statement->bind_param("ssss", $dni, $nombre, $direccion, $cuenta);
+        // 5. VINCULAR PARÁMETROS obtenidos del objeto Receta a la consulta parametrizada
+        $statement->bind_param("sss", $nombre, $imagen, $descripcion);
 
         // 6. EJECUTAR CONSULTA
-        if (!$statement->execute()) { $this->handleError($statement, "ejecutando inserción de cliente"); }
+        if (!$statement->execute()) { $this->handleError($statement, "ejecutando inserción de receta en el inventario del usuario"); }
 
-        // 7. OBTENER el ID del cliente generado por la base de datos
+        // 7. OBTENER el ID de la receta en el inventario del usuario generado por la base de datos
         $id_generado = $statement->insert_id;
         
         // 8. LIMPIEZA
         $statement->close();
         $conn->close();
 
-        return new Cliente($id_generado, $dni, $nombre, $direccion, $cuenta);
-    }
-
-    /********************************
-     * ACTUALIZAR - Consulta UPDATE *
-     ********************************/
-    /**
-     * Actualizar un cliente existente
-     * @param Cliente $cliente Objeto Cliente con los datos actualizados
-     * @throws Exception Si hay error en la operación
-     * @return bool True si la actualización se realiza con éxito
-     */
-    public function actualizar(Cliente $cliente): bool {
-        // 1. VALIDAR parámetros de entrada
-        $id_cliente = $cliente->getIdcliente();
-        if (empty($id_cliente)) { throw new Exception("No se puede actualizar un cliente sin ID"); }
-
-        // 2. OBTENER CONEXIÓN
-        $conn = $this->getConnection();
-
-        // 3. CONSTRUIR CONSULTA
-        $sql = "UPDATE clientes SET dni=?, nombre=?, direccion_postal=?, num_cuenta=? WHERE id_cliente=?;";
-
-        // 4. PREPARAR CONSULTA parametrizada
-        $statement = $conn->prepare($sql);
-        if (!$statement) { $this->handleError($conn, "preparando actualización de cliente"); }
-
-        // 5. EXTRAER VALORES del objeto Cliente
-        $dni = $cliente->getDni();
-        $nombre = $cliente->getNombre();
-        $direccion = $cliente->getDireccionPostal();
-        $cuenta = $cliente->getNumCuenta();
-
-        // 6. VINCULAR PARÁMETROS
-        $statement->bind_param("ssssi", 
-            $dni, 
-            $nombre, 
-            $direccion, 
-            $cuenta, 
-            $id_cliente
-        );
-
-        // 7. EJECUTAR CONSULTA con manejo de errores
-        if (!$statement->execute()) { $this->handleError($statement, "ejecutando actualización de cliente"); }
-
-        // 8. VERIFICAR si la actualización ha modificado algún dato
-        $actualizado = $statement->affected_rows > 0;
-
-        // 9. LIMPIEZA
-        $statement->close();
-        $conn->close();
-    
-        return $actualizado;
+        return new Receta($id_generado, $nombre, $imagen, $descripcion);
     }
 
     /******************************
      * ELIMINAR - Consulta DELETE *
      ******************************/
     /**
-     * Eliminar cliente por su ID
-     * @param int $id_cliente Identificador único del cliente
+     * Eliminar registro de receta en el inventario del usuario
+     * @param int $id_receta Identificador único de la receta en el inventario
      * @throws Exception Si hay error en la consulta
      * @return bool True si la eliminación se realiza con éxito
      */
-    public function eliminarPorId(int $id_cliente): bool {
+    public function eliminarPorId(int $id_receta): bool {
         // 1. VALIDAR parámetros de entrada
-        if ($id_cliente <= 0) { return false; }
+        if ($id_receta <= 0) { throw new Exception("No se puede eliminar una receta sin ID"); }
 
         // 2. OBTENER CONEXIÓN
         $conn = $this->getConnection();
 
         // 3. CONSTRUIR CONSULTA
-        $sql = "DELETE FROM clientes WHERE id_cliente=?;";
+        $sql = "DELETE FROM recetas WHERE id_receta=?;";
 
         // 4. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);
         if (!$statement) { $this->handleError($conn, "preparando eliminación"); }
 
         // 5. EJECUTAR CONSULTA con manejo de errores
-        $statement->bind_param("i", $id_cliente);
+        $statement->bind_param("i", $id_receta);
         if (!$statement->execute()) { $this->handleError($statement, "ejecutando eliminación"); }
 
         // 6. VERIFICAR si la actualización ha modificado algún dato

@@ -1,29 +1,28 @@
 <?php
 
-use controllers\ClienteController;
-use controllers\FacturaController;
-use controllers\MascotaController;
-use controllers\TratamientoController;
+use controllers\RecetaController;
+use controllers\IngredienteController;
+use controllers\EfectoController;
+use controllers\LocalizacionController;
 
-define('BASE_URL', '/practicas-php/clinica_veterinaria');
-define('APP_ENV', 'development');
+define('BASE_URL', 'recetario-hyrule');
 
 /**
  * Función de autocarga de clases. La estructura del proyecto se compone de las vistas en HTML, el archivo de conexión a la base de datos, y los siguientes namespaces:
- *      models\Cliente - Lógica de datos
- *      controllers\ClienteController - Lógica de control
- *      repositories\ClienteRepositorio - Acceso a datos
- *      services\ClienteService - Lógica de negocio
+ *      models\Receta - Lógica de datos
+ *      controllers\RecetaController - Lógica de control
+ *      repositories\RecetaRepositorio - Acceso a datos
+ *      services\RecetaService - Lógica de negocio
  */
 spl_autoload_register(function (string $class): void {
     // Array que mapea los namespaces a las carpetas físicas
     $prefixToDirectory = [
         'config\\' => 'config/',
         'controllers\\' => 'controllers/',
+        'helpers\\' => 'helpers/',
         'models\\' => 'models/',
         'repositories\\' => 'repositories/',
-        'services\\' => 'services/',
-        'helpers\\' => 'helpers/'
+        'services\\' => 'services/'
     ];
 
     foreach ($prefixToDirectory as $namespace => $directory) {
@@ -46,25 +45,25 @@ spl_autoload_register(function (string $class): void {
 });
 
 
-$action = $_POST['action'] ?? $_GET['action'] ?? 'mostrarFormularioPrincipal';
+$action = $_POST['action'] ?? $_GET['action'] ?? 'mostrarHome';
 
-$cliente_controller = new ClienteController();
-$mascota_controller = new MascotaController();
-$factura_controller = new FacturaController();
-$tratamiento_controller = new TratamientoController();
+$receta_controller = new RecetaController();
+$ingrediente_controller = new IngredienteController();
+$efecto_controller = new EfectoController();
+$localizacion_controller = new LocalizacionController();
 
 switch ( true ) {
     case ($action === 'buscarConFiltros' && isset($_POST['buscar_cliente'])):
-        $cliente_controller->buscarConFiltros($_POST);
+        $receta_controller->buscarConFiltros($_POST);
         break;
     case ($action === 'buscarSinFiltros' && isset($_POST['buscar_cliente_sin_filtro'])):
-        $cliente_controller->buscarSinFiltros();
+        $receta_controller->buscarSinFiltros();
         break;
     case ($action === 'crear' && isset($_POST['crear_cliente'])):
-        $cliente_controller->crear($_POST);
+        $receta_controller->crear($_POST);
         break;
-    case ($action === 'mostrarFormularioPrincipal'):
-        $cliente_controller->mostrarFormularioPrincipal();
+    case ($action === 'mostrarHome'):
+        $receta_controller->mostrarHome();
         break;
     default:
         // Página no encontrada

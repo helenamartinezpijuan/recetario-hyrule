@@ -1,11 +1,13 @@
 <?php 
-// Aquí es donde van las funciones de validación y/o normalización de datos
 namespace services;
 
 use helpers\Logger;
 use Exception;
 
-class ClienteService {
+/**
+ * La clase RecetaService se encarga de la validación y/o normalización de datos
+ */
+class RecetaService {
     private $dni_length = 9; // varchar(9)
     private $nombre_length = 50; // varchar(50)
     private $direccion_postal_length = 150; // varchar(150)

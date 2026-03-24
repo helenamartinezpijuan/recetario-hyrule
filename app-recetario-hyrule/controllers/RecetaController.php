@@ -8,13 +8,13 @@ use helpers\Logger;
 use Exception;
 
 /**
- * La clase ClienteController se encarga de:
- * Recibir datos del formulario
+ * La clase RecetaController se encarga de:
+ * Recibir datos del formulario de búsqueda
  * Llamar al services
  * Llamar a repositories
  * Cargar la vista
  */
-class ClienteController {
+class RecetaController {
 
     private $repository;
     private $service;
@@ -24,45 +24,28 @@ class ClienteController {
         $this->repository = new RecetaRepository();
     }
 
-    public function mostrarFormularioPrincipal(): void {
-        try {
-            // 1. OBTENER DATOS de los tipos de vías para la dirección postal
-            $tipos_via = $this->service->obtenerTiposVia();
-            
-            // 2. MOSTRAR VISTA del formulario principal
-            $this->mostrar('clientes/formulario', [
-                'tipos_via' => $tipos_via,
-                'base_url' => BASE_URL
-            ]);
-            
-        // 3. MANEJO DE ERRORES
-        } catch (Exception $e) {
-            Logger::error($e->getMessage(), __FILE__);
-            $this->mostrar('clientes/error', [
-                'mensaje' => 'Error al cargar el formulario',
-                'base_url' => BASE_URL
-            ]);
-        }
+    public function mostrarHome(): void {
+        // Mostrar página /home
     }
 
-    public function buscarSinFiltros(): void {
+    public function mostrarListadoRecetas(): void {
         try {
             // 1. EXTRAER DATOS del formulario
             $orden = $_POST['orden_busqueda'] ?? '';
 
             // 2. BUSCAR en la base de datos
-            $clientes = $this->repository->obtenerTodos($orden);
+            $recetas = $this->repository->obtenerTodos($orden);
 
             // 3. MOSTRAR VISTA con los resultados
-            $this->mostrar('clientes/resultado', [
-                'clientes' => $clientes,
+            $this->mostrar('recetas/index', [
+                'recetas' => $recetas,
                 'base_url' => BASE_URL
             ]);
 
         // 3. MANEJO DE ERRORES
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
-            $this->mostrar('clientes/error', [
+            $this->mostrar('recetas/error', [
                 'mensaje' => 'Error en la búsqueda',
                 'base_url' => BASE_URL
             ]);
@@ -70,7 +53,7 @@ class ClienteController {
     }
     
     /**
-     * Busca clientes aplicando los filtros del formulario
+     * Busca recetas aplicando los filtros del formulario
      * @param array $postData Los datos completos de $_POST
      * @return void
      */
@@ -83,14 +66,14 @@ class ClienteController {
             $numCuenta = $postData['buscar_num_cuenta'] ?? '';
             
             // 2. VALIDAR Y NORMALIZAR los datos del formulario
-            $filtros = $this->service->prepararFiltrosBusqueda($dni, $nombre, $direccion, $numCuenta);
+            $filtros = $this->service->prepararFiltrosBusqueda($nombre, $direccion, $numCuenta);
             
             // 3. BUSCAR en la base de datos
-            $clientes = $this->repository->buscarPorFiltros($filtros);
+            $recetas = $this->repository->buscarPorFiltros($filtros);
             
             // 4. MOSTRAR VISTA con los resultados
             $this->mostrar('clientes/resultado', [
-                'clientes' => $clientes,
+                'recetas' => $recetas,
                 'base_url' => BASE_URL
             ]);
 
