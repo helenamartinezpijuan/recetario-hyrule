@@ -341,6 +341,18 @@ class RecetaRepository extends BaseRepository {
         return $eliminado;
     }
 
+
+    // PENDIENTE IMPLEMENTAR !!!
+    public function obtenerIngredientesConCantidad(int $id_receta): array {
+        // Obtener ingredientes con cantidades (array asociativo)
+        return [];
+    }
+
+    public function obtenerEfectosPorRecetaId(int $id_receta): array {
+        // Obtener efectos (array asociativo)
+        return [];
+    }
+
 }
 
 ?>

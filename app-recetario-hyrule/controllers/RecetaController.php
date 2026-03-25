@@ -24,6 +24,16 @@ class RecetaController {
         $this->repository = new RecetaRepository();
     }
 
+    public function index() {
+        $service = new RecetaService();
+        
+        $recetas = $service->getAllRecetas();
+        $tiposEfectos = $service->getAllTiposEfectos();
+        $ingredientesPorCategoria = $service->getIngredientesPorCategoria();
+        
+        //include __DIR__ . '/../views/recetas/index.php';
+    }
+
     public function mostrarHome(): void {
         // Mostrar página /home
     }
