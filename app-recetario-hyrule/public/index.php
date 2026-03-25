@@ -45,7 +45,7 @@ spl_autoload_register(function (string $class): void {
 });
 
 
-$action = $_POST['action'] ?? $_GET['action'] ?? 'mostrarHome';
+$action = $_POST['action'] ?? $_GET['action'] ?? 'home';
 
 $receta_controller = new RecetaController();
 $ingrediente_controller = new IngredienteController();
@@ -53,17 +53,18 @@ $efecto_controller = new EfectoController();
 $localizacion_controller = new LocalizacionController();
 
 switch ( true ) {
-    case ($action === 'buscarConFiltros' && isset($_POST['buscar_cliente'])):
-        $receta_controller->buscarConFiltros($_POST);
+    case ($action === 'recetas'):
+        $receta_controller->index();
         break;
-    case ($action === 'buscarSinFiltros' && isset($_POST['buscar_cliente_sin_filtro'])):
-        $receta_controller->buscarSinFiltros();
+    case ($action === 'filtrar_recetas' && isset($_POST['filtrar_recetas'])):
+        //$receta_controller->buscarConFiltros($_POST);
+        $receta_controller->filtrarRecetas($_POST);
         break;
-    case ($action === 'crear' && isset($_POST['crear_cliente'])):
-        $receta_controller->crear($_POST);
+    case ($action === 'obtener_receta' && isset($_POST['obtener_receta'])):
+        $receta_controller->obtenerReceta($_POST);
         break;
-    case ($action === 'mostrarHome'):
-        $receta_controller->mostrarHome();
+    case ($action === 'home'):
+        $receta_controller->index();
         break;
     default:
         // Página no encontrada
