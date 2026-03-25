@@ -208,25 +208,36 @@ class RecetaRepository extends BaseRepository {
      * @throws Exception Si hay error en la consulta
      * @return array Array de objetos Receta
      */
-    public function buscarPorFiltros(array $filtros): array {
+    public function buscarPorFiltros(array $efectos_ids, array $ingredientes_ids): array {
         // 1. OBTENER CONEXIÓN
         $conn = $this->getConnection();
         
         // 2. CONSTRUIR CONSULTA
-        $sql = "SELECT id_receta, nombre, imagen, descripcion FROM recetas WHERE 1=1";
+        $sql = "SELECT recetas.id_receta, recetas.nombre, recetas.imagen, recetas.descripcion
+                    FROM recetas
+                    WHERE 1=1";
         $tipos = "";
         $valores = [];
 
-        // 3. AÑADIR FILTROS validados
-        foreach ($filtros as $columna => $valor) { 
-            // Validar que la columna existe en la tabla
-            if (in_array($columna, self::COLUMNAS_PERMITIDAS)) {
-                $sql .= " AND $columna LIKE ?";
-                $tipos .= "s";
-                $valores[] = $valor;
-            }
+        // 3. AÑADIR FILTROS validados de los efectos
+        if (!empty($efectos_ids)) {
+            $placeholders = implode(',', array_fill(0, count($efectos_ids), '?'));
+            $sql .= " AND EXISTS (SELECT 1 FROM recetas_efectos
+                                WHERE recetas_efectos.id_receta = recetas.id_receta
+                                AND recetas_efectos.id_efecto IN ($placeholders))";
+            $tipos .= str_repeat('i', count($efectos_ids));
+            $valores = array_merge($valores, $efectos_ids);
         }
-        $sql .= " ORDER BY nombre";
+
+        // 4. AÑADIR FILTROS validados de los ingredientes
+         if (!empty($ingredientes_ids)) {
+            $placeholders = implode(',', array_fill(0, count($ingredientes_ids), '?'));
+            $sql .= " AND EXISTS (SELECT 1 FROM recetas_ingredientes 
+                                WHERE recetas_ingredientes.id_receta = recetas.id_receta 
+                                AND recetas_ingredientes.id_ingrediente IN ($placeholders))";
+            $tipos .= str_repeat('i', count($ingredientes_ids));
+            $valores = array_merge($valores, $ingredientes_ids);
+        }
         
         // 4. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);

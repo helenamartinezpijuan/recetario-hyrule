@@ -82,10 +82,10 @@ class RecetaService {
      * Obtiene recetas filtradas por IDs de efectos e ingredientes
      * @param array $efectos_ids
      * @param array $ingredientes_ids
-     * @return array de Receta
+     * @return array de objetos Receta
      */
     public function getRecetasFiltradas(array $efectos_ids, array $ingredientes_ids): array {
-        return $this->recetaRepo->buscarPorFiltros($efectos_ids, $ingredientes_ids); // O CREO OTRO MÉTODO Y SEPARO LA LÓGICA O METO LOS IDs COMO ARRAY?
+        return $this->recetaRepo->buscarPorFiltros($efectos_ids, $ingredientes_ids);
     }
     
     /**
