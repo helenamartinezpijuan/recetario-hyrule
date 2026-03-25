@@ -27,7 +27,7 @@ class RecetaDetalle {
      */
     public function getReceta(): Receta { return $this->receta; }
     /**
-     * Función que devuelve un array asociativo de ingredientes y su cantidade
+     * Función que devuelve un array asociativo de ingredientes y su cantidades
      * @return array
      */
     public function getIngredientes(): array { return $this->ingredientes; }

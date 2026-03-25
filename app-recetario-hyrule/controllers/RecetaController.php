@@ -15,7 +15,7 @@ use Exception;
  * - Cargar la vista correspondiente de 'views'
  * - Devolver respuestas JSON para peticiones AJAX
  */
-class RecetaController {
+class RecetaController extends BaseController {
 
     private RecetaService $service;
     private RecetaRepository $repository;
@@ -145,31 +145,6 @@ class RecetaController {
                 'message' => 'Error al cargar los detalles de la receta'
             ]);
         }
-    }
-    
-    /**************************************
-     * MÉTODO AUXILIAR PARA CARGAR VISTAS *
-     **************************************/
-    /**
-     * Método auxiliar para cargar una vista PHP con datos
-     * @param string $nombre Nombre del archivo de la vista
-     * @param array $datos Array asociativo con los datos que la vista necesita
-     * @throws Exception Si la vista no existe
-     */
-    private function mostrar(string $nombre, array $datos = []): void {
-        // 1. CONSTRUIR RUTA completa
-        $rutaVista = __DIR__ . '/../views/' . $nombre . '.php';
-
-        // 2. VERIFICAR que la vista existe
-        if (!file_exists($rutaVista)) {
-            throw new Exception("Vista no encontrada: $nombre");
-        }
-
-        // 3. CONVERTIR array asociativo en variables individuales
-        extract($datos);
-
-        // 4. INCLUIR la vista
-        require_once $rutaVista;
     }
 }
 
