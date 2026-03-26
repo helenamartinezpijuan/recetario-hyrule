@@ -22,7 +22,7 @@ class RecetaController extends BaseController {
 
     public function __construct() {
         $this->service = new RecetaService();
-        $this->repository = new RecetaRepository();
+        //$this->repository = new RecetaRepository();
     }
 
     /****************************************************
@@ -122,8 +122,8 @@ class RecetaController extends BaseController {
 
             // 3. PREPARAR DATOS para pasar a Json
             $receta = $detalle->getReceta();
-            $ingredientes = $detalle->getIngredientes(); // ['nombre' => string, 'cantidad' => int]
-            $efectos = $detalle->getEfectos(); // ['nombre' => string, 'descripcion' => string]
+            $ingredientes = $detalle->getIngredientes();
+            $efectos = $detalle->getEfectos();
 
             // 4. DEVOLVER RESPUESTA
             echo json_encode([

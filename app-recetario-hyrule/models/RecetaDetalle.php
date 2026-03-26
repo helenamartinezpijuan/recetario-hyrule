@@ -12,8 +12,8 @@ class RecetaDetalle {
     /**
      * Constructor de la clase RecetaDetalle
      * @param Receta $receta Objeto Receta
-     * @param array $ingredientes Array asociativo ['nombre' => string, 'cantidad' => int]
-     * @param array $efectos Array asociativo ['nombre' => string, 'descripcion' => string]
+     * @param array $ingredientes Array asociativo ['nombre' => 'cantidad']
+     * @param array $efectos Array asociativo ['nombre' => 'descripcion']
      */
     public function __construct(Receta $receta, array $ingredientes, array $efectos) {
         $this->receta = $receta;

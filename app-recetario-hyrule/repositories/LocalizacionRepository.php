@@ -2,109 +2,84 @@
 
 namespace repositories;
 
-use models\Receta;
+use models\Localizacion;
 use Exception;
 
 /**
- * La clase RecetaRepository se encarga de manejar la lógica de las consultas SQL para la tabla 'recetas' de la base de datos. Por norma general, las funciones siguen el siguiente orden lógico:
- *  1. VALIDAR los parámetros de la función
- *  2. OBTENER CONEXIÓN a la base de datos
- *  3. CONSTRUIR CONSULTA SQL
- *  4. PREPARAR CONSULTA parametrizada
- *  5. VINCULAR PARÁMETROS a la consulta parametrizada
- *  6. EJECUTAR CONSULTA con manejo de errores
- *  7. OBTENER RESULTADOS o VERIFICAR MODIFICACIÓN
- *  8. CREAR nuevo objeto (o array de objetos) Receta
- *  9. LIMPIEZA de la conexión
+ * La clase LocalizacionRepository se encarga de manejar la lógica de las consultas SQL para la tabla 'localizaciones' de la base de datos
  */
 class RecetaRepository extends BaseRepository {
-
-    /**
-     * El array COLUMNAS_PERMITIDAS especifica las columnas existentes en la tabla 'recetas' de la base de datos
-     * @var array Strings con los nombres de las columnas de la tabla 'recetas'
-     */
-    public const COLUMNAS_PERMITIDAS = [
-        'id_receta', 
-        'nombre', 
-        'imagen', 
-        'descripcion'
-    ];
-
 
     /**************************************************
      * BUSCAR sin filtros - Consulta SELECT sin WHERE *
      **************************************************/
     /**
-     * Buscar recetas sin aplicar filtros
+     * Buscar localizaciones sin aplicar filtros
      * @param string $orden Columna de la tabla de la base de datos por la que ordenar el resultado de la consulta
      * @throws Exception Si hay error en la consultas
-     * @return Receta[] Array de objetos Receta
+     * @return Localizacion[] Array de objetos Localizacion
      */
     public function obtenerTodos(string $orden = 'nombre'): array {
-        // 1. VALIDAR parámetros de entrada
-        if (!in_array($orden, self::COLUMNAS_PERMITIDAS)) {
-            $orden = 'nombre'; // Valor por defecto
-        }
-
-        // 2. OBTENER CONEXIÓN
+        // 1. OBTENER CONEXIÓN
         $conn = $this->getConnection();
 
-        // 3. CONSTRUIR CONSULTA
-        $sql = "SELECT id_receta, nombre, imagen, descripcion FROM recetas ORDER BY $orden";
+        // 2. CONSTRUIR CONSULTA
+        $sql = "SELECT id_localizacion, nombre, region, imagen, descripcion FROM localizaciones ORDER BY $orden";
 
-        // 4. EJECUTAR CONSULTA con manejo de errores
+        // 3. EJECUTAR CONSULTA con manejo de errores
         $resultado = $conn->query($sql);
-        if (!$resultado) { $this->handleError($conn, "consultando todas las recetas"); }
+        if (!$resultado) { $this->handleError($conn, "consultando todas las localizaciones"); }
 
-        // 5. OBTENER RESULTADOS
-        $recetas = [];
+        // 4. OBTENER RESULTADOS
+        $localizaciones = [];
 
-        // 6. CREAR objeto Receta
+        // 5. CREAR objeto Localizacion
         while ($registro = $resultado->fetch_assoc()) {
-            $receta = new Receta(
-                $registro["id_receta"],
+            $localizacion = new Localizacion(
+                $registro["id_localizacion"],
                 $registro["nombre"],
+                $registro["region"],
                 $registro["imagen"],
                 $registro["descripcion"]
             );
-            $recetas[] = $receta;
+            $localizaciones[] = $localizacion;
         }
 
         // 7. LIMPIEZA
         $resultado->close();
         $conn->close();
     
-        return $recetas;
+        return $localizaciones;
     }
 
     /****************************************************
      * BUSCAR por ID - Consulta SELECT con WHERE id=$id *
      ****************************************************/
     /**
-     * Buscar receta por su ID
-     * @param int $id_receta Identificador único de la receta
+     * Buscar localizacion por su ID
+     * @param int $id_localizacion Identificador único de la localización
      * @throws Exception Si hay error en la consulta
-     * @return Receta Objeto Receta con ID = $id_receta
+     * @return Localizacion Objeto Localizacion con ID = $id_localizacion
      */
-    public function obtenerPorId(int $id_receta): ?Receta {
+    public function obtenerPorId(int $id_localizacion): ?Localizacion {
         // 1. VALIDAR parámetros de entrada
-        if ($id_receta <= 0) { throw new Exception("No se puede buscar una receta sin ID"); }
+        if ($id_localizacion <= 0) { throw new Exception("No se puede buscar una localización sin ID"); }
 
         // 2. OBTENER CONEXIÓN
         $conn = $this->getConnection();
 
         // 3. CONSTRUIR CONSULTA
-        $sql = "SELECT nombre, imagen, descripcion FROM recetas WHERE id_receta=?;";
+        $sql = "SELECT nombre, region, imagen, descripcion FROM localizaciones WHERE id_localizacion=?;";
 
         // 4. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);
-        if (!$statement) { $this->handleError($conn, "preparando búsqueda por ID"); }
+        if (!$statement) { $this->handleError($conn, "preparando búsqueda de localización por ID"); }
 
         // 5. VINCULAR PARÁMETROS a la consulta
-        $statement->bind_param("i", $id_receta);
+        $statement->bind_param("i", $id_localizacion);
 
         // 6. EJECUTAR CONSULTA con manejo de errores
-        if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda por ID"); }
+        if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda de localización por ID"); }
 
         // 7. OBTENER RESULTADOS
         $resultado = $statement->get_result();
@@ -120,10 +95,11 @@ class RecetaRepository extends BaseRepository {
         // 9. OBTENER LA FILA como array asociativo
         $fila = $resultado->fetch_assoc();
 
-        // 10. CREAR objeto cliente
-        $receta = new Receta(
-            $id_receta,
+        // 10. CREAR objeto Localizacion
+        $localizacion = new Localizacion(
+            $id_localizacion,
             $fila['nombre'],
+            $fila['region'],
             $fila['imagen'],
             $fila['descripcion']
         );
@@ -132,14 +108,14 @@ class RecetaRepository extends BaseRepository {
         $statement->close();
         $conn->close();
     
-        return $receta;
+        return $localizacion;
     }
 
     /*************************************************
      * BUSCAR por nombre - Consulta SELECT con WHERE *
      *************************************************/
     /**
-     * Busca recetas por nombre
+     * Busca localizaciones por nombre
      * @param string $nombre Nombre de la receta introducido por el usuario
      * @throws Exception Si hay error en la consulta
      * @return array Array de objetos Receta
@@ -203,7 +179,7 @@ class RecetaRepository extends BaseRepository {
      * BUSCAR con filtros - Consulta SELECT con WHERE *
      **************************************************/
     /**
-     * Busca recetas aplicando filtros
+     * Busca localizaciones aplicando filtros
      * @param array $filtros Array asociativo con filtros validados
      * @throws Exception Si hay error en la consulta
      * @return array Array de objetos Receta

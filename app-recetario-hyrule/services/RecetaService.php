@@ -53,7 +53,7 @@ class RecetaService {
      * @return array de objetos Receta
      */
     public function getRecetasFiltradas(array $efectos_ids, array $ingredientes_ids): array {
-        return $this->recetaRepo->buscarPorFiltros($efectos_ids, $ingredientes_ids);
+        return $this->recetaRepo->obtenerPorFiltros($efectos_ids, $ingredientes_ids);
     }
     
     /**
@@ -62,7 +62,7 @@ class RecetaService {
      * @return RecetaDetalle|null
      */
     public function getRecetaDetalle(int $id): ?RecetaDetalle {
-        $receta = $this->recetaRepo->buscarPorId($id);
+        $receta = $this->recetaRepo->obtenerPorId($id);
         if (!$receta) return null;
         
         // Obtener ingredientes con cantidades (array asociativo)
