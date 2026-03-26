@@ -21,6 +21,7 @@ class Localizacion {
    * @param string $nombre Nombre de la localización
    * @param string $imagen Ruta a la imagen de la localización
    * @param string $descripcion Breve descripción de la localización
+   * @param string $region Enumerador con las regiones de Hyrule
    */
   public function __construct($id_localizacion, $nombre, $imagen, $descripcion, $region) {
     $this->setIdIngrediente($id_localizacion);

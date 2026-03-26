@@ -1,0 +1,100 @@
+<?php 
+namespace services;
+
+use models\Localizacion;
+use repositories\LocalizacionRepository;
+use helpers\Logger;
+use Exception;
+
+/**
+ * La clase LocalizacionService se encarga de la validación y/o normalización de datos
+ */
+class LocalizacionService {
+    private $localizacionRepo;
+    
+    public function __construct() {
+        $this->localizacionRepo = new LocalizacionRepository();
+    }
+    
+    /**
+     * Devuelve un array asociativo con las localizaciones agrupadas por región, definida por el ENUM de la tabla 'localizaciones'
+     * @return array ['Hebra' => [Localizacion, ...], 'Eldin' => [...], ...]
+     */
+    public function getLocalizacionesPorRegion(): array {
+        try {
+            // 1. OBTENER todas las localizaciones
+            $todos = $this->localizacionRepo->obtenerTodos();
+            // 2. INICIALIZAR ARRAY de regiones vacías
+            $regionesAgrupadas = [];
+
+            // 3. AGRUPAR localizaciones por regiones
+            foreach ($todos as $localizacion) {
+                $region = $localizacion->getRegion();
+                $regionesAgrupadas[$region][] = $localizacion;
+            }
+            return $regionesAgrupadas;
+
+        // 4. CONTROL DE ERRORES en caso de no poder conectar con el repositorio
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    
+    }
+    
+    /**
+     * Obtiene todos los localizacions (para la vista principal)
+     * @return array de Localizacion
+     */
+    public function getAllLocalizaciones(): array {
+        try {
+            return $this->localizacionRepo->obtenerTodos();
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }  
+    }
+
+    /**
+     * Obtiene todas las regiones (para los filtros)
+     * @return array de strings para las regiones
+     */
+    public function getRegionesDisponibles(): array {
+        try {
+            return $this->localizacionRepo->obtenerRegiones();
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+
+    /**
+     * Obtiene las localizaciones de una región concreta
+     * @param string $region Nombre de la región
+     * @return array Array de objetos Localizacion
+     */
+    public function getLocalizacionesPorRegionEspecifica(string $region): array {
+        try {
+            return $this->localizacionRepo->obtenerPorRegion($region);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+    
+    /**
+     * Obtiene localizacions filtrados por región/es
+     * @param array $regiones
+     * @return array de objetos Localizacion
+     */
+    public function getLocalizacionesFiltradas(array $regiones): array {
+        try {
+            return $this->localizacionRepo->obtenerPorRegiones($regiones);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+}
+
+?>

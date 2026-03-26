@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Enlazar con la hoja de estilo css -->
-    <!--<link rel="stylesheet" href="recetario-hyrule/public/estilos.css">-->
     <link rel="stylesheet" href="../../public/estilos.css">
 
     <!-- Importar la última versión (3.7.1) de JQuery -->
