@@ -30,10 +30,6 @@ class RecetaRepository extends BaseRepository {
         'descripcion'
     ];
 
-
-    /**************************************************
-     * BUSCAR sin filtros - Consulta SELECT sin WHERE *
-     **************************************************/
     /**
      * Buscar recetas sin aplicar filtros
      * @param string $orden Columna de la tabla de la base de datos por la que ordenar el resultado de la consulta
@@ -77,9 +73,6 @@ class RecetaRepository extends BaseRepository {
         return $recetas;
     }
 
-    /****************************************************
-     * BUSCAR por ID - Consulta SELECT con WHERE id=$id *
-     ****************************************************/
     /**
      * Buscar receta por su ID
      * @param int $id_receta Identificador único de la receta
@@ -135,53 +128,37 @@ class RecetaRepository extends BaseRepository {
         return $receta;
     }
 
-    /*************************************************
-     * BUSCAR por nombre - Consulta SELECT con WHERE *
-     *************************************************/
     /**
      * Busca recetas por nombre
-     * @param string $nombre Nombre de la receta introducido por el usuario
+     * @param string $nombre Nombre introducido en la barra buscadora de la receta (o parte de su descripción)
      * @throws Exception Si hay error en la consulta
-     * @return array Array de objetos Receta
+     * @return Receta[] Array de objetos Receta
      */
-    /*public function buscarPorFiltros(string $nombre): array {
+    public function buscarPorNombre(string $nombre): array {
         // 1. OBTENER CONEXIÓN
         $conn = $this->getConnection();
         
         // 2. CONSTRUIR CONSULTA
-        $sql = "SELECT id_receta, nombre, imagen, descripcion FROM recetas WHERE 1=1";
-        $tipos = "";
-        $valores = [];
+        $sql = "SELECT id_receta, nombre, imagen, descripcion 
+            FROM recetas 
+            WHERE nombre LIKE ? OR descripcion LIKE ? 
+            ORDER BY nombre;";
 
-        // 3. AÑADIR FILTROS validados
-        foreach ($filtros as $columna => $valor) { 
-            // Validar que la columna existe en la tabla
-            if (in_array($columna, self::COLUMNAS_PERMITIDAS)) {
-                $sql .= " AND $columna LIKE ?";
-                $tipos .= "s";
-                $valores[] = $valor;
-            }
-        }
-        $sql .= " ORDER BY nombre";
-        
-        // 4. PREPARAR CONSULTA parametrizada
+        // 3. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);
-        if (!$statement) { $this->handleError($conn, "preparando búsqueda por filtros"); }
+        if (!$statement) { $this->handleError($conn, "preparando búsqueda de receta por nombre"); }
         
-        // 5. VINCULAR PARÁMETROS si hay filtros
-        if (!empty($valores)) {
-            // Uso de operador splat (...) para evitar un switch(count($valores))
-            $statement->bind_param($tipos, ...$valores);
-        }
+        // 4. VINCULAR PARÁMETROS a la consulta
+        $statement->bind_param('ss', $nombre, $nombre);
         
-        // 6. EJECUTAR CONSULTA
-        if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda por filtros"); }
+        // 5. EJECUTAR CONSULTA
+        if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda de receta por nombre"); }
         
-        // 7. OBTENER RESULTADOS
+        // 6. OBTENER RESULTADOS
         $resultado = $statement->get_result();
         $recetas = [];
         
-        // 8. CREAR objetos Receta
+        // 7. CREAR objetos Receta
         while ($registro = $resultado->fetch_assoc()) {
             $receta = new Receta(
                 $registro["id_receta"],
@@ -192,19 +169,17 @@ class RecetaRepository extends BaseRepository {
             $recetas[] = $receta;
         }
         
-        // 9. LIMPIEZA
+        // 8. LIMPIEZA
         $statement->close();
         $conn->close();
         
         return $recetas;
-    }*/
+    }
 
-    /**************************************************
-     * BUSCAR con filtros - Consulta SELECT con WHERE *
-     **************************************************/
     /**
      * Busca recetas aplicando filtros
-     * @param array $filtros Array asociativo con filtros validados
+     * @param array $efectos_ids Array de ids de los efectos
+     * @param array $ingredientes_ids Array de ids de los ingredientes
      * @throws Exception Si hay error en la consulta
      * @return array Array de objetos Receta
      */
@@ -274,9 +249,6 @@ class RecetaRepository extends BaseRepository {
         return $recetas;
     }
 
-    /********************************
-     * CREAR - Consulta INSERT INTO *
-     ********************************/
     /**
      * Crear nuevo registro de receta en el inventario del usuario
      * @param Receta $receta Objeto Receta a insertar en la base de datos
@@ -315,9 +287,6 @@ class RecetaRepository extends BaseRepository {
         return new Receta($id_generado, $nombre, $imagen, $descripcion);
     }
 
-    /******************************
-     * ELIMINAR - Consulta DELETE *
-     ******************************/
     /**
      * Eliminar registro de receta en el inventario del usuario
      * @param int $id_receta Identificador único de la receta en el inventario

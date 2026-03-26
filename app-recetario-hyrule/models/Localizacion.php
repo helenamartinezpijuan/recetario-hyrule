@@ -7,9 +7,9 @@ namespace models;
 class Localizacion {
   protected $id_localizacion;
   protected $nombre;
+  protected $region;
   protected $imagen;
   protected $descripcion;
-  protected $region;
 
   /***************
    * CONSTRUCTOR *
@@ -19,16 +19,16 @@ class Localizacion {
    * Constructor de la clase Localizacion
    * @param int $id_localizacion Identificador único (clave primaria) de la localización
    * @param string $nombre Nombre de la localización
+   * @param string $region Enumerador con las regiones de Hyrule
    * @param string $imagen Ruta a la imagen de la localización
    * @param string $descripcion Breve descripción de la localización
-   * @param string $region Enumerador con las regiones de Hyrule
    */
-  public function __construct($id_localizacion, $nombre, $imagen, $descripcion, $region) {
+  public function __construct($id_localizacion, $nombre, $region, $imagen, $descripcion) {
     $this->setIdIngrediente($id_localizacion);
     $this->setNombre($nombre);
+    $this->setRegion($region);
     $this->setImagen($imagen);
     $this->setDescripcion($descripcion);
-    $this->setRegion($region);
   }
 
   /***********

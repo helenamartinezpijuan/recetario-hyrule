@@ -37,7 +37,7 @@ class RecetaController extends BaseController {
             // 1. OBTENER DATOS para la vista
             $recetas = $this->service->getAllRecetas();
             $tiposEfectos = $this->service->getAllTiposEfectos();
-            $ingredientesPorCategoria = $this->service->getIngredientesPorCategoria();
+            $ingredientesPorCategoria = $this->service->getIngredientesPorCategoria(); 
 
             // 2. CARGAR VISTA de todas las recetas
             $this->mostrar('recetas/index', [
