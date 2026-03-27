@@ -17,9 +17,6 @@ class LocalizacionController extends BaseController {
         $this->repository = new LocalizacionRepository();
     }
 
-    /*********************************************************
-     * MOSTRAR VISTA PRINCIPAL DE LOCALIZACIONES (sin filtros) *
-     *********************************************************/
     /**
      * Muestra la página de listado de localizaciones con todos los datos iniciales
      * @return void
@@ -30,14 +27,14 @@ class LocalizacionController extends BaseController {
             $localizaciones = $this->service->getAllLocalizaciones();
 
             // 2. CARGAR VISTA de todas las localizaciones
-            $this->mostrar('localizacions/index', [
+            $this->mostrar('localizaciones/localizaciones-zelda-breath-of-the-wild', [
                 'localizaciones' => $localizaciones,
                 'base_url' => BASE_URL
             ]);
 
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
-            $this->mostrar('recetas/error', [
+            $this->mostrar('localizaciones/error', [
                 'mensaje' => 'Error al cargar la página de localizaciones',
                 'base_url' => BASE_URL
             ]);

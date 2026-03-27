@@ -40,7 +40,7 @@ class RecetaController extends BaseController {
             $ingredientesPorCategoria = $this->service->getIngredientesPorCategoria(); 
 
             // 2. CARGAR VISTA de todas las recetas
-            $this->mostrar('recetas/index', [
+            $this->mostrar('recetas/recetas-zelda-breath-of-the-wild', [
                 'recetas' => $recetas,
                 'tiposEfectos' => $tiposEfectos,
                 'ingredientesPorCategoria' => $ingredientesPorCategoria,
