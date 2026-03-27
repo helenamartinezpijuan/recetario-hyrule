@@ -3,6 +3,8 @@
 namespace repositories;
 
 use models\Receta;
+use models\Efecto;
+use models\TipoEfecto;
 use Exception;
 
 /**
@@ -113,7 +115,7 @@ class RecetaRepository extends BaseRepository {
         // 9. OBTENER LA FILA como array asociativo
         $registro = $resultado->fetch_assoc();
 
-        // 10. CREAR objeto cliente
+        // 10. CREAR objeto Receta
         $receta = new Receta(
             $id_receta,
             $registro['nombre'],
@@ -321,16 +323,110 @@ class RecetaRepository extends BaseRepository {
         return $eliminado;
     }
 
+    /**
+     * Obtener ingredientes con cantidades (array asociativo)
+     * @param int $id_receta ID de la receta
+     * @throws Exception Si hay error en la consulta
+     * @return array{nombre: string, cantidad: int}
+     */
     public function obtenerIngredientesConCantidad(int $id_receta): array {
-        // Obtener ingredientes con cantidades (array asociativo)
-        // PENDIENTE DE IMPLEMENTAR
-        return [];
+        // 1. VALIDAR parámetros de entrada
+        if ($id_receta <= 0) { throw new Exception("No se puede buscar una receta sin ID"); }
+
+        // 2. OBTENER CONEXIÓN
+        $conn = $this->getConnection();
+
+        // 3. CONSTRUIR CONSULTA
+        $sql = "SELECT ingredientes.nombre, recetas_ingredientes.cantidad 
+                FROM recetas_ingredientes
+                INNER JOIN ingredientes USING(id_ingrediente)
+                WHERE recetas_ingredientes.id_receta = ?
+                ORDER BY ingredientes.nombre";
+
+        // 4. PREPARAR CONSULTA parametrizada
+        $statement = $conn->prepare($sql);
+        if (!$statement) { $this->handleError($conn, "preparando obtención de ingredientes de receta"); }
+
+        // 5. VINCULAR PARÁMETROS a la consulta
+        $statement->bind_param("i", $id_receta);
+
+        // 6. EJECUTAR CONSULTA con manejo de errores
+        if (!$statement->execute()) { $this->handleError($statement, "ejecutando obtención de ingredientes de receta"); }
+
+        // 7. OBTENER RESULTADOS
+        $resultado = $statement->get_result();
+        $ingredientes = [];
+
+        // 8. CREAR array asociativo
+        while ($registro = $resultado->fetch_assoc()) {
+            $ingredientes[] = [
+                'nombre' => $registro['nombre'],
+                'cantidad' => $registro['cantidad']
+            ];
+        }
+
+        // 9. LIMPIEZA
+        $statement->close();
+        $conn->close();
+    
+        return $ingredientes;
     }
 
+    /**
+     * Obtener efectos (array asociativo)
+     * @param int $id_receta ID de la receta
+     * @throws Exception Si hay error en la consulta
+     * @return Efecto[] Array de objetos Efecto
+     */
     public function obtenerEfectosPorRecetaId(int $id_receta): array {
-        // Obtener efectos (array asociativo)
-        // PENDIENTE DE IMPLEMENTAR
-        return [];
+        // 1. VALIDAR parámetros de entrada
+        if ($id_receta <= 0) { throw new Exception("No se puede buscar una receta sin ID"); }
+
+        // 2. OBTENER CONEXIÓN
+        $conn = $this->getConnection();
+
+        // 3. CONSTRUIR CONSULTA
+        $sql = "SELECT efectos.id_efecto, efectos_id_tipo_efecto, efectos.descripcion,
+                tipos_efectos.nombre
+                FROM recetas_efectos
+                INNER JOIN efectos USING(id_efecto) 
+                INNER JOIN tipos_efectos USING(id_tipo_efecto)
+                WHERE recetas_efectos.id_receta = ?
+                ORDER BY tipos_efectos.nombre";
+
+        // 4. PREPARAR CONSULTA parametrizada
+        $statement = $conn->prepare($sql);
+        if (!$statement) { $this->handleError($conn, "preparando obtención de ingredientes de receta"); }
+
+        // 5. VINCULAR PARÁMETROS a la consulta
+        $statement->bind_param("i", $id_receta);
+
+        // 6. EJECUTAR CONSULTA con manejo de errores
+        if (!$statement->execute()) { $this->handleError($statement, "ejecutando obtención de ingredientes de receta"); }
+
+        // 7. OBTENER RESULTADOS
+        $resultado = $statement->get_result();
+        $efectos = [];
+
+        // 8. CREAR objetos Efecto
+        while ($registro = $resultado->fetch_assoc()) {
+            $tipoEfecto = new TipoEfecto(
+                $registro['id_tipo_efecto'],
+                $registro['tipo_nombre']
+            );
+            $efecto = new Efecto(
+                $registro['id_efecto'],
+                $tipoEfecto,
+                $registro['descripcion']
+            );
+            $efectos[] = $efecto;
+        }
+
+        // 9. LIMPIEZA
+        $statement->close();
+        $conn->close();
+    
+        return $efectos;
     }
 
 }

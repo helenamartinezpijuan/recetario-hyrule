@@ -152,54 +152,61 @@ class IngredienteRepository extends BaseRepository {
 
     /**
      * Buscar ingredientes aplicando filtros
-     * @param array $categorias_ingrediente Array asociativo de ingredientes por categorías
-     * @param array $localizaciones_ids Array de ids de las localizaciones
+     * @param array $ingredientes_ids Array de IDs de ingredientes seleccionados
+     * @param array $localizaciones_ids Array de IDs de las localizaciones
      * @return Ingrediente[] Array de objetos Ingrediente
      */
-    public function obtenerPorFiltros(array $categorias_ingrediente, array $localizaciones_ids): array {
+    public function obtenerPorFiltros(array $ingredientes_ids, array $localizaciones_ids): array {
         // 1. OBTENER CONEXIÓN
         $conn = $this->getConnection();
         
         // 2. CONSTRUIR CONSULTA
-        $sql = "SELECT ingredientes.id_ingrediente, ingredientes.nombre, ingredientes.imagen, ingredientes.descripcion
-                    FROM ingredientes
-                    WHERE 1=1";
+        $sql = "SELECT DISTINCT ingredientes.id_ingrediente, ingredientes.nombre, ingredientes.imagen, ingredientes.descripcion FROM ingredientes";
         $tipos = "";
         $valores = [];
 
-        // 3. AÑADIR FILTROS validados de los efectos
-        if (!empty($categorias_ingrediente)) {
-            // EL ARRAY CATEGORIAS_INGREDIENTE YA VIENE EN FORMATO ingrediente -> categoria (no haría falta conectar con la BD, ¿debería estar aquí esta filtración?)
+        if (!empty($localizaciones_ids)) {
+            $sql .= " INNER JOIN ingredientes_localizaciones USING (id_ingrediente_localizacion)";
         }
 
-        // 4. AÑADIR FILTROS validados de las localizaciones
+        $sql .= " WHERE 1=1";
+
+        // 3. AÑADIR FILTRO por IDs de ingredientes
+        if (!empty($ingredientes_ids)) {
+            $placeholders = implode(',', array_fill(0, count($ingredientes_ids), '?'));
+            $sql .= " AND ingredientes.id_ingrediente IN ($placeholders)";
+            $tipos .= str_repeat('i', count($ingredientes_ids));
+            $valores = array_merge($valores, $ingredientes_ids);
+        }
+
+        // 4. AÑADIR FILTROS por localizaciones
          if (!empty($localizaciones_ids)) {
             $placeholders = implode(',', array_fill(0, count($localizaciones_ids), '?'));
-            $sql .= " AND EXISTS (SELECT 1 FROM ingredientes_localizaciones 
-                                WHERE ingredientes_localizaciones.id_ingrediente = ingredientes.id_ingrediente 
-                                AND ingredientes_localizaciones.id_ingrediente IN ($placeholders))";
+            $sql .= " AND ingredientes_localizaciones.id_localizacion IN ($placeholders))";
             $tipos .= str_repeat('i', count($localizaciones_ids));
             $valores = array_merge($valores, $localizaciones_ids);
         }
+
+        $sql .= " ORDER BY i.nombre";
         
-        // 4. PREPARAR CONSULTA parametrizada
+        // 5. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);
         if (!$statement) { $this->handleError($conn, "preparando búsqueda por filtros"); }
         
-        // 5. VINCULAR PARÁMETROS si hay filtros
+        // 6. VINCULAR PARÁMETROS si hay filtros
         if (!empty($valores)) {
             // Uso de operador splat (...) para evitar un switch(count($valores))
             $statement->bind_param($tipos, ...$valores);
         }
         
-        // 6. EJECUTAR CONSULTA
+        // 7. EJECUTAR CONSULTA
         if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda por filtros"); }
         
-        // 7. OBTENER RESULTADOS
+        // 8. OBTENER RESULTADOS
         $resultado = $statement->get_result();
         $ingredientes = [];
         
-        // 8. CREAR objetos Ingrediente
+        // 9. CREAR objetos Ingrediente
         while ($registro = $resultado->fetch_assoc()) {
             $ingrediente = new Ingrediente(
                 $registro["id_receta"],
@@ -210,7 +217,7 @@ class IngredienteRepository extends BaseRepository {
             $ingredientes[] = $ingrediente;
         }
         
-        // 9. LIMPIEZA
+        // 10. LIMPIEZA
         $statement->close();
         $conn->close();
         
