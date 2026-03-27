@@ -79,13 +79,13 @@ class IngredienteService {
     
     /**
      * Obtiene ingredientes filtrados por categorías de ingredientes y/o por localizaciones
+     * @param array $ingredientes_ids
      * @param array $localizaciones_ids
      * @return array de objetos Ingrediente
      */
-    public function getIngredientesFiltrados(array $localizaciones_ids): array {
+    public function getIngredientesFiltrados(array $ingredientes_ids, array $localizaciones_ids): array {
         try {
-            $categorias_ingrediente = $this->getIngredientesPorCategoria();
-            return $this->ingredienteRepo->obtenerPorFiltros($categorias_ingrediente, $localizaciones_ids);
+            return $this->ingredienteRepo->obtenerPorFiltros($ingredientes_ids, $localizaciones_ids);
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
             return [];
