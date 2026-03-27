@@ -150,7 +150,12 @@ class IngredienteRepository extends BaseRepository {
         return $ingredientes;
     }
 
-
+    /**
+     * Buscar ingredientes aplicando filtros
+     * @param array $categorias_ingrediente Array asociativo de ingredientes por categorías
+     * @param array $localizaciones_ids Array de ids de las localizaciones
+     * @return Ingrediente[] Array de objetos Ingrediente
+     */
     public function obtenerPorFiltros(array $categorias_ingrediente, array $localizaciones_ids): array {
         // 1. OBTENER CONEXIÓN
         $conn = $this->getConnection();
@@ -162,16 +167,9 @@ class IngredienteRepository extends BaseRepository {
         $tipos = "";
         $valores = [];
 
-        // EL ARRAY CATEGORIAS_INGREDIENTE YA VIENE EN FORMATO ingrediente -> categoria (no hará falta conectar con la BD, ¿debería estar aquí esta filtración?)
-
         // 3. AÑADIR FILTROS validados de los efectos
         if (!empty($categorias_ingrediente)) {
-            $placeholders = implode(',', array_fill(0, count($categorias_ingrediente), '?'));
-            $sql .= " AND EXISTS (SELECT 1 FROM recetas_efectos
-                                WHERE recetas_efectos.id_receta = recetas.id_receta
-                                AND recetas_efectos.id_efecto IN ($placeholders))";
-            $tipos .= str_repeat('i', count($categorias_ingrediente));
-            $valores = array_merge($valores, $categorias_ingrediente);
+            // EL ARRAY CATEGORIAS_INGREDIENTE YA VIENE EN FORMATO ingrediente -> categoria (no haría falta conectar con la BD, ¿debería estar aquí esta filtración?)
         }
 
         // 4. AÑADIR FILTROS validados de las localizaciones
@@ -199,24 +197,24 @@ class IngredienteRepository extends BaseRepository {
         
         // 7. OBTENER RESULTADOS
         $resultado = $statement->get_result();
-        $recetas = [];
+        $ingredientes = [];
         
-        // 8. CREAR objetos Receta
+        // 8. CREAR objetos Ingrediente
         while ($registro = $resultado->fetch_assoc()) {
-            $receta = new Receta(
+            $ingrediente = new Ingrediente(
                 $registro["id_receta"],
                 $registro["nombre"],
                 $registro["imagen"],
                 $registro["descripcion"]
             );
-            $recetas[] = $receta;
+            $ingredientes[] = $ingrediente;
         }
         
         // 9. LIMPIEZA
         $statement->close();
         $conn->close();
         
-        return $recetas;
+        return $ingredientes;
     }
 
 
