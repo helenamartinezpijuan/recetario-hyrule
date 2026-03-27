@@ -1,11 +1,7 @@
 <?php
-
-use controllers\RecetaController;
-use controllers\IngredienteController;
-use controllers\EfectoController;
-use controllers\LocalizacionController;
-
-define('BASE_URL', 'recetario-hyrule');
+if (!defined('BASE_URL')) {
+    define('BASE_URL', __DIR__ . '/../');
+}
 
 /**
  * Función de autocarga de clases. La estructura del proyecto se compone de las vistas en HTML, el archivo de conexión a la base de datos, y los siguientes namespaces:
@@ -15,7 +11,7 @@ define('BASE_URL', 'recetario-hyrule');
  *      services\RecetaService - Lógica de negocio
  */
 spl_autoload_register(function (string $class): void {
-    // Array que mapea los namespaces a las carpetas físicas
+    // 1. MAPEAR los namespaces a las carpetas físicas
     $prefixToDirectory = [
         'config\\' => 'config/',
         'controllers\\' => 'controllers/',
@@ -26,23 +22,27 @@ spl_autoload_register(function (string $class): void {
     ];
 
     foreach ($prefixToDirectory as $namespace => $directory) {
-        // Verificamos si la clase usa este namespace
+        // 2. VERIFICAR si la clase usa este namespace
         if (strpos($class, $namespace) === 0) {
-            // Eliminamos el namespace para obtener sólo el nombre de la clase
+            // 3. ELIMINAR el namespace para obtener sólo el nombre de la clase
             $className = substr($class, strlen($namespace));
-            // Construimos la ruta completa
-            $file = __DIR__ . '/../' . $directory . $className . '.php';
+            // 4. CONSTRUIR la ruta completa
+            $file = BASE_URL . $directory . $className . '.php';
             
-            // Incluimos el archivo si existe
+            // 5. INCLUIR el archivo si existe
             if (file_exists($file)) {
                 require_once $file;
                 return; // Salimos del bucle si encontramos la clase
             }
         }
-    }
-    
-    // Si llegamos aquí, la clase no se encontró en ningún directorio
+    } 
+    // 6. Si llegamos aquí, la clase no se encontró en ningún directorio
 });
+
+use controllers\RecetaController;
+use controllers\IngredienteController;
+use controllers\EfectoController;
+use controllers\LocalizacionController;
 
 
 $action = $_POST['action'] ?? $_GET['action'] ?? 'home';
@@ -52,23 +52,54 @@ $ingrediente_controller = new IngredienteController();
 $efecto_controller = new EfectoController();
 $localizacion_controller = new LocalizacionController();
 
-switch ( true ) {
-    case ($action === 'recetas'):
+switch ( $action ) {
+    case ('recetas'):
         $receta_controller->index();
         break;
-    case ($action === 'filtrar_recetas' && isset($_POST['filtrar_recetas'])):
-        //$receta_controller->buscarConFiltros($_POST);
+    case ('filtrar_recetas'):
         $receta_controller->filtrarRecetas($_POST);
         break;
-    case ($action === 'obtener_receta' && isset($_POST['obtener_receta'])):
-        $receta_controller->obtenerReceta($_POST);
+    case ('obtener_receta'):
+        $receta_controller->obtenerReceta($_GET);
         break;
-    case ($action === 'home'):
+    case ('ingredientes'):
+        $ingrediente_controller->index();
+        break;
+    case ('filtrar_ingredientes'):
+        $ingrediente_controller->filtrarIngredientes($_POST);
+        break;
+    case ('obtener_ingrediente'):
+        $ingrediente_controller->obtenerIngrediente($_GET);
+        break;
+    case ('efectos'):
+        $efecto_controller->index();
+        break;
+    case ('obtener_efecto'):
+        $efecto_controller->obtenerEfecto($_GET);
+        break;
+    case ('localizaciones'):
+        $localizacion_controller->index();
+        break;
+    case ('filtrar_localizaciones'):
+        $localizacion_controller->filtrarLocalizaciones($_POST);
+        break;
+    case ('obtener_localizacion'):
+        $localizacion_controller->obtenerLocalizacion($_GET);
+        break;
+    case ('home'):
         $receta_controller->index();
         break;
     default:
-        // Página no encontrada
-        echo "404";
+        // Cargar vista home desde /views/home/index.php
+        $rutaHome = BASE_PATH . 'views/home/index.php';
+        if (file_exists($rutaHome)) {
+            require_once $rutaHome;
+        } else {
+            echo "<h1>Recetario de Hyrule</h1>";
+            echo "<p>Bienvenido al recetario de Zelda: Breath of the Wild</p>";
+            echo "<p><a href='?action=recetas'>Ver recetas</a></p>";
+        }
+        break;
 }
 
 ?>

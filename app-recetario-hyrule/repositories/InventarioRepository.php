@@ -6,16 +6,7 @@ use models\Inventario;
 use Exception;
 
 /**
- * La clase RecetaRepository se encarga de manejar la lógica de las consultas SQL para la tabla 'recetas' de la base de datos. Por norma general, las funciones siguen el siguiente orden lógico:
- *  1. VALIDAR los parámetros de la función
- *  2. OBTENER CONEXIÓN a la base de datos
- *  3. CONSTRUIR CONSULTA SQL
- *  4. PREPARAR CONSULTA parametrizada
- *  5. VINCULAR PARÁMETROS a la consulta parametrizada
- *  6. EJECUTAR CONSULTA con manejo de errores
- *  7. OBTENER RESULTADOS o VERIFICAR MODIFICACIÓN
- *  8. CREAR nuevo objeto (o array de objetos) Receta
- *  9. LIMPIEZA de la conexión
+ * La clase RecetaRepository se encarga de manejar la lógica de las consultas SQL para la tabla 'inventarios' de la base de datos.
  */
 class InventarioRepository extends BaseRepository {
 
