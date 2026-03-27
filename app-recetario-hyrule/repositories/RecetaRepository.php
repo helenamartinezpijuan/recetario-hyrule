@@ -111,14 +111,14 @@ class RecetaRepository extends BaseRepository {
         }
 
         // 9. OBTENER LA FILA como array asociativo
-        $fila = $resultado->fetch_assoc();
+        $registro = $resultado->fetch_assoc();
 
         // 10. CREAR objeto cliente
         $receta = new Receta(
             $id_receta,
-            $fila['nombre'],
-            $fila['imagen'],
-            $fila['descripcion']
+            $registro['nombre'],
+            $registro['imagen'],
+            $registro['descripcion']
         );
 
         // 11. LIMPIEZA
@@ -323,11 +323,13 @@ class RecetaRepository extends BaseRepository {
 
     public function obtenerIngredientesConCantidad(int $id_receta): array {
         // Obtener ingredientes con cantidades (array asociativo)
+        // PENDIENTE DE IMPLEMENTAR
         return [];
     }
 
     public function obtenerEfectosPorRecetaId(int $id_receta): array {
         // Obtener efectos (array asociativo)
+        // PENDIENTE DE IMPLEMENTAR
         return [];
     }
 

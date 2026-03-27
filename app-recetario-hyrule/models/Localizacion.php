@@ -24,7 +24,7 @@ class Localizacion {
    * @param string $descripcion Breve descripción de la localización
    */
   public function __construct($id_localizacion, $nombre, $region, $imagen, $descripcion) {
-    $this->setIdIngrediente($id_localizacion);
+    $this->setIdLocalizacion($id_localizacion);
     $this->setNombre($nombre);
     $this->setRegion($region);
     $this->setImagen($imagen);
@@ -39,7 +39,7 @@ class Localizacion {
    * Función que devuelve el ID de la localización
    * @return int
    */
-  public function getIdIngrediente(): int {
+  public function getIdLocalizacion(): int {
     return $this->id_localizacion;
   }
   /**
@@ -48,6 +48,13 @@ class Localizacion {
    */
   public function getNombre(): string {
     return $this->nombre;
+  }
+  /**
+   * Función que devuelve la región de la localización
+   * @return string
+   */
+  public function getRegion(): string {
+    return $this->region;
   }
   /**
    * Función que devuelve la ruta a la imagen de la localización
@@ -63,13 +70,6 @@ class Localizacion {
   public function getDescripcion(): string {
     return $this->descripcion;
   }
-  /**
-   * Función que devuelve la región de la localización
-   * @return string
-   */
-  public function getRegion(): string {
-    return $this->region;
-  }
 
 
   /***********
@@ -80,7 +80,7 @@ class Localizacion {
    * Función que asigna el ID a la localización
    * @param int $id_localizacion
    */
-  protected function setIdIngrediente($id_localizacion): void {
+  protected function setIdLocalizacion($id_localizacion): void {
     $this->id_localizacion = $id_localizacion;
   }
   /**
@@ -89,6 +89,13 @@ class Localizacion {
    */
   protected function setNombre($nombre): void {
       $this->nombre = $nombre;
+  }
+  /**
+   * Función que asigna la región de la localización
+   * @param string $region
+   */
+  protected function setRegion($region): void {
+    $this->region = $region;
   }
   /**
    * Función que asigna la ruta a la imagen de la localización
@@ -103,13 +110,6 @@ class Localizacion {
    */
   protected function setDescripcion($descripcion): void {
     $this->descripcion = $descripcion;
-  }
-  /**
-   * Función que asigna la región de la localización
-   * @param string $region
-   */
-  protected function setRegion($region): void {
-    $this->region = $region;
   }
 }
 
