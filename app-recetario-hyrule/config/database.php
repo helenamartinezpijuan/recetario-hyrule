@@ -8,7 +8,7 @@ class Database {
     private static $host = 'sql200.infinityfree.com';   // Free hosting site InfinityFree
     private static $database = 'if0_41455627_db_recetario_hyrule';
     private static $username = 'if0_41455627';
-    private static $password = 'Plujadeponent';
+    private static $password = '****'; // Lo oculto para subir el archivo a DeepSeek, la contraseña real es un texto, no símbolos.
 
     public static function getConnection() {
         $conn = new \mysqli(self::$host, self::$username, self::$password, self::$database);

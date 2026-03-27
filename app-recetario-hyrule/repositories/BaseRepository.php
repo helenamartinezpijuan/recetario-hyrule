@@ -10,7 +10,6 @@ abstract class BaseRepository {
     
     protected function getConnection() {
         $conn = Database::getConnection();
-        //$conn->set_charset("utf8mb4");
         return $conn;
     }
 

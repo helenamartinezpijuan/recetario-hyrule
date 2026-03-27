@@ -1,14 +1,19 @@
 <?php
+if (!defined('BASE_PATH')) {
+    define('BASE_PATH', __DIR__ . '/../');
+}
 if (!defined('BASE_URL')) {
-    define('BASE_URL', __DIR__ . '/../');
+    define('BASE_URL', '/recetario-hyrule');
 }
 
 /**
  * Función de autocarga de clases. La estructura del proyecto se compone de las vistas en HTML, el archivo de conexión a la base de datos, y los siguientes namespaces:
- *      models\Receta - Lógica de datos
- *      controllers\RecetaController - Lógica de control
- *      repositories\RecetaRepositorio - Acceso a datos
- *      services\RecetaService - Lógica de negocio
+ *      config\ - Conexión a la BD
+ *      controllers\ - Lógica de control
+ *      helpers\ - Sistema de log de errores
+ *      models\ - Lógica de datos
+ *      repositories\ - Acceso a datos
+ *      services\ - Lógica de negocio
  */
 spl_autoload_register(function (string $class): void {
     // 1. MAPEAR los namespaces a las carpetas físicas
@@ -27,7 +32,7 @@ spl_autoload_register(function (string $class): void {
             // 3. ELIMINAR el namespace para obtener sólo el nombre de la clase
             $className = substr($class, strlen($namespace));
             // 4. CONSTRUIR la ruta completa
-            $file = BASE_URL . $directory . $className . '.php';
+            $file = BASE_PATH . $directory . $className . '.php';
             
             // 5. INCLUIR el archivo si existe
             if (file_exists($file)) {
@@ -53,45 +58,45 @@ $efecto_controller = new EfectoController();
 $localizacion_controller = new LocalizacionController();
 
 switch ( $action ) {
-    case ('recetas'):
+    case 'recetas':
         $receta_controller->index();
         break;
-    case ('filtrar_recetas'):
+    case 'filtrar_recetas':
         $receta_controller->filtrarRecetas($_POST);
         break;
-    case ('obtener_receta'):
+    case 'obtener_receta':
         $receta_controller->obtenerReceta($_GET);
         break;
-    case ('ingredientes'):
+    case 'ingredientes':
         $ingrediente_controller->index();
         break;
-    case ('filtrar_ingredientes'):
+    case 'filtrar_ingredientes':
         $ingrediente_controller->filtrarIngredientes($_POST);
         break;
-    case ('obtener_ingrediente'):
+    case 'obtener_ingrediente':
         $ingrediente_controller->obtenerIngrediente($_GET);
         break;
-    case ('efectos'):
+    case 'efectos':
         $efecto_controller->index();
         break;
-    case ('obtener_efecto'):
+    case 'obtener_efecto':
         $efecto_controller->obtenerEfecto($_GET);
         break;
-    case ('localizaciones'):
+    case 'localizaciones':
         $localizacion_controller->index();
         break;
-    case ('filtrar_localizaciones'):
+    case 'filtrar_localizaciones':
         $localizacion_controller->filtrarLocalizaciones($_POST);
         break;
-    case ('obtener_localizacion'):
+    case 'obtener_localizacion':
         $localizacion_controller->obtenerLocalizacion($_GET);
         break;
-    case ('home'):
+    case 'home':
         $receta_controller->index();
         break;
     default:
         // Cargar vista home desde /views/home/index.php
-        $rutaHome = BASE_PATH . 'views/home/index.php';
+        $rutaHome = BASE_PATH . 'views/public/home.php';
         if (file_exists($rutaHome)) {
             require_once $rutaHome;
         } else {
@@ -99,7 +104,6 @@ switch ( $action ) {
             echo "<p>Bienvenido al recetario de Zelda: Breath of the Wild</p>";
             echo "<p><a href='?action=recetas'>Ver recetas</a></p>";
         }
-        break;
 }
 
 ?>
