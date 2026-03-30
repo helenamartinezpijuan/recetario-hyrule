@@ -85,10 +85,11 @@ $all_ok = true;
 foreach ($routes as $route_name => $route) {
     $result = simulate_router($route['action'], $route['method'], $route['data'] ?? []);
     
+    // CORRECCIÓN: Usar concatenación normal o {$var} en lugar de ${var}
     if ($result['success']) {
-        test_assert(true, "Ruta '$route_name' (${route['method']}) responde correctamente. Output: " . $result['output_length'] . " bytes");
+        test_assert(true, "Ruta '$route_name' (" . $route['method'] . ") responde correctamente. Output: " . $result['output_length'] . " bytes");
     } else {
-        test_assert(false, "Ruta '$route_name' (${route['method']}) falló: " . ($result['error'] ?? 'Error desconocido'));
+        test_assert(false, "Ruta '$route_name' (" . $route['method'] . ") falló: " . ($result['error'] ?? 'Error desconocido'));
         $all_ok = false;
     }
 }

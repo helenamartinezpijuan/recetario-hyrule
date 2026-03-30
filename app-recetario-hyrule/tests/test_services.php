@@ -26,8 +26,9 @@ try {
     $tiposEfectos = $recetaService->getAllTiposEfectos();
     test_assert(is_array($tiposEfectos), "getAllTiposEfectos() devuelve array con " . count($tiposEfectos) . " tipos");
     
-    $ingredientesPorCategoria = $recetaService->getIngredientesPorCategoria();
-    test_assert(is_array($ingredientesPorCategoria), "getIngredientesPorCategoria() devuelve array con " . count($ingredientesPorCategoria) . " categorías");
+    // Usamos sortIngredientesPorCategoria() en su lugar.
+    $ingredientesPorCategoria = $recetaService->sortIngredientesPorCategoria();
+    test_assert(is_array($ingredientesPorCategoria), "sortIngredientesPorCategoria() devuelve array con " . count($ingredientesPorCategoria) . " categorías");
     
     if (!empty($recetas)) {
         $primeraReceta = $recetas[0];

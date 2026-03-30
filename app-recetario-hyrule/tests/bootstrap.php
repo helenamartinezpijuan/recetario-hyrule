@@ -6,15 +6,25 @@
 
 // Definir constantes para pruebas
 define('TEST_MODE', true);
-define('BASE_PATH', __DIR__ . '/../');
-define('BASE_URL', '/recetario-hyrule');
+
+// Detectar la ruta base correctamente
+if (!defined('BASE_PATH')) {
+    // Si estamos en /tests/, subimos un nivel
+    if (basename(__DIR__) === 'tests') {
+        define('BASE_PATH', realpath(__DIR__ . '/../') . '/');
+    } else {
+        define('BASE_PATH', realpath(__DIR__) . '/');
+    }
+}
+//define('BASE_URL', '/recetario-hyrule');
+define('BASE_URL', '');
 
 // Configurar manejo de errores para tests
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('log_errors', 0);
 
-// Función de autocarga (misma que en home.php)
+// Función de autocarga
 spl_autoload_register(function (string $class): void {
     $prefixToDirectory = [
         'config\\' => 'config/',

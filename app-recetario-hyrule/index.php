@@ -8,7 +8,8 @@
 
 // Definir constante con la ruta base de la aplicación
 define('BASE_PATH', __DIR__ . '/');
-define('BASE_URL', '/recetario-hyrule');
+//define('BASE_URL', '/recetario-hyrule');
+define('BASE_URL', '');
 
 // Incluir el punto de entrada real de la aplicación
 require_once BASE_PATH . 'public/home.php';
