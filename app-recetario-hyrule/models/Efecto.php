@@ -7,6 +7,7 @@ namespace models;
 class Efecto {
   protected $id_efecto;
   protected $id_tipo_efecto;
+  protected $imagen;
   protected $descripcion;
 
   /***************
@@ -17,11 +18,13 @@ class Efecto {
    * Constructor de la clase Efecto
    * @param int $id_efecto Identificador único (clave primaria) del efecto
    * @param TipoEfecto $id_tipo_efecto Nombre del efecto
+   * @param string $imagen Ruta a la imagen
    * @param string $descripcion Breve descripción del efecto
    */
-  public function __construct($id_efecto, TipoEfecto $id_tipo_efecto, $descripcion) {
+  public function __construct($id_efecto, TipoEfecto $id_tipo_efecto, $imagen, $descripcion) {
     $this->setIdEfecto($id_efecto);
     $this->setTipoEfecto($id_tipo_efecto);
+    $this->setImagen($imagen);
     $this->setDescripcion($descripcion);
   }
 
@@ -42,6 +45,13 @@ class Efecto {
    */
   public function getTipoEfecto(): TipoEfecto {
     return $this->id_tipo_efecto;
+  }
+  /**
+   * Función que devuelve la ruta a la imagen del efecto
+   * @return string
+   */
+  public function getImagen(): string {
+    return $this->imagen;
   }
    /**
    * Función que devuelve la descripción del efecto
@@ -68,7 +78,15 @@ class Efecto {
    * @param TipoEfecto $id_tipo_efecto
    */
   protected function setTipoEfecto($id_tipo_efecto): void {
-      $this->id_tipo_efecto = $id_tipo_efecto;
+    $this->id_tipo_efecto = $id_tipo_efecto;
+  }
+  /**
+   * Función que asigna la ruta de la imagen al efecto
+   * @param string $imagen
+   * @return void
+   */
+  protected function setImagen($imagen): void {
+    $this->imagen = $imagen;
   }
   /**
    * Función que asigna la descripción del efecto

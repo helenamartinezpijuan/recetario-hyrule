@@ -18,16 +18,13 @@ use Exception;
 class RecetaController extends BaseController {
 
     private RecetaService $service;
-    //private RecetaRepository $repository;
+    private RecetaRepository $repository;
 
     public function __construct() {
         $this->service = new RecetaService();
-        //$this->repository = new RecetaRepository();
+        $this->repository = new RecetaRepository();
     }
 
-    /****************************************************
-     * MOSTRAR VISTA PRINCIPAL DE RECETAS (sin filtros) *
-     ****************************************************/
     /**
      * Muestra la página de listado de recetas con todos los datos iniciales
      * @return void
@@ -37,7 +34,7 @@ class RecetaController extends BaseController {
             // 1. OBTENER DATOS para la vista
             $recetas = $this->service->getAllRecetas();
             $tiposEfectos = $this->service->getAllTiposEfectos();
-            $ingredientesPorCategoria = $this->service->getIngredientesPorCategoria(); 
+            $ingredientesPorCategoria = $this->service->sortIngredientesPorCategoria(); 
 
             // 2. CARGAR VISTA de todas las recetas
             $this->mostrar('recetas/recetas-zelda-breath-of-the-wild', [
@@ -56,9 +53,6 @@ class RecetaController extends BaseController {
         }
     }
 
-    /*************************************************************
-     * ENDPOINT AJAX: FILTRAR RECETAS POR EFECTOS E INGREDIENTES *
-     *************************************************************/
     /**
      * Recibe los filtros vía POST y devuelve las recetas filtradas en JSON
      * @param array $postData Los datos completos de $_POST
@@ -95,9 +89,6 @@ class RecetaController extends BaseController {
         }
     }
 
-    /*************************************************************
-     * ENDPOINT AJAX: OBTENER DETALLE DE UNA RECETA (para modal) *
-     *************************************************************/
     /**
      * Recibe el ID de una receta vía GET y devuelve sus detalles completos en JSON
      * @param array $getData Datos de $_GET
@@ -105,7 +96,7 @@ class RecetaController extends BaseController {
      * @return void
      */
     public function obtenerReceta(array $getData): void {
-        // EXPLAIN WHAT THIS DOES
+        // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON (no HTML)
         header('Content-Type: application/json');
 
         try {

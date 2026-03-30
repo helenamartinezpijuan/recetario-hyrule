@@ -27,8 +27,8 @@ class RecetaService {
      * Devuelve array con las categorías de ingredientes y sus ingredientes
      * @return array ['setas' => [Ingrediente, ...], 'pescados_mariscos' => [...], ...]
      */
-    public function getIngredientesPorCategoria(): array {
-        return $this->ingredienteService->getIngredientesPorCategoria();
+    public function sortIngredientesPorCategoria(): array {
+        return $this->ingredienteService->sortIngredientesPorCategoria();
     }
     
     /**

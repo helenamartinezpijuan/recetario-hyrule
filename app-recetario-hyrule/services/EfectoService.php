@@ -45,7 +45,7 @@ class EfectoService {
     /**
      * Busca efectos por nombre del tipo de efecto
      * @param string $nombre Nombre del Efecto buscado
-     * @return array de Efecto
+     * @return Efecto[]
      */
     public function buscarEfectosPorNombre(string $nombre): array {
         try {
@@ -72,6 +72,10 @@ class EfectoService {
             return null;
         }
     }
+
+
+
+
 
 }
 

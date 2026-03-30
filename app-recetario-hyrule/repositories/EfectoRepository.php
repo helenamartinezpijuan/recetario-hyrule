@@ -21,7 +21,7 @@ class EfectoRepository extends BaseRepository {
         $conn = $this->getConnection();
 
         // 2. CONSTRUIR CONSULTA
-        $sql = "SELECT id_efecto, id_tipo_efecto, descripcion FROM efectos ORDER BY $orden";
+        $sql = "SELECT id_efecto, id_tipo_efecto, imagen, descripcion FROM efectos ORDER BY $orden";
 
         // 3. EJECUTAR CONSULTA con manejo de errores
         $resultado = $conn->query($sql);
@@ -37,6 +37,7 @@ class EfectoRepository extends BaseRepository {
             $efecto = new Efecto(
                 $registro["id_efecto"],
                 $tipo_efecto,
+                $registro["imagen"],
                 $registro["descripcion"]
             );
             $efectos[] = $efecto;
@@ -63,7 +64,7 @@ class EfectoRepository extends BaseRepository {
         $conn = $this->getConnection();
 
         // 3. CONSTRUIR CONSULTA
-        $sql = "SELECT id_tipo_efecto, descripcion FROM efectos WHERE id_efecto=?;";
+        $sql = "SELECT id_tipo_efecto, imagen, descripcion FROM efectos WHERE id_efecto=?;";
 
         // 4. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);
@@ -95,6 +96,7 @@ class EfectoRepository extends BaseRepository {
         $efecto = new Efecto(
             $id_efecto,
             $tipo_efecto,
+            $registro["imagen"],
             $registro['descripcion']
         );
 
@@ -117,7 +119,7 @@ class EfectoRepository extends BaseRepository {
         
         // 2. CONSTRUIR CONSULTA
         $likeNombre = "%$nombre%";
-        $sql = "SELECT efectos.id_efecto, efectos.id_tipo_efecto, efectos.descripcion, tipos_efectos.nombre 
+        $sql = "SELECT efectos.id_efecto, efectos.id_tipo_efecto, efectos.imagen efectos.descripcion, tipos_efectos.nombre 
             FROM efectos 
             INNER JOIN tipos_efectos USING(id_tipo_efecto) 
             WHERE tipos_efectos.nombre LIKE ? OR efectos.descripcion LIKE ?
@@ -147,6 +149,7 @@ class EfectoRepository extends BaseRepository {
             $efecto = new Efecto(
                 $registro["id_efecto"],
                 $tipoEfecto,
+                $registro["imagen"],
                 $registro["descripcion"]
             );
             $efectos[] = $efecto;
