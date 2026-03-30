@@ -1,46 +1,71 @@
 <?php
-// tests/debug_controller.php
-// Prueba el controlador sin pasar por index.php
+/**
+ * Debugger para controladores
+ * Permite depurar problemas específicos en un controlador
+ */
 
-require_once __DIR__ . '/../config/Database.php';
-require_once __DIR__ . '/../helpers/Logger.php';
-require_once __DIR__ . '/../models/Cliente.php';
-require_once __DIR__ . '/../services/ClienteService.php';
-require_once __DIR__ . '/../repositories/BaseRepository.php';
-require_once __DIR__ . '/../repositories/ClienteRepository.php';
-require_once __DIR__ . '/../controllers/ClienteController.php';
+require_once __DIR__ . '/bootstrap.php';
 
-use controllers\ClienteController;
+test_section("DEBUGGER DE CONTROLADORES");
 
-echo "<h1>Debug de ClienteController</h1>";
+// Configurar qué depurar
+$debug_controller = $_GET['controller'] ?? 'RecetaController';
+$debug_method = $_GET['method'] ?? 'index';
+$debug_params = $_GET['params'] ?? [];
+
+echo "🔍 Debuggeando: $debug_controller::$debug_method()" . PHP_EOL;
+echo "📝 Parámetros: " . json_encode($debug_params) . PHP_EOL;
+echo PHP_EOL;
 
 try {
-    $controller = new ClienteController();
+    $controller_class = "controllers\\$debug_controller";
     
-    echo "<h2>Simulando mostrarFormularioPrincipal()</h2>";
+    if (!class_exists($controller_class)) {
+        throw new Exception("Controlador $controller_class no existe");
+    }
     
-    // Usamos Reflection para acceder al método privado 'mostrar' y capturar lo que pasa
-    $reflection = new ReflectionClass($controller);
-    $metodoMostrar = $reflection->getMethod('mostrar');
-    $metodoMostrar->setAccessible(true);
+    $controller = new $controller_class();
     
-    // Simulamos que llamamos a mostrarFormularioPrincipal
-    echo "<p>✅ Controlador instanciado correctamente</p>";
+    echo "✅ Controlador instanciado correctamente" . PHP_EOL;
+    echo "📋 Métodos disponibles: " . implode(', ', get_class_methods($controller)) . PHP_EOL;
+    echo PHP_EOL;
     
-    // Verificar que el servicio tiene tipos de vía
-    echo "<h3>Verificando ClienteService:</h3>";
-    $service = $reflection->getProperty('service');
-    $service->setAccessible(true);
-    $serviceInstance = $service->getValue($controller);
+    if (!method_exists($controller, $debug_method)) {
+        throw new Exception("Método $debug_method no existe en $debug_controller");
+    }
     
-    $tipos = $serviceInstance->obtenerTiposVia();
-    echo "<pre>";
-    echo "Tipos de vía desde service: " . count($tipos) . " elementos\n";
-    print_r($tipos);
-    echo "</pre>";
+    echo "🚀 Ejecutando método $debug_method..." . PHP_EOL;
+    echo "────────────────────────────────────────────" . PHP_EOL;
+    
+    // Capturar salida
+    ob_start();
+    
+    if ($debug_method === 'index') {
+        $controller->index();
+    } elseif ($debug_method === 'filtrarRecetas' && !empty($debug_params)) {
+        $controller->filtrarRecetas($debug_params);
+    } elseif ($debug_method === 'obtenerReceta' && isset($debug_params['id'])) {
+        $controller->obtenerReceta(['id' => $debug_params['id']]);
+    } elseif ($debug_method === 'filtrarIngredientes' && !empty($debug_params)) {
+        $controller->filtrarIngredientes($debug_params);
+    } elseif ($debug_method === 'obtenerIngrediente' && isset($debug_params['id'])) {
+        $controller->obtenerIngrediente(['id' => $debug_params['id']]);
+    } else {
+        echo "⚠️  Método no soportado para debug automático. Ejecutando directamente..." . PHP_EOL;
+        $controller->$debug_method();
+    }
+    
+    $output = ob_get_clean();
+    
+    echo PHP_EOL . "────────────────────────────────────────────" . PHP_EOL;
+    echo "📤 OUTPUT:" . PHP_EOL;
+    echo $output;
+    echo PHP_EOL;
     
 } catch (Exception $e) {
-    echo "<p style='color: red;'>ERROR: " . $e->getMessage() . "</p>";
-    echo "<pre>" . $e->getTraceAsString() . "</pre>";
+    echo "❌ ERROR: " . $e->getMessage() . PHP_EOL;
+    echo "📍 En: " . $e->getFile() . " línea " . $e->getLine() . PHP_EOL;
+    echo PHP_EOL;
+    echo "📚 Stack trace:" . PHP_EOL;
+    echo $e->getTraceAsString() . PHP_EOL;
 }
-?>
