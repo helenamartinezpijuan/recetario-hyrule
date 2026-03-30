@@ -89,8 +89,7 @@ class IngredienteService {
                 // Si no está en ninguna categoría definida, va a 'varios'
                 if (!$categoriaAsignada) {
                     $categorias['varios'][] = $ingrediente;
-                    // Actualizar la lista de IDs de 'varios' para futuras clasificaciones
-                    self::CATEGORIAS_INGREDIENTES['varios']['ids'][] = $id;
+                    $varios_ids[] = $id; // Guardar para posible uso futuro
                 }
             }
             return $categorias;
