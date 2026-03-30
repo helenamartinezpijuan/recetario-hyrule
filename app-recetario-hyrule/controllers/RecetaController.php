@@ -18,7 +18,7 @@ use Exception;
 class RecetaController extends BaseController {
 
     private RecetaService $service;
-    private RecetaRepository $repository;
+    //private RecetaRepository $repository;
 
     public function __construct() {
         $this->service = new RecetaService();

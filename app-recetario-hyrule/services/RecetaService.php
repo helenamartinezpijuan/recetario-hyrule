@@ -1,6 +1,7 @@
 <?php 
 namespace services;
 
+use models\Receta;
 use models\RecetaDetalle;
 use repositories\RecetaRepository;
 use repositories\EfectoRepository;
@@ -35,7 +36,12 @@ class RecetaService {
      * @return array de Receta
      */
     public function getAllRecetas(): array {
-        return $this->recetaRepo->obtenerTodos();
+        try {
+            return $this->recetaRepo->obtenerTodos();
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
     }
     
     /**
@@ -43,7 +49,43 @@ class RecetaService {
      * @return array de TipoEfecto
      */
     public function getAllTiposEfectos(): array {
-        return $this->efectoRepo->obtenerTodos();
+        try {
+            return $this->efectoRepo->obtenerTipos();
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+
+    /**
+     * Busca recetas por nombre
+     * @param string $nombre Nombre de la receta buscada
+     * @return array de Receta
+     */
+    public function buscarRecetasPorNombre(string $nombre): array {
+        try {
+            if (empty(trim($nombre))) {
+                return $this->getAllRecetas();
+            }
+            return $this->recetaRepo->buscarPorNombre($nombre);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+    
+    /**
+     * Obtiene una receta por su ID
+     * @param int $id Identificador único de la receta
+     * @return Receta|null
+     */
+    public function getRecetaPorId(int $id): ?Receta {
+        try {
+            return $this->recetaRepo->obtenerPorId($id);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return null;
+        }
     }
     
     /**
@@ -53,7 +95,12 @@ class RecetaService {
      * @return array de objetos Receta
      */
     public function getRecetasFiltradas(array $efectos_ids, array $ingredientes_ids): array {
-        return $this->recetaRepo->obtenerPorFiltros($efectos_ids, $ingredientes_ids);
+        try {
+            return $this->recetaRepo->obtenerPorFiltros($efectos_ids, $ingredientes_ids);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
     }
     
     /**

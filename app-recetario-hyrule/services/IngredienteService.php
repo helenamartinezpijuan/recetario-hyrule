@@ -76,6 +76,37 @@ class IngredienteService {
             return [];
         }  
     }
+
+    /**
+     * Busca ingredientes por nombre
+     * @param string $nombre Nombre del Ingrediente buscado
+     * @return array de Ingrediente
+     */
+    public function buscarIngredientesPorNombre(string $nombre): array {
+        try {
+            if (empty(trim($nombre))) {
+                return $this->getAllIngredientes();
+            }
+            return $this->ingredienteRepo->buscarPorNombre($nombre);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+    
+    /**
+     * Obtiene un ingrediente por su ID
+     * @param int $id
+     * @return Ingrediente|null
+     */
+    public function getIngredientePorId(int $id): ?Ingrediente {
+        try {
+            return $this->ingredienteRepo->obtenerPorId($id);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return null;
+        }
+    }
     
     /**
      * Obtiene ingredientes filtrados por categorías de ingredientes y/o por localizaciones

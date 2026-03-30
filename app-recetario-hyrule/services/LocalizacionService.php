@@ -81,6 +81,37 @@ class LocalizacionService {
             return [];
         }
     }
+
+    /**
+     * Busca localizaciones por nombre o región
+     * @param string $nombre Nombre de la región o localización buscada
+     * @return array de Localizacion
+     */
+    public function buscarLocalizacionesPorNombre(string $nombre): array {
+        try {
+            if (empty(trim($nombre))) {
+                return $this->getAllLocalizaciones();
+            }
+            return $this->localizacionRepo->buscarPorNombre($nombre);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+    
+    /**
+     * Obtiene una localización por su ID
+     * @param int $id Identificador único de la localización
+     * @return Localizacion|null
+     */
+    public function getLocalizacionPorId(int $id): ?Localizacion {
+        try {
+            return $this->localizacionRepo->obtenerPorId($id);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return null;
+        }
+    }
     
     /**
      * Obtiene localizacions filtrados por región/es

@@ -28,10 +28,51 @@ class EfectoService {
             return [];
         }
     }
+    
+    /**
+     * Obtiene todos los tipos de efecto (para filtros)
+     * @return array de TipoEfecto
+     */
+    public function getAllTiposEfectos(): array {
+        try {
+            return $this->efectoRepo->obtenerTipos();
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+    
+    /**
+     * Busca efectos por nombre del tipo de efecto
+     * @param string $nombre Nombre del Efecto buscado
+     * @return array de Efecto
+     */
+    public function buscarEfectosPorNombre(string $nombre): array {
+        try {
+            if (empty(trim($nombre))) {
+                return $this->getAllEfectos();
+            }
+            return $this->efectoRepo->buscarPorNombre($nombre);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+    
+    /**
+     * Obtiene un efecto por su ID
+     * @param int $id
+     * @return Efecto|null
+     */
+    public function getEfectoPorId(int $id): ?Efecto {
+        try {
+            return $this->efectoRepo->obtenerPorId($id);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return null;
+        }
+    }
 
-    // REVISAR ULTIMA CONSULTA A DEEPSEEK PARA LA REVISIÓN DE LOS SERVICES
-    //He realizado los cambios que indicas, pero con algunas modificaciones:
-    //MODIFICACION 1: En el EfectoService.php no he incluido la función getAllTiposEfectos porque no voy a realizar búsquedas filtradas para los efectos, solo por nombre (hay 11 en total, prefiero mostrar solo una lista y ofrecer la opción de búsqueda por la barra en caso de que alguien la quiera, pero la veo bastante innecesaria)
 }
 
 ?>

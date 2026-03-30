@@ -17,9 +17,6 @@ class EfectoController extends BaseController {
         $this->repository = new EfectoRepository();
     }
 
-    /*********************************************************
-     * MOSTRAR VISTA PRINCIPAL DE EFECTOS (sin filtros) *
-     *********************************************************/
     /**
      * Muestra la página de listado de efectos con todos los datos iniciales
      * @return void
