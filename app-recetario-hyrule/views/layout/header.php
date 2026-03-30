@@ -1,44 +1,65 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <title><?php echo $titulo ?? 'Recetario de Hyrule'; ?></title>
-    
+<head>    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Recetario de Zelda: Breath of the Wild - Descubre todas las recetas, ingredientes y efectos del juego">
+    <meta name="author" content="Helena Martinez Pijuan">
 
-<!-- METER META ETIQUETAS PASADAS COMO EL $titulo PARA CADA PÁGINA ESPECÍFICA -->
+    <title><?php echo $titulo ?? 'Recetario de Hyrule - Zelda: Breath of the Wild'; ?></title>
 
     <!-- Enlazar con la hoja de estilo css -->
-    <link rel="stylesheet" href="../../public/estilos.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/public/estilos.css">
 
     <!-- Importar la última versión (3.7.1) de JQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body>
-    <!--<nav> ¡PENDIENTE! </nav>-->
-
     <!-- Widget de accesibilidad -->
-<div id="accessibility-widget" class="accessibility-widget" aria-label="Panel de accesibilidad">
-    <button id="accessibility-toggle" class="accessibility-toggle" aria-expanded="false" aria-controls="accessibility-panel">
-        <span aria-hidden="true">♿</span>
-        <span class="visually-hidden">Abrir panel de accesibilidad</span>
-    </button>
-    <div id="accessibility-panel" class="accessibility-panel" hidden>
-        <h3>Opciones de accesibilidad</h3>
-        <button class="accessibility-option" data-font="openDyslexic">
-            <span aria-hidden="true">📖</span> Fuente para disléxicos
+    <div id="accessibility-widget" class="accessibility-widget" aria-label="Panel de accesibilidad">
+        <button id="accessibility-toggle" class="accessibility-toggle" aria-expanded="false" aria-controls="accessibility-panel">
+            <span aria-hidden="true">♿</span>
+            <span class="visually-hidden">Abrir panel de accesibilidad</span>
         </button>
-        <button class="accessibility-option" data-contrast="high">
-            <span aria-hidden="true">🌙</span> Alto contraste
-        </button>
-        <button class="accessibility-option" data-colorblind="protanopia">
-            <span aria-hidden="true">🎨</span> Modo protanopía
-        </button>
-        <button class="accessibility-option" data-reset>
-            <span aria-hidden="true">⟳</span> Restablecer
-        </button>
+        <div id="accessibility-panel" class="accessibility-panel" hidden>
+            <h3>Opciones de accesibilidad</h3>
+            <button class="accessibility-option" data-font="openDyslexic">
+                <span aria-hidden="true">📖</span> Fuente para disléxicos
+            </button>
+            <button class="accessibility-option" data-contrast="high">
+                <span aria-hidden="true">🌙</span> Alto contraste
+            </button>
+            <button class="accessibility-option" data-colorblind="protanopia">
+                <span aria-hidden="true">🎨</span> Modo protanopía
+            </button>
+            <button class="accessibility-option" data-reset>
+                <span aria-hidden="true">⟳</span> Restablecer
+            </button>
+        </div>
     </div>
-</div>
+
+    <!-- Header visual con navegación -->
+    <header class="site-header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href="?action=home" aria-label="Ir a inicio">
+                    <img src="<?= BASE_URL ?>/resources/img/logo-draft-1.png" alt="Recetario Hyrule - Logo">
+                </a>
+            </div>
+            
+            <nav class="main-nav" aria-label="Navegación principal">
+                <ul class="nav-list">
+                    <li><a href="?action=home" class="<?= ($activePage ?? '') === 'home' ? 'active' : '' ?>">HOME</a></li>
+                    <li><a href="?action=recetas" class="<?= ($activePage ?? '') === 'recetas' ? 'active' : '' ?>">RECETAS</a></li>
+                    <li><a href="?action=ingredientes" class="<?= ($activePage ?? '') === 'ingredientes' ? 'active' : '' ?>">INGREDIENTES</a></li>
+                    <li><a href="?action=efectos" class="<?= ($activePage ?? '') === 'efectos' ? 'active' : '' ?>">EFECTOS</a></li>
+                    <li><a href="?action=localizaciones" class="<?= ($activePage ?? '') === 'localizaciones' ? 'active' : '' ?>">LOCALIZACIONES</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="main-content">
 
 <script>
 // Widget de accesibilidad

@@ -92,18 +92,23 @@ switch ( $action ) {
         $localizacion_controller->obtenerLocalizacion($_GET);
         break;
     case 'home':
-        $receta_controller->index();
-        break;
-    default:
         // Cargar vista home desde /views/home/index.php
-        $rutaHome = BASE_PATH . 'views/public/home.php';
+        $rutaHome = BASE_PATH . 'views/home/index.php';
         if (file_exists($rutaHome)) {
-            require_once $rutaHome;
+            // Definir variables para la vista si son necesarias
+            $activePage = 'home';
+            $titulo = 'Inicio - Recetario de Hyrule';
+            include $rutaHome;
         } else {
+            // Fallback
             echo "<h1>Recetario de Hyrule</h1>";
-            echo "<p>Bienvenido al recetario de Zelda: Breath of the Wild</p>";
             echo "<p><a href='?action=recetas'>Ver recetas</a></p>";
         }
+        break;
+    default:
+        // Si la acción no existe, redirigir a home
+        header('Location: index.php?action=home');
+        exit;
 }
 
 ?>

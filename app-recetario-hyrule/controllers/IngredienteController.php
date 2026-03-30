@@ -49,11 +49,11 @@ class IngredienteController extends BaseController {
     }
 
     /**
-     * Recibe los filtros vía POST y devuelve los ingredientes filtradas en JSON
+     * Recibe los filtros vía POST y devuelve los ingredientes filtrados en JSON
      * @param array $postData Los datos completos de $_POST
      * @return void
      */
-    public function filtrarLocalizaciones(array $postData): void {
+    public function filtrarIngredientes(array $postData): void {
         // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON (no HTML)
         header('Content-Type: application/json');
 
@@ -61,9 +61,32 @@ class IngredienteController extends BaseController {
             // 1. EXTRAER DATOS del formulario
             $ingredientes_categorias = $postData['ingrediente_categoria'] ?? [];
             $localizaciones_ids = $postData['localizaciones'] ?? [];
+            $nombre = trim($postData['nombre'] ?? '');
 
             // 2. VALIDAR Y NORMALIZAR los datos a través del service
-            $ingredientes_ids = $this->ingredienteService->getIngredientesPorCategoria($ingredientes_categorias);
+
+            // 2.1 OBTENER IDs de ingredientes por categorías (si hay categorías seleccionadas)
+            $ingredientes_ids = [];
+            if (!empty($categorias)) {
+                $ingredientes_ids = $this->ingredienteService->getIngredientesPorCategoria($ingredientes_categorias);
+            }
+
+            // 2.2 OBTENER INGREDIENTES que coincidan si hay búsqueda por nombre
+            if (!empty($nombre)) {
+                $ingredientesPorNombre = $this->ingredienteService->buscarIngredientesPorNombre($nombre);
+                $idsPorNombre = array_map(function($ing) {
+                    return $ing->getIdIngrediente();
+                }, $ingredientesPorNombre);
+                
+                // Si ya hay IDs por categoría, hacer intersección; si no, usar los de nombre
+                if (!empty($ingredientes_ids)) {
+                    $ingredientes_ids = array_intersect($ingredientes_ids, $idsPorNombre);
+                } else {
+                    $ingredientes_ids = $idsPorNombre;
+                }
+            }
+            
+            // 2.3 FILTRAR por localizaciones
             $ingredientes = $this->ingredienteService->getIngredientesFiltrados($ingredientes_ids, $localizaciones_ids);
 
             // 3. PREPARAR DATOS para pasar a Json

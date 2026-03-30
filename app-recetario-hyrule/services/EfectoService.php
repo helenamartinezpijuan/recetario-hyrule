@@ -73,10 +73,6 @@ class EfectoService {
         }
     }
 
-
-
-
-
 }
 
 ?>
