@@ -187,7 +187,7 @@ class IngredienteRepository extends BaseRepository {
             $valores = array_merge($valores, $localizaciones_ids);
         }
 
-        $sql .= " ORDER BY i.nombre";
+        $sql .= " ORDER BY ingredientes.nombre";
         
         // 5. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);

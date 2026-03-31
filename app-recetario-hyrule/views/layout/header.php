@@ -18,7 +18,7 @@
     <!-- Widget de accesibilidad -->
     <div id="accessibility-widget" class="accessibility-widget" aria-label="Panel de accesibilidad">
         <button id="accessibility-toggle" class="accessibility-toggle" aria-expanded="false" aria-controls="accessibility-panel">
-            <span aria-hidden="true">♿</span>
+            <span aria-hidden="true"><img src="<?= BASE_URL ?>/resources/img/accesibilidad.png" alt="Logo de accesibilidad"></span>
             <span class="visually-hidden">Abrir panel de accesibilidad</span>
         </button>
         <div id="accessibility-panel" class="accessibility-panel" hidden>
@@ -43,7 +43,7 @@
         <div class="container header-container">
             <div class="logo">
                 <a href="?action=home" aria-label="Ir a inicio">
-                    <img src="<?= BASE_URL ?>/resources/img/logo-draft-1.png" alt="Recetario Hyrule - Logo">
+                    <img src="<?= BASE_URL ?>/resources/img/logo-draft-2.png" alt="Recetario Hyrule - Logo">
                 </a>
             </div>
             

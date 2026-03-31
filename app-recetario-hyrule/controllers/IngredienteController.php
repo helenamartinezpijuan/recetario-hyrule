@@ -32,7 +32,7 @@ class IngredienteController extends BaseController {
             $localizaciones = $this->localizacionService->getAllLocalizaciones();
 
             // 2. CARGAR VISTA de todos los ingredientes
-            $this->mostrar('ingredientes/index', [
+            $this->mostrar('ingredientes/ingredientes-zelda-breath-of-the-wild', [
                 'ingredientes' => $ingredientes,
                 'ingredientesPorCategoria' => $ingredientesPorCategoria,
                 'localizaciones' => $localizaciones,

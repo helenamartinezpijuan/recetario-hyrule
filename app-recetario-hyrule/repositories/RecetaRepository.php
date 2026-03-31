@@ -386,7 +386,7 @@ class RecetaRepository extends BaseRepository {
         $conn = $this->getConnection();
 
         // 3. CONSTRUIR CONSULTA
-        $sql = "SELECT efectos.id_efecto, efectos_id_tipo_efecto, efectos.descripcion,
+        $sql = "SELECT efectos.id_efecto, efectos.id_tipo_efecto, efectos.imagen, efectos.descripcion,
                 tipos_efectos.nombre
                 FROM recetas_efectos
                 INNER JOIN efectos USING(id_efecto) 
@@ -412,11 +412,12 @@ class RecetaRepository extends BaseRepository {
         while ($registro = $resultado->fetch_assoc()) {
             $tipoEfecto = new TipoEfecto(
                 $registro['id_tipo_efecto'],
-                $registro['tipo_nombre']
+                $registro['nombre']
             );
             $efecto = new Efecto(
                 $registro['id_efecto'],
                 $tipoEfecto,
+                $registro['imagen'],
                 $registro['descripcion']
             );
             $efectos[] = $efecto;

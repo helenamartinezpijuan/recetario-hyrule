@@ -29,7 +29,7 @@ class EfectoController extends BaseController {
             $tipos_efectos = $this->service->getAllTiposEfectos();
 
             // 2. CARGAR VISTA de todos los efectos
-            $this->mostrar('efectos/index', [
+            $this->mostrar('efectos/efectos-zelda-breath-of-the-wild', [
                 'efectos' => $efectos,
                 'tipos_efectos' => $tipos_efectos,
                 'base_url' => BASE_URL

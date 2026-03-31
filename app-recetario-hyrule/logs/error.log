@@ -1,0 +1,25 @@
+[2026-03-30 07:27:13] ERROR: Table 'if0_41455627_db_recetario_hyrule.recetas' doesn't exist en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/recetario-hyrule/services/RecetaService.php
+[2026-03-30 07:27:13] ERROR: Table 'if0_41455627_db_recetario_hyrule.tipos_efectos' doesn't exist en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/recetario-hyrule/services/RecetaService.php
+[2026-03-30 07:40:50] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/recetario-hyrule/services/IngredienteService.php
+[2026-03-30 07:52:37] ERROR: Vista no encontrada: ingredientes/index en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/IngredienteController.php
+[2026-03-30 07:52:37] ERROR: Vista no encontrada: ingredientes/index en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/IngredienteController.php
+[2026-03-30 07:52:45] ERROR: Vista no encontrada: efectos/index en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/EfectoController.php
+[2026-03-30 07:53:03] ERROR: Vista no encontrada: ingredientes/index en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/IngredienteController.php
+[2026-03-30 07:53:06] ERROR: Vista no encontrada: efectos/index en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/EfectoController.php
+[2026-03-30 07:54:03] ERROR: Vista no encontrada: efectos/index en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/EfectoController.php
+[2026-03-30 09:14:57] ERROR: Vista no encontrada: ingredientes/index en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/IngredienteController.php
+[2026-03-30 09:16:42] ERROR: Unknown column 'efectos_id_tipo_efecto' in 'SELECT' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
+[2026-03-30 09:16:50] ERROR: Unknown column 'efectos_id_tipo_efecto' in 'SELECT' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
+[2026-03-30 09:16:59] ERROR: Unknown column 'efectos_id_tipo_efecto' in 'SELECT' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
+[2026-03-30 09:20:19] ERROR: Unknown column 'efectos_id_tipo_efecto' in 'SELECT' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
+[2026-03-31 01:51:23] ERROR: Vista no encontrada: ingredientes/index en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/IngredienteController.php
+[2026-03-31 01:51:28] ERROR: Unknown column 'efectos_id_tipo_efecto' in 'SELECT' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
+[2026-03-31 03:01:02] ERROR: Unknown column 'efectos_id_tipo_efecto' in 'SELECT' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
+[2026-03-31 03:01:05] ERROR: Unknown column 'efectos_id_tipo_efecto' in 'SELECT' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
+[2026-03-31 03:04:34] ERROR: Unknown column 'efectos_id_tipo_efecto' in 'SELECT' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
+[2026-03-31 03:04:45] ERROR: Vista no encontrada: ingredientes/index en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/IngredienteController.php
+[2026-03-31 03:05:38] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 03:10:00] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 03:22:18] ERROR: Vista no encontrada: efectos/index en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/EfectoController.php
+[2026-03-31 03:48:39] ERROR: Unknown column 'efectos_id_tipo_efecto' in 'SELECT' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
+[2026-03-31 03:52:42] ERROR: Unknown column 'efectos_id_tipo_efecto' in 'SELECT' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
