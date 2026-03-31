@@ -12,7 +12,7 @@ body {
     color: #2C2C2C;
     font-family: 'AmaticSC', sans-serif;
     line-height: 1.5;
-    font-size: 18px;
+    font-size: 21px;
 }
 
 /* ============================================
@@ -39,7 +39,7 @@ body {
 }
 
 .logo img {
-    max-height: 60px;
+    max-height: 80px;
 }
 
 .main-nav ul {
@@ -103,7 +103,7 @@ body {
    ============================================ */
 .breadcrumb {
     margin: 1.5rem 0;
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: #4E98D9;
 }
 
@@ -122,7 +122,7 @@ body {
     border: none;
     cursor: pointer;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 1.2rem;
     transition: all 0.2s;
 }
 
@@ -162,7 +162,7 @@ body {
 .hero {
     text-align: center;
     padding: 4rem 1rem;
-    background: linear-gradient(135deg, #66CAF2 0%, #A9D943 100%);
+    background: linear-gradient(135deg, #F2EDD5 0%, #A9D943 100%);
     color: #F2EDD5;
     border-radius: 20px;
     margin: 2rem 0;
@@ -170,7 +170,7 @@ body {
 
 .hero h1 {
     font-size: 4rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
     font-family: 'PermanentMarker', cursive;
 }
 
@@ -193,9 +193,9 @@ body {
     background-color: #F2EDD5;
 }
 
-/* ============================================
+/* =====================================================================
    LAYOUT DE PÁGINAS CON FILTROS (RECETAS, INGREDIENTES, LOCALIZACIONES)
-   ============================================ */
+   ===================================================================== */
 .page-layout {
     display: flex;
     gap: 2rem;
@@ -322,7 +322,7 @@ body {
 }
 
 .card-title {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
     margin-bottom: 0.5rem;
     color: #A9D943;
 }
@@ -334,11 +334,11 @@ body {
 }
 
 .card-icon {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
 }
 
 .card-description {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     margin-bottom: 1rem;
     color: #555;
 }
