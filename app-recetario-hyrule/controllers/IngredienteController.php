@@ -59,38 +59,36 @@ class IngredienteController extends BaseController {
 
         try {
             // 1. EXTRAER DATOS del formulario
-            $ingredientes_categorias = $postData['ingrediente_categoria'] ?? [];
+            $categorias = $postData['ingrediente_categoria'] ?? [];
             $localizaciones_ids = $postData['localizaciones'] ?? [];
             $nombre = trim($postData['nombre'] ?? '');
 
-            // 2. VALIDAR Y NORMALIZAR los datos a través del service
-
-            // 2.1 OBTENER IDs de ingredientes por categorías (si hay categorías seleccionadas)
+            // 2. OBTENER IDs de ingredientes por categorías (si hay categorías seleccionadas)
             $ingredientes_ids = [];
             if (!empty($categorias)) {
-                $ingredientes_ids = $this->ingredienteService->getIngredientesPorCategoria($ingredientes_categorias);
+                $ingredientes_ids = $this->ingredienteService->getIngredientesPorCategoria($categorias);
             }
 
-            // 2.2 OBTENER INGREDIENTES que coincidan si hay búsqueda por nombre
+            // 3. OBTENER INGREDIENTES que coincidan si hay búsqueda por nombre
             if (!empty($nombre)) {
-                $ingredientesPorNombre = $this->ingredienteService->buscarIngredientesPorNombre($nombre);
-                $idsPorNombre = array_map(function($ing) {
+                $ingredientes_por_nombre = $this->ingredienteService->buscarIngredientesPorNombre($nombre);
+                $ids_por_nombre = array_map(function($ing) {
                     return $ing->getIdIngrediente();
-                }, $ingredientesPorNombre);
+                }, $ingredientes_por_nombre);
                 
                 // Si ya hay IDs por categoría, hacer intersección; si no, usar los de nombre
                 if (!empty($ingredientes_ids)) {
-                    $ingredientes_ids = array_intersect($ingredientes_ids, $idsPorNombre);
+                    $ingredientes_ids = array_intersect($ingredientes_ids, $ids_por_nombre);
                 } else {
-                    $ingredientes_ids = $idsPorNombre;
+                    $ingredientes_ids = $ids_por_nombre;
                 }
             }
             
-            // 2.3 FILTRAR por localizaciones
+            // 4. FILTRAR por localizaciones
             $ingredientes = $this->ingredienteService->getIngredientesFiltrados($ingredientes_ids, $localizaciones_ids);
 
-            // 3. PREPARAR DATOS para pasar a Json
-            $ingredientesArray = array_map(function($ingrediente) {
+            // 5. PREPARAR DATOS para pasar a Json
+            $ingredientes_array = array_map(function($ingrediente) {
                 return [
                     'id_ingrediente' => $ingrediente->getIdIngrediente(),
                     'nombre' => $ingrediente->getNombre(),
@@ -99,8 +97,8 @@ class IngredienteController extends BaseController {
                 ];
             }, $ingredientes);
 
-            // 4. DEVOLVER RESPUESTA
-            echo json_encode(['success' => true, 'ingredientes' => $ingredientesArray]);
+            // 6. DEVOLVER RESPUESTA
+            echo json_encode(['success' => true, 'ingredientes' => $ingredientes_array]);
         
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);

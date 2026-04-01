@@ -116,6 +116,15 @@ class RecetaController extends BaseController {
             $ingredientes = $detalle->getIngredientes();
             $efectos = $detalle->getEfectos();
 
+            // Convertir efectos a array simple
+            $efectosArray = array_map(function($efecto) {
+                return [
+                    'nombre' => $efecto->getTipoEfecto()->getNombre(),
+                    'descripcion' => $efecto->getDescripcion(),
+                    'imagen' => $efecto->getImagen() ?? strtolower($efecto->getTipoEfecto()->getNombre()) . '.png'
+                ];
+            }, $efectos);
+
             // 4. DEVOLVER RESPUESTA
             echo json_encode([
                 'success' => true,

@@ -57,10 +57,12 @@ class LocalizacionController extends BaseController {
             $regiones = $postData['regiones'] ?? [];
 
             // 2. VALIDAR Y NORMALIZAR los datos a través del service
-            $localizaciones = $this->service->getLocalizacionesFiltradas($regiones);
+            $localizaciones = empty($regiones) 
+                ? $this->service->getAllLocalizaciones()
+                : $this->service->getLocalizacionesFiltradas($regiones);
 
             // 3. PREPARAR DATOS para pasar a Json
-            $localizacionesArray = array_map(function($localizacion) {
+            $localizaciones_array = array_map(function($localizacion) {
                 return [
                     'id_localizacion' => $localizacion->getIdLocalizacion(),
                     'nombre' => $localizacion->getNombre(),
@@ -70,7 +72,7 @@ class LocalizacionController extends BaseController {
             }, $localizaciones);
 
             // 4. DEVOLVER RESPUESTA
-            echo json_encode(['success' => true, 'localizaciones' => $localizacionesArray]);
+            echo json_encode(['success' => true, 'localizaciones' => $localizaciones_array]);
         
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);

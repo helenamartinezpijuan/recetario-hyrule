@@ -89,7 +89,7 @@ class RecetaRepository extends BaseRepository {
         $conn = $this->getConnection();
 
         // 3. CONSTRUIR CONSULTA
-        $sql = "SELECT nombre, imagen, descripcion FROM recetas WHERE id_receta=?;";
+        $sql = "SELECT nombre, imagen, descripcion FROM recetas WHERE id_receta=?";
 
         // 4. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);
@@ -190,8 +190,8 @@ class RecetaRepository extends BaseRepository {
         $conn = $this->getConnection();
         
         // 2. CONSTRUIR CONSULTA
-        $sql = "SELECT recetas.id_receta, recetas.nombre, recetas.imagen, recetas.descripcion
-                    FROM recetas
+        $sql = "SELECT recetas.id_receta, recetas.nombre, recetas.imagen, recetas.descripcion 
+                    FROM recetas 
                     WHERE 1=1";
         $tipos = "";
         $valores = [];
@@ -199,8 +199,8 @@ class RecetaRepository extends BaseRepository {
         // 3. AÑADIR FILTROS validados de los efectos
         if (!empty($efectos_ids)) {
             $placeholders = implode(',', array_fill(0, count($efectos_ids), '?'));
-            $sql .= " AND EXISTS (SELECT 1 FROM recetas_efectos
-                                WHERE recetas_efectos.id_receta = recetas.id_receta
+            $sql .= " AND EXISTS (SELECT 1 FROM recetas_efectos 
+                                WHERE recetas_efectos.id_receta = recetas.id_receta 
                                 AND recetas_efectos.id_efecto IN ($placeholders))";
             $tipos .= str_repeat('i', count($efectos_ids));
             $valores = array_merge($valores, $efectos_ids);
@@ -338,9 +338,9 @@ class RecetaRepository extends BaseRepository {
 
         // 3. CONSTRUIR CONSULTA
         $sql = "SELECT ingredientes.nombre, recetas_ingredientes.cantidad 
-                FROM recetas_ingredientes
-                INNER JOIN ingredientes USING(id_ingrediente)
-                WHERE recetas_ingredientes.id_receta = ?
+                FROM recetas_ingredientes 
+                INNER JOIN ingredientes USING(id_ingrediente) 
+                WHERE recetas_ingredientes.id_receta = ? 
                 ORDER BY ingredientes.nombre";
 
         // 4. PREPARAR CONSULTA parametrizada
@@ -386,12 +386,12 @@ class RecetaRepository extends BaseRepository {
         $conn = $this->getConnection();
 
         // 3. CONSTRUIR CONSULTA
-        $sql = "SELECT efectos.id_efecto, efectos.id_tipo_efecto, efectos.imagen, efectos.descripcion,
-                tipos_efectos.nombre
-                FROM recetas_efectos
+        $sql = "SELECT efectos.id_efecto, efectos.id_tipo_efecto, efectos.imagen, efectos.descripcion, 
+                tipos_efectos.nombre 
+                FROM recetas_efectos 
                 INNER JOIN efectos USING(id_efecto) 
-                INNER JOIN tipos_efectos USING(id_tipo_efecto)
-                WHERE recetas_efectos.id_receta = ?
+                INNER JOIN tipos_efectos USING(id_tipo_efecto) 
+                WHERE recetas_efectos.id_receta = ? 
                 ORDER BY tipos_efectos.nombre";
 
         // 4. PREPARAR CONSULTA parametrizada

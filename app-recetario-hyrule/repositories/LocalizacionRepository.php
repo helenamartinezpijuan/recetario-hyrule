@@ -254,7 +254,7 @@ class LocalizacionRepository extends BaseRepository {
             $tipos .= str_repeat('s', count($regiones));
             $valores = array_merge($valores, $regiones);
         }
-        $sql .= " ORDER BY nombre;";
+        $sql .= " ORDER BY nombre";
         
         // 5. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);

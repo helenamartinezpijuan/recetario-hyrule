@@ -23,3 +23,29 @@
 [2026-03-31 03:22:18] ERROR: Vista no encontrada: efectos/index en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/EfectoController.php
 [2026-03-31 03:48:39] ERROR: Unknown column 'efectos_id_tipo_efecto' in 'SELECT' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
 [2026-03-31 03:52:42] ERROR: Unknown column 'efectos_id_tipo_efecto' in 'SELECT' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
+[2026-03-31 04:05:35] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 04:20:20] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 04:20:21] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 04:20:22] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 04:20:23] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 04:20:24] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 04:20:25] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 04:20:28] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 04:20:29] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 04:20:30] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 04:20:34] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 04:20:40] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 04:25:26] ERROR: Unknown column 'i.nombre' in 'ORDER BY' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 05:07:22] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') ORDER BY ingredientes.nombre' at line 1 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 05:07:26] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') ORDER BY ingredientes.nombre' at line 1 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 05:07:31] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') ORDER BY ingredientes.nombre' at line 1 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 06:02:48] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') ORDER BY ingredientes.nombre' at line 1 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 06:04:31] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') ORDER BY ingredientes.nombre' at line 1 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 06:06:31] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') ORDER BY ingredientes.nombre' at line 1 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 06:07:39] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') ORDER BY ingredientes.nombre' at line 1 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 06:07:44] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') ORDER BY ingredientes.nombre' at line 1 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-03-31 07:00:14] ERROR: Connection refused en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/RecetaService.php
+[2026-03-31 07:00:20] ERROR: Connection refused en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/RecetaService.php
+[2026-03-31 07:00:24] ERROR: Connection refused en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/RecetaService.php
+[2026-03-31 07:00:24] ERROR: Connection refused en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/RecetaService.php
+[2026-03-31 07:00:24] ERROR: Connection refused en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
