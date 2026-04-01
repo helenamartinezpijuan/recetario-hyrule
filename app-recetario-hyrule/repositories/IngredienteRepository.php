@@ -166,7 +166,7 @@ class IngredienteRepository extends BaseRepository {
         $valores = [];
 
         if (!empty($localizaciones_ids)) {
-            $sql .= " INNER JOIN ingredientes_localizaciones USING (id_ingrediente_localizacion)";
+            $sql .= " INNER JOIN ingredientes_localizaciones USING(id_ingrediente_localizacion)";
         }
 
         $sql .= " WHERE 1=1";
@@ -187,7 +187,7 @@ class IngredienteRepository extends BaseRepository {
             $valores = array_merge($valores, $localizaciones_ids);
         }
 
-        //$sql .= " ORDER BY ingredientes.nombre";
+        $sql .= " ORDER BY ingredientes.nombre";
         
         // 5. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);

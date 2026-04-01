@@ -16,7 +16,7 @@
 </head>
 <body>
     <!-- Widget de accesibilidad -->
-    <div role="region" aria-label="Panel de accesibilidad" class="accessibility-widget" id="accessibility-widget">
+    <div role="region" aria-label="Panel de accesibilidad" class="accessibility-widget">
         <button id="accessibility-toggle" class="accessibility-toggle" aria-label="Abrir panel de accesibilidad">
             <img src="<?= BASE_URL ?>/resources/img/accesibilidad.png" alt="Accesibilidad" class="accessibility-icon">
         </button>

@@ -184,6 +184,10 @@ class IngredienteService {
      */
     public function getIngredientesFiltrados(array $ingredientes_ids, array $localizaciones_ids): array {
         try {
+            if (empty($ingredientes_ids) && empty($localizaciones_ids)) {
+                return $this->getAllIngredientes();
+            }
+
             return $this->ingredienteRepo->obtenerPorFiltros($ingredientes_ids, $localizaciones_ids);
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);

@@ -26,6 +26,10 @@ body {
     font-size: 21px;
 }
 
+html {
+    font-family: 'AmaticSC', sans-serif;
+}
+
 /* ============================================
    HEADER
    ============================================ */
@@ -94,7 +98,7 @@ body {
 }
 
 .user-actions span {
-    color: #F2EDD5;
+    color: var(--bg-light);
 }
 
 .btn-login, .btn-logout {
@@ -108,7 +112,7 @@ body {
 }
 
 .btn-login:hover, .btn-logout:hover {
-    background-color: #A9D943;
+    background-color: var(--primary-green);
 }
 
 /* ============================================
@@ -116,7 +120,7 @@ body {
    ============================================ */
 .site-footer {
     background-color: #4E98D9;
-    color: #F2EDD5;
+    color: var(--bg-light);
     text-align: center;
     padding: 1.5rem 0;
     margin-top: 3rem;
@@ -183,6 +187,7 @@ body {
     margin-right: 15px;
     padding: 5px 10px;
     border-radius: 20px;
+    font-family: 'AmaticSC', sans-serif;
 }
 
 .btn-back:hover {
@@ -197,10 +202,11 @@ body {
     position: sticky;
     top: 20px;
     z-index: 100;
-    background-color: #F2EDD5;
+    background-color: var(--bg-light);
     padding: 15px 0;
     margin-bottom: 20px;
     text-align: center;
+    font-family: 'Patrick Hand', serif;
 }
 
 .search-input-large {
@@ -208,14 +214,14 @@ body {
     max-width: 500px;
     padding: 12px 20px;
     font-size: 1.1rem;
-    border: 2px solid #A9D943;
+    border: 2px solid var(--primary-green);
     border-radius: 30px;
     outline: none;
     transition: all 0.3s;
 }
 
 .search-input-large:focus {
-    border-color: #3B67BF;
+    border-color: var(--accent-blue);
     box-shadow: 0 0 5px rgba(59, 103, 191, 0.3);
 }
 
@@ -254,19 +260,19 @@ body {
 
 .btn-link {
     background: none;
-    color: #A9D943;
+    color: var(--primary-green);
     text-decoration: underline;
     padding: 0;
 }
 
 .btn-link:hover {
-    color: #A9D943;
+    color: var(--primary-green);
 }
 
 p, .description, .recipe-description, .ingrediente-description,
 .localizacion-description, .efecto-description {
     font-family: 'PatrickHand', cursive;
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 1.4;
 }
 
@@ -281,8 +287,8 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 .hero {
     text-align: center;
     padding: 4rem 1rem;
-    background: linear-gradient(135deg, #F2EDD5 0%, #A9D943 100%);
-    color: #F2EDD5;
+    background: linear-gradient(135deg, var(--bg-light) 0%, var(--primary-green) 100%);
+    color: var(--accent-blue);
     border-radius: 20px;
     margin: 2rem 0;
 }
@@ -300,7 +306,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 }
 
 .btn-get-started {
-    background-color: #A9D943;
+    background-color: var(--primary-green);
     color: #2C2C2C;
     padding: 0.8rem 2rem;
     font-size: 1.2rem;
@@ -309,7 +315,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 }
 
 .btn-get-started:hover {
-    background-color: #F2EDD5;
+    background-color: var(--bg-light);
 }
 
 /* =====================================================================
@@ -406,7 +412,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 .page-title {
     font-size: 2rem;
     margin-bottom: 1rem;
-    color: #A9D943;
+    color: var(--primary-green);
 }
 
 /* Tarjetas (recetas, ingredientes, efectos, localizaciones) */
@@ -420,7 +426,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 
 .recipe-card, .ingrediente-card, .efecto-card, .localizacion-card {
     background-color: var(--white);
-    border: 1px solid var(--primary-green);
+    /*border: 1px solid var(--primary-green);*/
 }
 
 .card {
@@ -448,7 +454,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 .card-title {
     font-size: 1.8rem;
     margin-bottom: 0.5rem;
-    color: #A9D943;
+    color: var(--primary-green);
 }
 
 .card-icons {
@@ -528,7 +534,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 
 .modal-container {
     position: relative;
-    background-color: #F2EDD5;
+    background-color: var(--bg-light);
     max-width: 800px;
     width: 90%;
     max-height: 90vh;
@@ -549,7 +555,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 
 .modal-header h2 {
     margin: 0;
-    color: #A9D943;
+    color: var(--primary-green);
 }
 
 .modal-close {
@@ -557,7 +563,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
     border: none;
     font-size: 2rem;
     cursor: pointer;
-    color: #A9D943;
+    color: var(--primary-green);
 }
 
 .modal-body {
@@ -583,7 +589,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 
 .detail-title {
     font-size: 2rem;
-    color: #A9D943;
+    color: var(--primary-green);
     margin-bottom: 0.5rem;
 }
 
@@ -622,7 +628,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 
 .spinner {
     border: 4px solid #f3f3f3;
-    border-top: 4px solid #A9D943;
+    border-top: 4px solid var(--primary-green);
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -745,13 +751,13 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 .accessibility-panel h3 {
     margin: 0 0 10px 0;
     font-size: 16px;
-    color: #A9D943;
+    color: var(--primary-green);
 }
 
 .accessibility-option {
     padding: 8px 12px;
     border: none;
-    background: #F2EDD5;
+    background: var(--bg-light);
     border-radius: 8px;
     cursor: pointer;
     text-align: left;
@@ -778,6 +784,20 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 .font-opendyslexic *:not(button):not(.btn) {
     font-family: 'OpenDyslexic', monospace !important;
 }
+
+p.font-opendyslexic {
+    font-family: 'PatrickHand', cursive;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+h2.font-opendyslexic {
+    font-size: 1.2em;
+}
+h3.font-opendyslexic {
+    font-size: 1em;
+}
+
 
 /* Alto contraste */
 .high-contrast {

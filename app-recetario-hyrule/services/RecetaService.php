@@ -96,6 +96,10 @@ class RecetaService {
      */
     public function getRecetasFiltradas(array $efectos_ids, array $ingredientes_ids): array {
         try {
+            if (empty($efectos_ids) && empty($ingredientes_ids)) {
+                return $this->getAllRecetas();
+            }
+
             return $this->recetaRepo->obtenerPorFiltros($efectos_ids, $ingredientes_ids);
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);

@@ -191,7 +191,7 @@ class RecetaRepository extends BaseRepository {
         $conn = $this->getConnection();
         
         // 2. CONSTRUIR CONSULTA
-        $sql = "SELECT recetas.id_receta, recetas.nombre, recetas.imagen, recetas.descripcion 
+        $sql = "SELECT DISTINCT recetas.id_receta, recetas.nombre, recetas.imagen, recetas.descripcion 
                     FROM recetas 
                     WHERE 1=1";
         $tipos = "";
