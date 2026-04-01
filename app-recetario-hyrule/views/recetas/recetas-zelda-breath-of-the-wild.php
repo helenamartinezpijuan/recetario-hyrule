@@ -270,7 +270,7 @@ $(document).ready(function() {
             receta.efectos.forEach(efecto => {
                 efectosHtml += `
                     <div class="efecto-mini-card">
-                        <img src="${BASE_URL}/resources/img/effects/${escapeHtml(efecto.nombre.toLowerCase())}.png" 
+                        <img src="${BASE_URL}/resources/img/effects/${escapeHtml(efecto.imagen)}"
                              alt="${escapeHtml(efecto.nombre)}"
                              onerror="this.src='${BASE_URL}/resources/img/effects/default.png'">
                         <div class="efecto-mini-info">
@@ -287,7 +287,7 @@ $(document).ready(function() {
         
         let ingredientesHtml = '<div class="detail-section"><h3>INGREDIENTES</h3><ul class="ingredientes-list">';
         if (receta.ingredientes && receta.ingredientes.length > 0) {
-            receta.ingredientes.forEach(ing => {
+            receta.ingredientes.forEach(([ing, cantidad]) {
                 ingredientesHtml += `
                     <li class="ingrediente-item">
                         <img src="${BASE_URL}/resources/img/ingredients/${escapeHtml(ing.imagen || 'placeholder.webp')}" 
@@ -296,7 +296,7 @@ $(document).ready(function() {
                         <span class="ingrediente-nombre">
                             <a href="?action=obtener_ingrediente&id=${ing.id_ingrediente || ''}">${escapeHtml(ing.nombre)}</a>
                         </span>
-                        <span class="ingrediente-cantidad">x ${ing.cantidad}</span>
+                        <span class="ingrediente-cantidad">x ${cantidad}</span>
                     </li>
                 `;
             });

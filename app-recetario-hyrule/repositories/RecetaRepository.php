@@ -5,6 +5,7 @@ namespace repositories;
 use models\Receta;
 use models\Efecto;
 use models\TipoEfecto;
+use models\Ingrediente;
 use Exception;
 
 /**
@@ -327,7 +328,7 @@ class RecetaRepository extends BaseRepository {
      * Obtener ingredientes con cantidades (array asociativo)
      * @param int $id_receta ID de la receta
      * @throws Exception Si hay error en la consulta
-     * @return array{nombre: string, cantidad: int}
+     * @return array{ingrediente: Ingrediente, cantidad: int}
      */
     public function obtenerIngredientesConCantidad(int $id_receta): array {
         // 1. VALIDAR parámetros de entrada
@@ -337,7 +338,7 @@ class RecetaRepository extends BaseRepository {
         $conn = $this->getConnection();
 
         // 3. CONSTRUIR CONSULTA
-        $sql = "SELECT ingredientes.nombre, recetas_ingredientes.cantidad 
+        $sql = "SELECT ingredientes.id_ingrediente, ingredientes.nombre, ingredientes.imagen, ingredientes.descripcion, recetas_ingredientes.cantidad 
                 FROM recetas_ingredientes 
                 INNER JOIN ingredientes USING(id_ingrediente) 
                 WHERE recetas_ingredientes.id_receta = ? 
@@ -359,8 +360,14 @@ class RecetaRepository extends BaseRepository {
 
         // 8. CREAR array asociativo
         while ($registro = $resultado->fetch_assoc()) {
+            $ingrediente = new Ingrediente(
+                $registro['id_ingrediente'],
+                $registro['nombre'],
+                $registro['imagen'],
+                $registro['descripcion']
+            );
             $ingredientes[] = [
-                'nombre' => $registro['nombre'],
+                'ingrediente' => $ingrediente,
                 'cantidad' => $registro['cantidad']
             ];
         }
@@ -373,7 +380,7 @@ class RecetaRepository extends BaseRepository {
     }
 
     /**
-     * Obtener efectos (array asociativo)
+     * Obtener efectos de una receta
      * @param int $id_receta ID de la receta
      * @throws Exception Si hay error en la consulta
      * @return Efecto[] Array de objetos Efecto
@@ -386,8 +393,7 @@ class RecetaRepository extends BaseRepository {
         $conn = $this->getConnection();
 
         // 3. CONSTRUIR CONSULTA
-        $sql = "SELECT efectos.id_efecto, efectos.id_tipo_efecto, efectos.imagen, efectos.descripcion, 
-                tipos_efectos.nombre 
+        $sql = "SELECT efectos.id_efecto, efectos.id_tipo_efecto, efectos.imagen, efectos.descripcion, tipos_efectos.nombre 
                 FROM recetas_efectos 
                 INNER JOIN efectos USING(id_efecto) 
                 INNER JOIN tipos_efectos USING(id_tipo_efecto) 

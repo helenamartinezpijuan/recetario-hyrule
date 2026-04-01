@@ -12,8 +12,8 @@ class RecetaDetalle {
     /**
      * Constructor de la clase RecetaDetalle
      * @param Receta $receta Objeto Receta
-     * @param array $ingredientes Array asociativo ['nombre' => string, 'cantidad' => int]
-     * @param array $efectos Array asociativo ['nombre' => string, 'descripcion' => string ]
+     * @param array $ingredientes Array asociativo ['objeto_ingrediente' => Ingrediente, 'cantidad' => int]
+     * @param Efecto[] $efectos Array de objetos Efecto
      */
     public function __construct(Receta $receta, array $ingredientes, array $efectos) {
         $this->receta = $receta;
@@ -28,12 +28,12 @@ class RecetaDetalle {
     public function getReceta(): Receta { return $this->receta; }
     /**
      * Función que devuelve un array asociativo de ingredientes y su cantidades
-     * @return array
+     * @return array Array asociativo con el objeto Ingrediente y su cantidad
      */
     public function getIngredientes(): array { return $this->ingredientes; }
     /**
      * Función que devuelve un array con los efectos
-     * @return array
+     * @return Efecto[]
      */
     public function getEfectos(): array { return $this->efectos; }
 }

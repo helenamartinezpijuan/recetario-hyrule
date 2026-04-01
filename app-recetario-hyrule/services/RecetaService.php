@@ -112,10 +112,10 @@ class RecetaService {
         $receta = $this->recetaRepo->obtenerPorId($id);
         if (!$receta) return null;
         
-        // Obtener ingredientes con cantidades (array asociativo)
+        // Obtener ingredientes con cantidades (array asociativo de objeto Ingrediente con su cantidad)
         $ingredientes = $this->recetaRepo->obtenerIngredientesConCantidad($id);
         
-        // Obtener efectos (array asociativo)
+        // Obtener efectos (array de objetos Efecto)
         $efectos = $this->recetaRepo->obtenerEfectosPorRecetaId($id);
         
         return new RecetaDetalle($receta, $ingredientes, $efectos);

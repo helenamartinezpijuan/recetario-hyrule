@@ -111,19 +111,10 @@ class RecetaController extends BaseController {
                 echo json_encode(['success' => false, 'message' => 'Receta no encontrada']);
             }
 
-            // 3. PREPARAR DATOS para pasar a Json
-            $receta = $detalle->getReceta();
-            $ingredientes = $detalle->getIngredientes();
-            $efectos = $detalle->getEfectos();
-
-            // Convertir efectos a array simple
-            $efectosArray = array_map(function($efecto) {
-                return [
-                    'nombre' => $efecto->getTipoEfecto()->getNombre(),
-                    'descripcion' => $efecto->getDescripcion(),
-                    'imagen' => $efecto->getImagen() ?? strtolower($efecto->getTipoEfecto()->getNombre()) . '.png'
-                ];
-            }, $efectos);
+            // 3. PREPARAR DATOS para pasar a Json          // BORRAR LUEGO :)
+            $receta = $detalle->getReceta();                // ESTO DEVUELVE UN OBJETO RECETA
+            $ingredientes = $detalle->getIngredientes();    // ESTO DEVUELVE UN ARRAY ASOCIATIVO CON 'OBJETO INGREDIENTE' => 'CANTIDAD EN RECETA'
+            $efectos = $detalle->getEfectos();              // ESTO DEVUELVE UN ARRAY DE OBJETOS EFECTO
 
             // 4. DEVOLVER RESPUESTA
             echo json_encode([
