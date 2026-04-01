@@ -6,12 +6,23 @@ include __DIR__ . '/../layout/header.php';
 
 <main class="main-content">
     <div class="container">
+        <!-- Breadcrumb -->
         <nav class="breadcrumb" aria-label="Ruta de navegación">
             <ol class="breadcrumb-list">
                 <li class="breadcrumb-item"><a href="?action=recetas">Recetas</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Todas las recetas</li>
             </ol>
         </nav>
+        <!-- Botón volver atrás -->
+        <button id="back-button" class="btn-back" style="display: none;" aria-label="Volver atrás">
+            ← Volver
+        </button>
+
+        <!-- Barra buscador -->
+        <div class="search-bar-container">
+            <input type="text" id="search-input" class="search-input-large" 
+                placeholder="🔍 Buscar recetas..." aria-label="Buscar recetas por nombre">
+        </div>
         
         <div class="page-layout">
             <aside class="filters-sidebar" aria-label="Filtros de búsqueda">
@@ -270,9 +281,10 @@ $(document).ready(function() {
             receta.efectos.forEach(efecto => {
                 efectosHtml += `
                     <div class="efecto-mini-card">
-                        <img src="${BASE_URL}/resources/img/effects/${escapeHtml(efecto.imagen)}"
-                             alt="${escapeHtml(efecto.nombre)}"
-                             onerror="this.src='${BASE_URL}/resources/img/effects/default.png'">
+                        <img src="${BASE_URL}/resources/img/effects/${escapeHtml(efecto.imagen || (efecto.nombre.toLowerCase() + '.png'))}" 
+                            alt="${escapeHtml(efecto.nombre)}"
+                            class="efecto-mini-img"
+                            onerror="this.src='${BASE_URL}/resources/img/effects/default.png'">
                         <div class="efecto-mini-info">
                             <strong>${escapeHtml(efecto.nombre)}</strong>
                             <p>${escapeHtml(efecto.descripcion)}</p>

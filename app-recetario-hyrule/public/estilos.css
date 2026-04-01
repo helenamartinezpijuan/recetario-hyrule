@@ -7,9 +7,20 @@
     box-sizing: border-box;
 }
 
+:root {
+    --primary-green: #A9D943;
+    --primary-green-dark: #8BBF2A;
+    --accent-blue: #3B67BF;
+    --accent-blue-light: #4E98D9;
+    --bg-light: #F2EDD5;
+    --text-dark: #332B2B;
+    --text-dark-light: #423232;
+    --white: #F2EDD5;
+}
+
 body {
-    background-color: #F2EDD5;
-    color: #2C2C2C;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
     font-family: 'AmaticSC', sans-serif;
     line-height: 1.5;
     font-size: 21px;
@@ -19,7 +30,7 @@ body {
    HEADER
    ============================================ */
 .site-header {
-    background-color: #A9D943;
+    background-color: var(--primary-green);
     padding: 1rem 0;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
@@ -38,8 +49,20 @@ body {
     gap: 1rem;
 }
 
+.logo {
+    position: relative;
+    z-index: 10;
+}
+
 .logo img {
     max-height: 80px;
+    width: auto;
+    transition: transform 0.3s, filter 0.3s;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 5px rgba(169, 217, 67, 0.5));
 }
 
 .main-nav ul {
@@ -51,7 +74,7 @@ body {
 }
 
 .main-nav a {
-    color: #F2EDD5;
+    color: var(--text-dark);
     text-decoration: none;
     font-weight: bold;
     font-size: 1.2rem;
@@ -60,7 +83,8 @@ body {
 
 .main-nav a:hover,
 .main-nav a.active {
-    color: #2C2C2C;
+    color: var(--white);
+    text-decoration: underline;
 }
 
 .user-actions {
@@ -102,14 +126,97 @@ body {
    BREADCRUMB
    ============================================ */
 .breadcrumb {
-    margin: 1.5rem 0;
-    font-size: 1.2rem;
-    color: #4E98D9;
+    background-color: var(--white);
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--primary-green);
 }
 
 .breadcrumb .active {
     font-weight: bold;
-    color: #A9D943;
+    color: var(--primary-green);
+}
+
+.breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 5px;
+}
+
+.breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+    content: ">";
+    margin: 0 8px;
+    color: var(--accent-blue);
+}
+
+.breadcrumb-item a {
+    color: var(--accent-blue);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb-item a:hover {
+    color: var(--primary-green);
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: var(--text-dark);
+    font-weight: bold;
+}
+
+.btn-back {
+    background: none;
+    border: none;
+    color: var(--accent-blue);
+    cursor: pointer;
+    font-size: 1rem;
+    margin-right: 15px;
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+.btn-back:hover {
+    background-color: var(--primary-green);
+    color: var(--white);
+}
+
+/* ============================================
+   SEARCH BAR
+   ============================================ */
+.search-bar-container {
+    position: sticky;
+    top: 20px;
+    z-index: 100;
+    background-color: #F2EDD5;
+    padding: 15px 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-input-large {
+    width: 80%;
+    max-width: 500px;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    border: 2px solid #A9D943;
+    border-radius: 30px;
+    outline: none;
+    transition: all 0.3s;
+}
+
+.search-input-large:focus {
+    border-color: #3B67BF;
+    box-shadow: 0 0 5px rgba(59, 103, 191, 0.3);
 }
 
 /* ============================================
@@ -127,22 +234,22 @@ body {
 }
 
 .btn-primary {
-    background-color: #66CAF2;
-    color: #2C2C2C;
+    background-color: var(--primary-green);
+    color: var(--text-dark);
     font-weight: bold;
 }
 
 .btn-primary:hover {
-    background-color: #A9D943;
+    background-color: var(--primary-green-dark);
 }
 
 .btn-secondary {
-    background-color: #e0e0e0;
-    color: #2C2C2C;
+    background-color: var(--accent-blue-light);
+    color: var(--white);
 }
 
 .btn-secondary:hover {
-    background-color: #c0c0c0;
+    background-color: var(--accent-blue);
 }
 
 .btn-link {
@@ -154,6 +261,18 @@ body {
 
 .btn-link:hover {
     color: #A9D943;
+}
+
+p, .description, .recipe-description, .ingrediente-description,
+.localizacion-description, .efecto-description {
+    font-family: 'PatrickHand', cursive;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
+    font-family: 'AmaticSC', sans-serif;
+    font-weight: bold;
 }
 
 /* ============================================
@@ -204,7 +323,8 @@ body {
 
 .filters-sidebar {
     flex: 0 0 280px;
-    background-color: #fff;
+    background-color: var(--white);
+    border: 1px solid var(--primary-green);
     padding: 1.5rem;
     border-radius: 16px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -213,7 +333,7 @@ body {
 .filters-title {
     font-size: 1.6rem;
     margin-bottom: 1rem;
-    color: #A9D943;
+    color: var(--primary-green-dark);
     border-bottom: 2px solid #66CAF2;
     display: inline-block;
 }
@@ -226,7 +346,7 @@ body {
     font-weight: bold;
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
-    color: #4E98D9;
+    color: var(--accent-blue);
 }
 
 .filter-list {
@@ -292,11 +412,15 @@ body {
 /* Tarjetas (recetas, ingredientes, efectos, localizaciones) */
 .recipes-grid,
 .ingredientes-grid,
-.efectos-grid,
-.localizaciones-grid {
+.efectos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
+}
+
+.recipe-card, .ingrediente-card, .efecto-card, .localizacion-card {
+    background-color: var(--white);
+    border: 1px solid var(--primary-green);
 }
 
 .card {
@@ -341,6 +465,34 @@ body {
     font-size: 1.2rem;
     margin-bottom: 1rem;
     color: #555;
+}
+
+/* Localizaciones */
+.localizaciones-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.localizacion-card {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.localizacion-card-image {
+    flex: 0 0 200px;
+}
+
+.localizacion-card-image img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.localizacion-card-content {
+    flex: 1;
 }
 
 /* ============================================
@@ -521,6 +673,13 @@ body {
     .localizaciones-grid {
         grid-template-columns: 1fr;
     }
+    .localizacion-card {
+        flex-direction: column;
+    }
+    .localizacion-card-image {
+        flex: auto;
+        width: 100%;
+    }
     .modal-container {
         width: 95%;
     }
@@ -545,21 +704,28 @@ body {
 }
 
 .accessibility-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #A9D943;
-    color: white;
+    background-color: var(--primary-green);
     border: none;
-    font-size: 24px;
     cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    transition: transform 0.2s;
+    transition: transform 0.2s, background-color 0.2s;
+    padding: 0;
 }
 
 .accessibility-toggle:hover {
     transform: scale(1.05);
-    background-color: #4E98D9;
+    background-color: var(--primary-green-dark);
+}
+
+.accessibility-icon {
+    width: 30px;
+    height: 30px;
+    display: block;
 }
 
 .accessibility-panel {
@@ -605,6 +771,57 @@ body {
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     border: 0;
+}
+
+/* Fuente para disléxicos */
+.font-opendyslexic,
+.font-opendyslexic *:not(button):not(.btn) {
+    font-family: 'OpenDyslexic', monospace !important;
+}
+
+/* Alto contraste */
+.high-contrast {
+    background-color: #000000 !important;
+    color: #FFFF00 !important;
+}
+
+.high-contrast a,
+.high-contrast button {
+    color: #00FFFF !important;
+    background-color: #000000 !important;
+    border: 1px solid #FFFFFF !important;
+}
+
+.high-contrast img {
+    filter: brightness(0.8) contrast(1.5) !important;
+}
+
+/* Modo Protanopia/Deuteranopia */
+.protanopia-mode {
+    filter: url('#protanopia-filter');
+}
+
+.protanopia-mode .site-header,
+.protanopia-mode .btn-primary {
+    background-color: #4D4D4D !important;
+}
+
+.protanopia-mode .btn-secondary {
+    background-color: #999999 !important;
+}
+
+/* Modo Tritanopia */
+.tritanopia-mode {
+    filter: url('#tritanopia-filter');
+}
+
+.tritanopia-mode .site-header,
+.tritanopia-mode .btn-primary {
+    background-color: #996633 !important;
+}
+
+.tritanopia-mode .btn-secondary {
+    background-color: #CC9966 !important;
 }
 
 

@@ -16,23 +16,25 @@
 </head>
 <body>
     <!-- Widget de accesibilidad -->
-    <div id="accessibility-widget" class="accessibility-widget" aria-label="Panel de accesibilidad">
-        <button id="accessibility-toggle" class="accessibility-toggle" aria-expanded="false" aria-controls="accessibility-panel">
-            <span aria-hidden="true"><img src="<?= BASE_URL ?>/resources/img/accesibilidad.png" alt="Logo de accesibilidad"></span>
-            <span class="visually-hidden">Abrir panel de accesibilidad</span>
+    <div role="region" aria-label="Panel de accesibilidad" class="accessibility-widget">
+        <button id="accessibility-toggle" class="accessibility-toggle" aria-label="Abrir panel de accesibilidad">
+            <img src="<?= BASE_URL ?>/resources/img/accesibilidad.png" alt="Accesibilidad" class="accessibility-icon">
         </button>
         <div id="accessibility-panel" class="accessibility-panel" hidden>
             <h3>Opciones de accesibilidad</h3>
-            <button class="accessibility-option" data-font="openDyslexic">
+            <button class="accessibility-option" data-action="font-dyslexic">
                 <span aria-hidden="true">📖</span> Fuente para disléxicos
             </button>
-            <button class="accessibility-option" data-contrast="high">
+            <button class="accessibility-option" data-action="high-contrast">
                 <span aria-hidden="true">🌙</span> Alto contraste
             </button>
-            <button class="accessibility-option" data-colorblind="protanopia">
-                <span aria-hidden="true">🎨</span> Modo protanopía
+            <button class="accessibility-option" data-action="colorblind-protan">
+                <span aria-hidden="true">🎨</span> Modo Protanopia/Deuteranopia
             </button>
-            <button class="accessibility-option" data-reset>
+            <button class="accessibility-option" data-action="colorblind-tritan">
+                <span aria-hidden="true">🎨</span> Modo Tritanopia
+            </button>
+            <button class="accessibility-option" data-action="reset">
                 <span aria-hidden="true">⟳</span> Restablecer
             </button>
         </div>
@@ -63,13 +65,15 @@
 
 <script>
 // Widget de accesibilidad
+// Widget de accesibilidad
 $(document).ready(function() {
     const $toggle = $('#accessibility-toggle');
     const $panel = $('#accessibility-panel');
     const $body = $('body');
     
-    // Toggle panel
-    $toggle.on('click', function() {
+    // Toggle panel - funciona click en cualquier parte del botón
+    $toggle.on('click', function(e) {
+        e.stopPropagation();
         const expanded = $panel.is(':visible');
         $panel.toggle();
         $toggle.attr('aria-expanded', !expanded);
@@ -77,38 +81,138 @@ $(document).ready(function() {
     
     // Cerrar panel al hacer clic fuera
     $(document).on('click', function(e) {
-        if (!$toggle.is(e.target) && !$panel.is(e.target) && $panel.has(e.target).length === 0) {
+        if (!$toggle.is(e.target) && !$panel.is(e.target) && !$toggle.find('*').is(e.target) && $panel.has(e.target).length === 0) {
             $panel.hide();
             $toggle.attr('aria-expanded', 'false');
         }
     });
     
-    // Cambiar fuente para disléxicos
-    $('[data-font="openDyslexic"]').on('click', function() {
-        $body.removeClass('font-lexend font-patrick font-amatic');
+    // Cambiar a fuente OpenDyslexic
+    $('[data-action="font-dyslexic"]').on('click', function() {
         $body.addClass('font-opendyslexic');
-        localStorage.setItem('accessibility-font', 'openDyslexic');
+        localStorage.setItem('accessibility-font', 'opendyslexic');
+        $panel.hide();
+        $toggle.attr('aria-expanded', 'false');
+        showAccessibilityMessage('Fuente cambiada a OpenDyslexic');
     });
     
     // Alto contraste
-    $('[data-contrast="high"]').on('click', function() {
+    $('[data-action="high-contrast"]').on('click', function() {
         $body.toggleClass('high-contrast');
         localStorage.setItem('high-contrast', $body.hasClass('high-contrast'));
+        $panel.hide();
+        $toggle.attr('aria-expanded', 'false');
+        showAccessibilityMessage($body.hasClass('high-contrast') ? 'Alto contraste activado' : 'Alto contraste desactivado');
+    });
+    
+    // Modo Protanopia/Deuteranopia (rojo-verde)
+    $('[data-action="colorblind-protan"]').on('click', function() {
+        $body.removeClass('tritanopia-mode');
+        $body.toggleClass('protanopia-mode');
+        localStorage.setItem('colorblind-mode', $body.hasClass('protanopia-mode') ? 'protanopia' : '');
+        $panel.hide();
+        $toggle.attr('aria-expanded', 'false');
+        showAccessibilityMessage($body.hasClass('protanopia-mode') ? 'Modo Protanopia activado' : 'Modo Protanopia desactivado');
+    });
+    
+    // Modo Tritanopia (azul-amarillo)
+    $('[data-action="colorblind-tritan"]').on('click', function() {
+        $body.removeClass('protanopia-mode');
+        $body.toggleClass('tritanopia-mode');
+        localStorage.setItem('colorblind-mode', $body.hasClass('tritanopia-mode') ? 'tritanopia' : '');
+        $panel.hide();
+        $toggle.attr('aria-expanded', 'false');
+        showAccessibilityMessage($body.hasClass('tritanopia-mode') ? 'Modo Tritanopia activado' : 'Modo Tritanopia desactivado');
     });
     
     // Restablecer
-    $('[data-reset]').on('click', function() {
-        $body.removeClass('font-opendyslexic font-lexend font-patrick font-amatic high-contrast');
+    $('[data-action="reset"]').on('click', function() {
+        $body.removeClass('font-opendyslexic high-contrast protanopia-mode tritanopia-mode');
         localStorage.removeItem('accessibility-font');
         localStorage.removeItem('high-contrast');
+        localStorage.removeItem('colorblind-mode');
+        $panel.hide();
+        $toggle.attr('aria-expanded', 'false');
+        showAccessibilityMessage('Todas las opciones restablecidas');
     });
     
     // Cargar preferencias guardadas
-    if (localStorage.getItem('accessibility-font') === 'openDyslexic') {
+    if (localStorage.getItem('accessibility-font') === 'opendyslexic') {
         $body.addClass('font-opendyslexic');
     }
     if (localStorage.getItem('high-contrast') === 'true') {
         $body.addClass('high-contrast');
+    }
+    const colorblindMode = localStorage.getItem('colorblind-mode');
+    if (colorblindMode === 'protanopia') {
+        $body.addClass('protanopia-mode');
+    } else if (colorblindMode === 'tritanopia') {
+        $body.addClass('tritanopia-mode');
+    }
+    
+    // Mensaje temporal para feedback
+    function showAccessibilityMessage(message) {
+        let $msg = $('#accessibility-message');
+        if ($msg.length === 0) {
+            $msg = $('<div id="accessibility-message" class="accessibility-message"></div>');
+            $('body').append($msg);
+        }
+        $msg.text(message).fadeIn(200).delay(2000).fadeOut(200);
+    }
+
+    // Gestionar historial de navegación
+    let navigationHistory = [];
+
+    function pushHistory(state, title, url) {
+        navigationHistory.push({ state, title, url });
+        localStorage.setItem('hyrule_history', JSON.stringify(navigationHistory));
+        updateBackButton();
+    }
+
+    function goBack() {
+        if (navigationHistory.length > 1) {
+            navigationHistory.pop();
+            const last = navigationHistory[navigationHistory.length - 1];
+            localStorage.setItem('hyrule_history', JSON.stringify(navigationHistory));
+            window.location.href = last.url;
+        } else {
+            window.location.href = '?action=home';
+        }
+    }
+
+    function updateBackButton() {
+        $('#back-button').toggle(navigationHistory.length > 1);
+    }
+
+    // Cargar historial al iniciar
+    const savedHistory = localStorage.getItem('hyrule_history');
+    if (savedHistory) {
+        navigationHistory = JSON.parse(savedHistory);
+        updateBackButton();
+    }
+
+    // Guardar cada navegación
+    $(document).on('click', 'a:not(.no-history)', function(e) {
+        const url = $(this).attr('href');
+        if (url && !url.startsWith('#') && !url.startsWith('javascript:')) {
+            pushHistory(null, document.title, url);
+        }
+    });
+
+    $('#back-button').on('click', goBack);
+
+    // Actualizar breadcrumb dinámicamente
+    function updateBreadcrumb(path) {
+        let html = '<ol class="breadcrumb-list">';
+        path.forEach((item, index) => {
+            if (index === path.length - 1) {
+                html += `<li class="breadcrumb-item active">${escapeHtml(item.name)}</li>`;
+            } else {
+                html += `<li class="breadcrumb-item"><a href="${item.url}">${escapeHtml(item.name)}</a></li>`;
+            }
+        });
+        html += '</ol>';
+        $('.breadcrumb').html(html);
     }
 });
 </script>

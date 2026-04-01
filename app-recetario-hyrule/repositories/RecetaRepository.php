@@ -341,8 +341,8 @@ class RecetaRepository extends BaseRepository {
         $sql = "SELECT ingredientes.id_ingrediente, ingredientes.nombre, ingredientes.imagen, ingredientes.descripcion, recetas_ingredientes.cantidad 
                 FROM recetas_ingredientes 
                 INNER JOIN ingredientes USING(id_ingrediente) 
-                WHERE recetas_ingredientes.id_receta = ? 
-                ORDER BY ingredientes.nombre";
+                WHERE recetas_ingredientes.id_receta = ?";
+                //ORDER BY ingredientes.nombre";
 
         // 4. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);

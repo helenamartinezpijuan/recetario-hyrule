@@ -11,6 +11,16 @@ include __DIR__ . '/../layout/header.php';
             <li class="breadcrumb-item active" aria-current="page">Todos los ingredientes</li>
         </ol>
     </nav>
+    <!-- Botón volver atrás -->
+    <button id="back-button" class="btn-back" style="display: none;" aria-label="Volver atrás">
+        ← Volver
+    </button>
+
+    <!-- Barra buscador -->
+    <div class="search-bar-container">
+        <input type="text" id="search-input" class="search-input-large" 
+            placeholder="🔍 Buscar ingredientes..." aria-label="Buscar ingredientes por nombre">
+    </div>
     
     <div class="page-layout">
         <!-- Barra lateral de filtros -->
@@ -18,11 +28,11 @@ include __DIR__ . '/../layout/header.php';
             <h2 class="filters-title">Filtros</h2>
             
             <!-- Búsqueda por nombre -->
-            <div class="filter-group">
+            <!--<div class="filter-group">
                 <h3 class="filter-category">Buscar</h3>
                 <input type="text" id="search-ingrediente" class="search-input" 
                        placeholder="Nombre del ingrediente..." aria-label="Buscar ingrediente por nombre">
-            </div>
+            </div>-->
             
             <!-- Filtro por categorías -->
             <div class="filter-group">
@@ -120,6 +130,24 @@ include __DIR__ . '/../layout/header.php';
                     </div>
                 <?php endif; ?>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de detalle de ingrediente -->
+<div id="ingrediente-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-ingrediente-title" style="display: none;">
+    <div class="modal-overlay" aria-hidden="true"></div>
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2 id="modal-ingrediente-title">Ingrediente</h2>
+            <button class="modal-close" aria-label="Cerrar modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-loader" style="display: none;">
+                <div class="spinner"></div>
+                <p>Cargando detalles...</p>
+            </div>
+            <div id="modal-ingrediente-content"></div>
         </div>
     </div>
 </div>
@@ -234,6 +262,88 @@ $(document).ready(function() {
                   .replace(/>/g, '&gt;')
                   .replace(/"/g, '&quot;')
                   .replace(/'/g, '&#39;');
+    }
+
+    // Abrir modal de ingrediente
+    $(document).on('click', '.view-ingrediente', function() {
+        const id = $(this).data('id');
+        openIngredienteModal(id);
+    });
+
+    function openIngredienteModal(id) {
+        const $modal = $('#ingrediente-modal');
+        $modal.fadeIn(200);
+        $('#modal-ingrediente-content').hide();
+        $('.modal-loader').show();
+
+        $.ajax({
+            url: 'index.php?action=obtener_ingrediente',
+            method: 'GET',
+            data: { id: id },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    renderIngredienteDetail(response.ingrediente);
+                } else {
+                    $('#modal-ingrediente-content').html('<div class="error-message"><p>Error al cargar el ingrediente</p></div>');
+                }
+            },
+            error: function() {
+                $('#modal-ingrediente-content').html('<div class="error-message"><p>Error de conexión</p></div>');
+            },
+            complete: function() {
+                $('.modal-loader').hide();
+                $('#modal-ingrediente-content').fadeIn(200);
+            }
+        });
+    }
+
+    function renderIngredienteDetail(ingrediente) {
+        const html = `
+            <div class="detail-header">
+                <div class="detail-image">
+                    <img src="${BASE_URL}/resources/img/ingredients/${ingrediente.imagen}" alt="${ingrediente.nombre}">
+                </div>
+                <div class="detail-info">
+                    <h1 class="detail-title">${escapeHtml(ingrediente.nombre)}</h1>
+                    <p class="detail-description">${escapeHtml(ingrediente.descripcion)}</p>
+                </div>
+            </div>
+            <div class="detail-section">
+                <h3>📍 Localizaciones</h3>
+                <div id="ingrediente-localizaciones">
+                    <div class="loader-mini" style="display: block;">Cargando localizaciones...</div>
+                </div>
+            </div>
+        `;
+        $('#modal-ingrediente-title').text(ingrediente.nombre);
+        $('#modal-ingrediente-content').html(html);
+        
+        // Cargar localizaciones del ingrediente
+        $.ajax({
+            url: 'index.php?action=obtener_localizaciones_por_ingrediente',
+            method: 'GET',
+            data: { id: ingrediente.id_ingrediente },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success && response.localizaciones.length > 0) {
+                    let locHtml = '<ul class="localizaciones-list">';
+                    response.localizaciones.forEach(loc => {
+                        locHtml += `<li>
+                            <strong>${escapeHtml(loc.nombre)}</strong> 
+                            <span class="region-badge">${escapeHtml(loc.region)}</span>
+                        </li>`;
+                    });
+                    locHtml += '</ul>';
+                    $('#ingrediente-localizaciones').html(locHtml);
+                } else {
+                    $('#ingrediente-localizaciones').html('<p>Este ingrediente se encuentra en todo Hyrule.</p>');
+                }
+            },
+            error: function() {
+                $('#ingrediente-localizaciones').html('<p>No se pudieron cargar las localizaciones.</p>');
+            }
+        });
     }
 });
 </script>

@@ -11,6 +11,16 @@ include __DIR__ . '/../layout/header.php';
             <li class="breadcrumb-item active" aria-current="page">Todos los efectos</li>
         </ol>
     </nav>
+    <!-- Botón volver atrás -->
+    <button id="back-button" class="btn-back" style="display: none;" aria-label="Volver atrás">
+        ← Volver
+    </button>
+
+    <!-- Barra buscador -->
+    <div class="search-bar-container">
+        <input type="text" id="search-input" class="search-input-large" 
+            placeholder="🔍 Buscar efectos..." aria-label="Buscar efectos por nombre">
+    </div>
     
     <h1 class="page-title">Efectos de los platos</h1>
     <p class="page-description">Los platos cocinados en Hyrule pueden tener efectos especiales que te ayudarán en tu aventura.</p>

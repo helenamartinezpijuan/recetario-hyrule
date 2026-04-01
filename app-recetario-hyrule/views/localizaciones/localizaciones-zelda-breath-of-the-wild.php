@@ -11,6 +11,16 @@ include __DIR__ . '/../layout/header.php';
             <li class="breadcrumb-item active" aria-current="page">Todas las localizaciones</li>
         </ol>
     </nav>
+    <!-- Botón volver atrás -->
+    <button id="back-button" class="btn-back" style="display: none;" aria-label="Volver atrás">
+        ← Volver
+    </button>
+
+    <!-- Barra buscador -->
+    <div class="search-bar-container">
+        <input type="text" id="search-input" class="search-input-large" 
+            placeholder="🔍 Buscar localizaciones..." aria-label="Buscar localizaciones por nombre">
+    </div>
     
     <div class="page-layout">
         <aside class="filters-sidebar" aria-label="Filtros de búsqueda">
@@ -24,7 +34,8 @@ include __DIR__ . '/../layout/header.php';
                             <li>
                                 <label class="checkbox-label">
                                     <input type="checkbox" class="filter-checkbox region-filter" 
-                                           value="<?= htmlspecialchars($region) ?>">
+                                        value="<?= htmlspecialchars($region) ?>"
+                                        aria-label="Filtrar por región <?= htmlspecialchars($region) ?>">
                                     <?= htmlspecialchars($region) ?>
                                 </label>
                             </li>
