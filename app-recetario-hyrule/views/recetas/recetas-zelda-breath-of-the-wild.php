@@ -287,7 +287,7 @@ $(document).ready(function() {
         
         let ingredientesHtml = '<div class="detail-section"><h3>INGREDIENTES</h3><ul class="ingredientes-list">';
         if (receta.ingredientes && receta.ingredientes.length > 0) {
-            receta.ingredientes.forEach(([ing, cantidad]) {
+            receta.ingredientes.forEach(([ing, cantidad]) => {
                 ingredientesHtml += `
                     <li class="ingrediente-item">
                         <img src="${BASE_URL}/resources/img/ingredients/${escapeHtml(ing.imagen || 'placeholder.webp')}" 

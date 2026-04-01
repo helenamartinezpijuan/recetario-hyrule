@@ -145,7 +145,7 @@ class RecetaRepository extends BaseRepository {
         $sql = "SELECT id_receta, nombre, imagen, descripcion 
             FROM recetas 
             WHERE nombre LIKE ? OR descripcion LIKE ? 
-            ORDER BY nombre;";
+            ORDER BY nombre";
 
         // 3. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);
