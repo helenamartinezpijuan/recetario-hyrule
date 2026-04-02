@@ -18,11 +18,11 @@ use Exception;
 class RecetaController extends BaseController {
 
     private RecetaService $service;
-    private RecetaRepository $repository;
+    //private RecetaRepository $repository;
 
     public function __construct() {
         $this->service = new RecetaService();
-        $this->repository = new RecetaRepository();
+        //$this->repository = new RecetaRepository();
     }
 
     /**
@@ -33,14 +33,16 @@ class RecetaController extends BaseController {
         try {
             // 1. OBTENER DATOS para la vista
             $recetas = $this->service->getAllRecetas();
-            $tiposEfectos = $this->service->getAllTiposEfectos();
-            $ingredientesPorCategoria = $this->service->sortIngredientesPorCategoria(); 
+            $recetas_detalles = $this->obtenerRecetas();
+            $tipos_efectos = $this->service->getAllTiposEfectos();
+            $ingredientes_por_categoria = $this->service->sortIngredientesPorCategoria();
 
             // 2. CARGAR VISTA de todas las recetas
             $this->mostrar('recetas/recetas-zelda-breath-of-the-wild', [
                 'recetas' => $recetas,
-                'tiposEfectos' => $tiposEfectos,
-                'ingredientesPorCategoria' => $ingredientesPorCategoria,
+                'recetas_detalles' => $recetas_detalles,
+                'tipos_efectos' => $tipos_efectos,
+                'ingredientes_por_categoria' => $ingredientes_por_categoria,
                 'base_url' => BASE_URL
             ]);
 
@@ -120,11 +122,11 @@ class RecetaController extends BaseController {
 
     /**
      * Recibe el ID de una receta vía GET y devuelve sus detalles completos en JSON
-     * @param array $getData Datos de $_GET
+     * @param array $id_receta Datos de $_GET
      * @throws Exception Si el ID de la receta no es válido
      * @return void
      */
-    public function obtenerReceta(array $getData): void {
+    public function obtenerReceta(array $id_receta): void {
         // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON (no HTML)
         header('Content-Type: application/json');
 
@@ -190,6 +192,44 @@ class RecetaController extends BaseController {
                 'message' => 'Error al cargar los detalles de la receta'
             ]);
         }
+    }
+
+    /**
+     * Obtiene todas las recetas con detalles sobre sus efectoso
+     * @return array{id_receta: int, nombre: string, imagen: string, descripcion: string, efectos: array>}
+     */
+    public function obtenerRecetas(): array {
+        $recetas = $this->service->getAllRecetas();
+        $recetas_detalle = [];
+
+        foreach ($recetas as $_receta) {
+            // 2. VALIDAR los datos a través del service
+            $detalle = $this->service->getRecetaDetalle($_receta->getIdReceta());
+            $receta = $detalle->getReceta();
+            $efectos = $detalle->getEfectos();
+
+            // 3. PREPARAR DATOS para array 
+            $efectos_preparados = [];
+            foreach ($efectos as $efecto) {
+                $efectos_preparados[] = [
+                    'id_efecto' => $efecto->getIdEfecto(),
+                    'nombre' => $efecto->getTipoEfecto()->getNombre(),
+                    'imagen' => $efecto->getImagen(),
+                    'descripcion' => $efecto->getDescripcion(),
+                ];
+            }
+
+            //
+            $recetas_detalle[] = [
+                'id_receta' => $receta->getIdReceta(),
+                'nombre' => $receta->getNombre(),
+                'imagen' => $receta->getImagen(),
+                'descripcion' => $receta->getDescripcion(),
+                'efectos' => $efectos_preparados
+            ];
+        }
+
+        return $recetas_detalle;
     }
 }
 

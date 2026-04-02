@@ -31,14 +31,14 @@ include __DIR__ . '/../layout/header.php';
                 <div class="filter-group">
                     <h3 class="filter-category" id="filter-efectos-heading">Efectos</h3>
                     <ul class="filter-list" aria-labelledby="filter-efectos-heading">
-                        <?php if (!empty($tiposEfectos)): ?>
-                            <?php foreach ($tiposEfectos as $tipoEfecto): ?>
+                        <?php if (!empty($tipos_efectos)): ?>
+                            <?php foreach ($tipos_efectos as $tipo_efecto): ?>
                                 <li>
                                     <label class="checkbox-label">
                                         <input type="checkbox" class="filter-checkbox efecto-filter" 
-                                               value="<?= $tipoEfecto->getIdTipoEfecto() ?>"
-                                               aria-label="Filtrar por efecto <?= htmlspecialchars($tipoEfecto->getNombre()) ?>">
-                                        <?= htmlspecialchars($tipoEfecto->getNombre()) ?>
+                                               value="<?= $tipo_efecto->getIdTipoEfecto() ?>"
+                                               aria-label="Filtrar por efecto <?= htmlspecialchars($tipo_efecto->getNombre()) ?>">
+                                        <?= htmlspecialchars($tipo_efecto->getNombre()) ?>
                                     </label>
                                 </li>
                             <?php endforeach; ?>
@@ -49,7 +49,7 @@ include __DIR__ . '/../layout/header.php';
                 <div class="filter-group">
                     <h3 class="filter-category" id="filter-ingredientes-heading">Ingredientes</h3>
                     <ul class="filter-list" aria-labelledby="filter-ingredientes-heading">
-                        <?php foreach ($ingredientesPorCategoria as $categoria => $ingredientes): ?>
+                        <?php foreach ($ingredientes_por_categoria as $categoria => $ingredientes): ?>
                             <li class="filter-category-level">
                                 <button class="category-toggle" aria-expanded="false" 
                                         aria-controls="<?= $categoria ?>-subcategory"
@@ -91,29 +91,42 @@ include __DIR__ . '/../layout/header.php';
                 </div>
                 
                 <div id="recipes-container">
-                    <?php if (!empty($recetas)): ?>
+                    <?php if (!empty($recetas_detalles)): ?>
                         <div class="recipes-grid" role="list">
-                            <?php foreach ($recetas as $receta): ?>
-                                <article class="recipe-card" data-id="<?= $receta->getIdReceta() ?>" role="listitem">
+                            <?php foreach ($recetas_detalles as $receta): ?>
+                                <article class="recipe-card" data-id="<?= $receta['id_receta'] ?>" role="listitem">
+                                    <!---------------------------------------------------------------------------------------------------------->
                                     <div class="recipe-card-image">
-                                        <img src="<?= BASE_URL ?>/resources/img/recipes/<?= htmlspecialchars($receta->getImagen()) ?>" 
-                                             alt="<?= htmlspecialchars($receta->getNombre()) ?>"
+                                        <img src="<?= BASE_URL ?>/resources/img/recipes/<?= htmlspecialchars($receta['imagen']) ?>" 
+                                             alt="Receta: <?= htmlspecialchars($receta['nombre']) ?>"
                                              loading="lazy"
                                              onerror="this.src='<?= BASE_URL ?>/resources/img/recipes/placeholder.jpg'">
                                     </div>
+                                    <!---------------------------------------------------------------------------------------------------------->
                                     <div class="recipe-card-content">
-                                        <h2 class="recipe-title"><?= htmlspecialchars($receta->getNombre()) ?></h2>
+                                        <h2 class="recipe-title"><?= htmlspecialchars($receta['nombre']) ?></h2>
                                         <div class="recipe-icons" aria-hidden="true">
-                                            <span class="recipe-icon">🍗</span>
-                                            <span class="recipe-icon">🍴</span>
+                                            <?php if (!empty($receta['efectos'])): ?>
+                                                <?php foreach ($receta['efectos'] as $efecto): ?>
+                                                    <img src='<?= BASE_URL ?>/resources/img/effects/<?= htmlspecialchars($efecto['imagen']) ?>' 
+                                                                    alt='Efecto <?= htmlspecialchars($efecto['nombre']) ?>' 
+                                                                    class='efecto-icon-mini'
+                                                                    title='<?= htmlspecialchars($efecto['nombre']) ?>'>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <span class="recipe-icon">🍗</span>
+                                                <span class="recipe-icon">🍴</span>
+                                            <?php endif; ?>
                                         </div>
-                                        <p class="recipe-description"><?= htmlspecialchars($receta->getDescripcion()) ?></p>
+                                        <p class="recipe-description"><?= htmlspecialchars($receta['descripcion']) ?></p>
                                         <button class="btn btn-link view-recipe" 
-                                                data-id="<?= $receta->getIdReceta() ?>"
-                                                aria-label="Ver detalles de <?= htmlspecialchars($receta->getNombre()) ?>">
+                                                data-id="<?= $receta['id_receta'] ?>"
+                                                aria-label="Ver detalles de <?= htmlspecialchars($receta['nombre']) ?>">
                                             Ver Receta
                                         </button>
                                     </div>
+                                    <!---------------------------------------------------------------------------------------------------------->
+
                                 </article>
                             <?php endforeach; ?>
                         </div>
@@ -293,7 +306,7 @@ $(document).ready(function() {
                 </article>
             `;
         });
-        });
+
         html += '</div>';
         container.html(html);
     }
@@ -324,7 +337,7 @@ $(document).ready(function() {
                 }
             },
             error: function() {
-                $('#modal-content').html('<div class="error-message"><p>Error de conexión. Por favor, intenta de nuevo.</p></div>');
+                $('#modal-content').html('<div class="error-message"><p>Error de conexión. Por favor, intentalo de nuevo mñas tarde.</p></div>');
             },
             complete: function() {
                 $('.modal-loader').hide();
