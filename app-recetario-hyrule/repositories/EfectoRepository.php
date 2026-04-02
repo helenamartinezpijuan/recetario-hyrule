@@ -182,11 +182,10 @@ class EfectoRepository extends BaseRepository {
 
         // 5. CREAR objeto TipoEfecto
         while ($registro = $resultado->fetch_assoc()) {
-            $tipo_efecto = new TipoEfecto(
+            $tipos_efectos[] = new TipoEfecto(
                 $registro["id_tipo_efecto"],
                 $registro["nombre"]
             );
-            $tipos_efectos[] = $tipo_efecto;
         }
 
         // 6. LIMPIEZA

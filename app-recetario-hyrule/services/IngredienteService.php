@@ -155,7 +155,7 @@ class IngredienteService {
             if (empty(trim($nombre))) {
                 return $this->getAllIngredientes();
             }
-            return $this->ingredienteRepo->buscarPorNombre($nombre);
+            return $this->ingredienteRepo->buscarPorNombre(trim($nombre));
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
             return [];

@@ -10,12 +10,12 @@ use Exception;
 
 class IngredienteController extends BaseController {
 
-    private IngredienteService $ingredienteService;
+    private IngredienteService $service;
     private LocalizacionService $localizacionService;
     private IngredienteRepository $repository;
 
     public function __construct() {
-        $this->ingredienteService = new IngredienteService();
+        $this->service = new IngredienteService();
         $this->localizacionService = new LocalizacionService();
         $this->repository = new IngredienteRepository();
     }
@@ -54,6 +54,119 @@ class IngredienteController extends BaseController {
      * @return void
      */
     public function filtrarIngredientes(array $postData): void {
+        // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON (no HTML)
+        header('Content-Type: application/json');
+
+        try {
+            // 1. EXTRAER DATOS del formulario
+            $categorias = $postData['ingrediente_categoria'] ?? [];
+            $localizaciones_ids = $postData['localizaciones'] ?? [];
+
+            // 2. OBTENER IDs de ingredientes por categorías (si hay categorías seleccionadas)
+            $ingredientes_ids = [];
+            if (!empty($categorias)) {
+                $ingredientes_ids = $this->service->getIngredientesPorCategoria($categorias);
+            }
+            
+            // 3. VALIDAR datos a través del service
+            $ingredientes = $this->service->getIngredientesFiltrados($ingredientes_ids, $localizaciones_ids);
+
+            // 4. PREPARAR DATOS para pasar a Json
+            $ingredientes_array = array_map(function($ingrediente) {
+                return [
+                    'id_ingrediente' => $ingrediente->getIdIngrediente(),
+                    'nombre' => $ingrediente->getNombre(),
+                    'imagen' => $ingrediente->getImagen(),
+                    'descripcion' => $ingrediente->getDescripcion()
+                ];
+            }, $ingredientes);
+
+            // 5. DEVOLVER RESPUESTA
+            echo json_encode(['success' => true, 'ingredientes' => $ingredientes_array]);
+        
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            echo json_encode(['success' => false, 'message' => 'Error al filtrar los ingredientes']);
+        }
+    }
+
+    /**
+     * Busca ingredientes por nombre (searchbar)
+     * @param array $postData Los datos completos del $_POST
+     * @return void
+     */
+    public function buscarIngredientes(array $postData): void {
+        header('Content-Type: application/json');
+        
+        try {
+            $nombre = trim($postData['nombre'] ?? '');
+            $ingredientes = $this->service->buscarIngredientesPorNombre($nombre);
+            
+            $ingredientes_array = array_map(function($receta) {
+                return [
+                    'id_ingrediente' => $receta->getIdIngrediente(),
+                    'nombre' => $receta->getNombre(),
+                    'imagen' => $receta->getImagen(),
+                    'descripcion' => $receta->getDescripcion()
+                ];
+            }, $ingredientes);
+            
+            echo json_encode(['success' => true, 'ingredientes' => $ingredientes_array]);
+            
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            echo json_encode(['success' => false, 'message' => 'Error en la búsqueda']);
+        }
+    }
+
+    /**
+     * Recibe el ID de un ingrediente vía GET y devuelve sus detalles completos en JSON
+     * @param array $getData Datos de $_GET
+     * @throws Exception Si el ID del ingrediente no es válido
+     * @return void
+     */
+    public function obtenerIngrediente(array $getData): void {
+        // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON (no HTML)
+        header('Content-Type: application/json');
+
+        try {
+            // 1. EXTRAER DATOS del formulario
+            $id = (int)($getData['id'] ?? 0);
+            if ($id <= 0) { throw new Exception("ID de ingrediente no válido"); }
+
+            // 2. VALIDAR Y NORMALIZAR los datos a través del service
+            $ingrediente = $this->ingredienteService->getIngredientePorId($id);
+            if (!$ingrediente) {
+                Logger::error("Ingrediente no encontrado con id $id", __FILE__);
+                echo json_encode(['success' => false, 'message' => 'Ingrediente no encontrado']);
+            }
+
+            // 3. DEVOLVER RESPUESTA
+            echo json_encode([
+                'success' => true,
+                'ingrediente' => [
+                    'id_ingrediente' => $ingrediente->getIdIngrediente(),
+                    'nombre' => $ingrediente->getNombre(),
+                    'imagen' => $ingrediente->getImagen(),
+                    'descripcion' => $ingrediente->getDescripcion()
+                ]
+            ]);
+
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error al cargar los detalles del ingrediente'
+            ]);
+        }
+    }
+    
+    /**
+     * Recibe los filtros vía POST y devuelve los ingredientes filtrados en JSON
+     * @param array $postData Los datos completos de $_POST
+     * @return void
+     */
+    public function filtrarIngredientes_depricated(array $postData): void {
         // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON (no HTML)
         header('Content-Type: application/json');
 
@@ -103,48 +216,6 @@ class IngredienteController extends BaseController {
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
             echo json_encode(['success' => false, 'message' => 'Error al filtrar los ingredientes']);
-        }
-    }
-
-    /**
-     * Recibe el ID de un ingrediente vía GET y devuelve sus detalles completos en JSON
-     * @param array $getData Datos de $_GET
-     * @throws Exception Si el ID del ingrediente no es válido
-     * @return void
-     */
-    public function obtenerIngrediente(array $getData): void {
-        // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON (no HTML)
-        header('Content-Type: application/json');
-
-        try {
-            // 1. EXTRAER DATOS del formulario
-            $id = (int)($getData['id'] ?? 0);
-            if ($id <= 0) { throw new Exception("ID de ingrediente no válido"); }
-
-            // 2. VALIDAR Y NORMALIZAR los datos a través del service
-            $ingrediente = $this->ingredienteService->getIngredientePorId($id);
-            if (!$ingrediente) {
-                Logger::error("Ingrediente no encontrado con id $id", __FILE__);
-                echo json_encode(['success' => false, 'message' => 'Ingrediente no encontrado']);
-            }
-
-            // 3. DEVOLVER RESPUESTA
-            echo json_encode([
-                'success' => true,
-                'ingrediente' => [
-                    'id_ingrediente' => $ingrediente->getIdIngrediente(),
-                    'nombre' => $ingrediente->getNombre(),
-                    'imagen' => $ingrediente->getImagen(),
-                    'descripcion' => $ingrediente->getDescripcion()
-                ]
-            ]);
-
-        } catch (Exception $e) {
-            Logger::error($e->getMessage(), __FILE__);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al cargar los detalles del ingrediente'
-            ]);
         }
     }
 }

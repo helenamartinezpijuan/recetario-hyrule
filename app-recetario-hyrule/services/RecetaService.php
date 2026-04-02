@@ -67,7 +67,7 @@ class RecetaService {
             if (empty(trim($nombre))) {
                 return $this->getAllRecetas();
             }
-            return $this->recetaRepo->buscarPorNombre($nombre);
+            return $this->recetaRepo->buscarPorNombre(trim($nombre));
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
             return [];

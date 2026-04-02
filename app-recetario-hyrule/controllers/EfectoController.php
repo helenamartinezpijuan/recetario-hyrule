@@ -45,6 +45,35 @@ class EfectoController extends BaseController {
     }
 
     /**
+     * Busca efecto por nombre (searchbar)
+     * @param array $postData Los datos completos del $_POST
+     * @return void
+     */
+    public function buscarEfectos(array $postData): void {
+        header('Content-Type: application/json');
+        
+        try {
+            $nombre = trim($postData['nombre'] ?? '');
+            $efectos = $this->service->buscarEfectosPorNombre($nombre);
+            
+            $efectos_array = array_map(function($efecto) {
+                return [
+                    'id_receta' => $efecto->getIdEfecto(),
+                    'nombre' => $efecto->getNombre(),
+                    'imagen' => $efecto->getImagen(),
+                    'descripcion' => $efecto->getDescripcion()
+                ];
+            }, $efectos);
+            
+            echo json_encode(['success' => true, 'efectos' => $efectos_array]);
+            
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            echo json_encode(['success' => false, 'message' => 'Error en la búsqueda']);
+        }
+    }
+
+    /**
      * Recibe el ID de un efecto vía GET y devuelve sus detalles completos en JSON
      * @param array $getData Datos de $_GET
      * @throws Exception Si el ID del efecto no es válido

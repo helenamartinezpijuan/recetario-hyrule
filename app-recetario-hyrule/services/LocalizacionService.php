@@ -92,7 +92,7 @@ class LocalizacionService {
             if (empty(trim($nombre))) {
                 return $this->getAllLocalizaciones();
             }
-            return $this->localizacionRepo->buscarPorNombre($nombre);
+            return $this->localizacionRepo->buscarPorNombre(trim($nombre));
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
             return [];

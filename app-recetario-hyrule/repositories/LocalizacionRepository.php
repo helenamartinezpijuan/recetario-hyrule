@@ -115,6 +115,7 @@ class LocalizacionRepository extends BaseRepository {
         $conn = $this->getConnection();
         
         // 2. CONSTRUIR CONSULTA
+        $likeNombre = "%$nombre%";
         $sql = "SELECT id_localizacion, nombre, region, imagen, descripcion 
             FROM localizaciones 
             WHERE nombre LIKE ? OR region LIKE ?
@@ -125,7 +126,7 @@ class LocalizacionRepository extends BaseRepository {
         if (!$statement) { $this->handleError($conn, "preparando búsqueda de localización por nombre"); }
         
         // 4. VINCULAR PARÁMETROS a la consulta
-        $statement->bind_param('ss', $nombre, $nombre);
+        $statement->bind_param('ss', $likeNombre, $likeNombre);
         
         // 5. EJECUTAR CONSULTA
         if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda de localización por nombre"); }

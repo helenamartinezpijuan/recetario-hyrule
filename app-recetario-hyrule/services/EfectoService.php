@@ -52,7 +52,7 @@ class EfectoService {
             if (empty(trim($nombre))) {
                 return $this->getAllEfectos();
             }
-            return $this->efectoRepo->buscarPorNombre($nombre);
+            return $this->efectoRepo->buscarPorNombre(trim($nombre));
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
             return [];

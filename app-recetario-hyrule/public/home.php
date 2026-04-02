@@ -65,6 +65,9 @@ switch ( $action ) {
     case 'filtrar_recetas':
         $receta_controller->filtrarRecetas($_POST);
         break;
+    case 'buscar_recetas':
+        $receta_controller->buscarRecetas($_POST);
+        break;
     case 'obtener_receta':
         $receta_controller->obtenerReceta($_GET);
         break;
@@ -74,11 +77,17 @@ switch ( $action ) {
     case 'filtrar_ingredientes':
         $ingrediente_controller->filtrarIngredientes($_POST);
         break;
+    case 'buscar_ingredientes':
+        $ingrediente_controller->buscarIngredientes($_POST);
+        break;
     case 'obtener_ingrediente':
         $ingrediente_controller->obtenerIngrediente($_GET);
         break;
     case 'efectos':
         $efecto_controller->index();
+        break;
+    case 'buscar_efectos':
+        $efecto_controller->buscarEfectos($_POST);
         break;
     case 'obtener_efecto':
         $efecto_controller->obtenerEfecto($_GET);
@@ -88,6 +97,9 @@ switch ( $action ) {
         break;
     case 'filtrar_localizaciones':
         $localizacion_controller->filtrarLocalizaciones($_POST);
+        break;
+    case 'buscar_localizaciones':
+        $localizacion_controller->buscarLocalizaciones($_POST);
         break;
     case 'obtener_localizacion':
         $localizacion_controller->obtenerLocalizacion($_GET);

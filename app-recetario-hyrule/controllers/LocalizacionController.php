@@ -81,6 +81,35 @@ class LocalizacionController extends BaseController {
     }
 
     /**
+     * Busca localizaciones por nombre (searchbar)
+     * @param array $postData Los datos completos del $_POST
+     * @return void
+     */
+    public function buscarLocalizaciones(array $postData): void {
+        header('Content-Type: application/json');
+        
+        try {
+            $nombre = trim($postData['nombre'] ?? '');
+            $localizaciones = $this->service->buscarLocalizacionesPorNombre($nombre);
+            
+            $localizaciones_array = array_map(function($localizacion) {
+                return [
+                    'id_receta' => $localizacion->getIdLocalizacion(),
+                    'nombre' => $localizacion->getNombre(),
+                    'imagen' => $localizacion->getImagen(),
+                    'descripcion' => $localizacion->getDescripcion()
+                ];
+            }, $localizaciones);
+            
+            echo json_encode(['success' => true, 'localizaciones' => $localizaciones_array]);
+            
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            echo json_encode(['success' => false, 'message' => 'Error en la búsqueda']);
+        }
+    }
+
+    /**
      * Recibe el ID de una localizacion vía GET y devuelve sus detalles completos en JSON
      * @param array $getData Datos de $_GET
      * @throws Exception Si el ID de la localizacion no es válido

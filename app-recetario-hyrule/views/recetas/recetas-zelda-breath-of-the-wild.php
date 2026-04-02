@@ -200,6 +200,51 @@ $(document).ready(function() {
             }
         });
     });
+
+    // Búsqueda por nombre con debounce
+    let searchTimeout;
+    $('#search-input').on('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const searchTerm = $(this).val();
+            
+            $('#loader').show();
+            $('#recipes-container').fadeOut(200);
+            
+            $.ajax({
+                url: 'index.php?action=buscar_recetas',
+                method: 'POST',
+                data: { nombre: searchTerm },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        renderRecipes(response.recetas);
+                        // Actualizar breadcrumb
+                        if (searchTerm) {
+                            $('.breadcrumb-list').html(`
+                                <li class="breadcrumb-item"><a href="?action=recetas">Recetas</a></li>
+                                <li class="breadcrumb-item active">Buscando: ${escapeHtml(searchTerm)}</li>
+                            `);
+                        } else {
+                            $('.breadcrumb-list').html(`
+                                <li class="breadcrumb-item"><a href="?action=recetas">Recetas</a></li>
+                                <li class="breadcrumb-item active">Todas las recetas</li>
+                            `);
+                        }
+                    } else {
+                        showError(response.message || 'Error en la búsqueda');
+                    }
+                },
+                error: function() {
+                    showError('Error de conexión con el servidor');
+                },
+                complete: function() {
+                    $('#loader').hide();
+                    $('#recipes-container').fadeIn(200);
+                }
+            });
+        }, 300);
+    });
     
     $('#clear-filters').on('click', function() {
         $('.filter-checkbox').prop('checked', false);
@@ -217,24 +262,37 @@ $(document).ready(function() {
         
         let html = '<div class="recipes-grid">';
         recetas.forEach(receta => {
+            // Obtener efectos de la receta
+            let efectosHtml = '';
+            if (receta.efectos && receta.efectos.length > 0) {
+                receta.efectos.slice(0, 3).forEach(efecto => {
+                    efectosHtml += `<img src="${BASE_URL}/resources/img/effects/${efecto.imagen}" 
+                                        alt="${efecto.nombre}" 
+                                        class="efecto-icon-mini"
+                                        title="${efecto.nombre}">`;
+                });
+            } else {
+                efectosHtml = '<span class="recipe-icon">🍽️</span>';
+            }
+
             html += `
                 <article class="recipe-card" data-id="${receta.id_receta}">
                     <div class="recipe-card-image">
                         <img src="${BASE_URL}/resources/img/recipes/${escapeHtml(receta.imagen)}" 
-                             alt="${escapeHtml(receta.nombre)}"
-                             onerror="this.src='${BASE_URL}/resources/img/recipes/placeholder.jpg'">
+                            alt="${escapeHtml(receta.nombre)}"
+                            onerror="this.src='${BASE_URL}/resources/img/recipes/placeholder.jpg'">
                     </div>
                     <div class="recipe-card-content">
                         <h2 class="recipe-title">${escapeHtml(receta.nombre)}</h2>
-                        <div class="recipe-icons">
-                            <span class="recipe-icon">🍗</span>
-                            <span class="recipe-icon">🍴</span>
+                        <div class="recipe-icons" aria-hidden="true">
+                            ${efectosHtml}
                         </div>
                         <p class="recipe-description">${escapeHtml(receta.descripcion)}</p>
                         <button class="btn btn-link view-recipe" data-id="${receta.id_receta}">Ver Receta</button>
                     </div>
                 </article>
             `;
+        });
         });
         html += '</div>';
         container.html(html);
@@ -282,7 +340,7 @@ $(document).ready(function() {
                 efectosHtml += `
                     <div class="efecto-mini-card">
                         <img src="${BASE_URL}/resources/img/effects/${escapeHtml(efecto.imagen || (efecto.nombre.toLowerCase() + '.png'))}" 
-                            alt="${escapeHtml(efecto.nombre)}"
+                            alt="Efecto ${escapeHtml(efecto.nombre)}"
                             class="efecto-mini-img"
                             onerror="this.src='${BASE_URL}/resources/img/effects/default.png'">
                         <div class="efecto-mini-info">
@@ -299,16 +357,17 @@ $(document).ready(function() {
         
         let ingredientesHtml = '<div class="detail-section"><h3>INGREDIENTES</h3><ul class="ingredientes-list">';
         if (receta.ingredientes && receta.ingredientes.length > 0) {
-            receta.ingredientes.forEach(([ing, cantidad]) => {
+            receta.ingredientes.forEach(ing => {
                 ingredientesHtml += `
                     <li class="ingrediente-item">
                         <img src="${BASE_URL}/resources/img/ingredients/${escapeHtml(ing.imagen || 'placeholder.webp')}" 
                              alt="${escapeHtml(ing.nombre)}"
-                             class="ingrediente-mini-img">
+                             class="ingrediente-mini-img"
+                             onerror="this.src='${BASE_URL}/resources/img/ingredients/placeholder.jpg'">
                         <span class="ingrediente-nombre">
-                            <a href="?action=obtener_ingrediente&id=${ing.id_ingrediente || ''}">${escapeHtml(ing.nombre)}</a>
+                            <a href="#" class="view-ingrediente" data-id="${ing.id_ingrediente}">${escapeHtml(ing.nombre)}</a>
                         </span>
-                        <span class="ingrediente-cantidad">x ${cantidad}</span>
+                        <span class="ingrediente-cantidad">x ${ing.cantidad}</span>
                     </li>
                 `;
             });

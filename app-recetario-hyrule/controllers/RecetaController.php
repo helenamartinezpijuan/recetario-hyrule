@@ -67,11 +67,11 @@ class RecetaController extends BaseController {
             $efectos_ids = $postData['efectos'] ?? [];
             $ingredientes_ids = $postData['ingredientes'] ?? [];
 
-            // 2. VALIDAR Y NORMALIZAR los datos a través del service
+            // 2. VALIDAR datos a través del service
             $recetas = $this->service->getRecetasFiltradas($efectos_ids, $ingredientes_ids);
 
             // 3. PREPARAR DATOS para pasar a Json
-            $recetasArray = array_map(function($receta) {
+            $recetas_array = array_map(function($receta) {
                 return [
                     'id_receta' => $receta->getIdReceta(),
                     'nombre' => $receta->getNombre(),
@@ -81,11 +81,40 @@ class RecetaController extends BaseController {
             }, $recetas);
 
             // 4. DEVOLVER RESPUESTA
-            echo json_encode(['success' => true, 'recetas' => $recetasArray]);
+            echo json_encode(['success' => true, 'recetas' => $recetas_array]);
         
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
             echo json_encode(['success' => false, 'message' => 'Error al filtrar las recetas']);
+        }
+    }
+
+    /**
+     * Busca recetas por nombre (searchbar)
+     * @param array $postData Los datos completos del $_POST
+     * @return void
+     */
+    public function buscarRecetas(array $postData): void {
+        header('Content-Type: application/json');
+        
+        try {
+            $nombre = trim($postData['nombre'] ?? '');
+            $recetas = $this->service->buscarRecetasPorNombre($nombre);
+            
+            $recetas_array = array_map(function($receta) {
+                return [
+                    'id_receta' => $receta->getIdReceta(),
+                    'nombre' => $receta->getNombre(),
+                    'imagen' => $receta->getImagen(),
+                    'descripcion' => $receta->getDescripcion()
+                ];
+            }, $recetas);
+            
+            echo json_encode(['success' => true, 'recetas' => $recetas_array]);
+            
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            echo json_encode(['success' => false, 'message' => 'Error en la búsqueda']);
         }
     }
 
@@ -104,17 +133,42 @@ class RecetaController extends BaseController {
             $id = (int)($getData['id'] ?? 0);
             if ($id <= 0) { throw new Exception("ID de receta no válido"); }
 
-            // 2. VALIDAR Y NORMALIZAR los datos a través del service
+            // 2. VALIDAR los datos a través del service
             $detalle = $this->service->getRecetaDetalle($id);
             if (!$detalle) {
                 Logger::error("Receta no encontrada con id $id", __FILE__);
                 echo json_encode(['success' => false, 'message' => 'Receta no encontrada']);
             }
 
-            // 3. PREPARAR DATOS para pasar a Json          // BORRAR LUEGO :)
-            $receta = $detalle->getReceta();                // ESTO DEVUELVE UN OBJETO RECETA
-            $ingredientes = $detalle->getIngredientes();    // ESTO DEVUELVE UN ARRAY ASOCIATIVO CON 'OBJETO INGREDIENTE' => 'CANTIDAD EN RECETA'
-            $efectos = $detalle->getEfectos();              // ESTO DEVUELVE UN ARRAY DE OBJETOS EFECTO
+            // 3. PREPARAR DATOS para pasar a Json
+
+            // 3.1. OBTENER DATOS del service
+            $receta = $detalle->getReceta();
+            $ingredientes_array = $detalle->getIngredientes();
+            $efectos = $detalle->getEfectos();
+
+            // 3.2. PREPARAR DATOS de ingredientes para JavaScript
+            $ingredientes_preparados = [];
+            foreach ($ingredientes_array as $ing) {
+                $ingredientes_preparados[] = [
+                    'id_ingrediente' => $ing['ingrediente']->getIdIngrediente(),
+                    'nombre' => $ing['ingrediente']->getNombre(),
+                    'imagen' => $ing['ingrediente']->getImagen(),
+                    'descripcion' => $ing['ingrediente']->getDescripcion(),
+                    'cantidad' => $ing['cantidad']
+                ];
+            }
+
+            // 3.3. PREPARAR DATOS de efectos para JavaScript
+            $efectos_preparados = [];
+            foreach ($efectos as $efecto) {
+                $efectos_preparados[] = [
+                    'id_efecto' => $efecto->getIdEfecto(),
+                    'nombre' => $efecto->getTipoEfecto()->getNombre(),
+                    'imagen' => $efecto->getImagen(),
+                    'descripcion' => $efecto->getDescripcion(),
+                ];
+            }
 
             // 4. DEVOLVER RESPUESTA
             echo json_encode([
@@ -124,8 +178,8 @@ class RecetaController extends BaseController {
                     'nombre' => $receta->getNombre(),
                     'imagen' => $receta->getImagen(),
                     'descripcion' => $receta->getDescripcion(),
-                    'ingredientes' => $ingredientes,
-                    'efectos' => $efectos
+                    'ingredientes' => $ingredientes_preparados,
+                    'efectos' => $efectos_preparados
                 ]
             ]);
 

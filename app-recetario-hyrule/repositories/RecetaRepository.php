@@ -142,6 +142,7 @@ class RecetaRepository extends BaseRepository {
         $conn = $this->getConnection();
         
         // 2. CONSTRUIR CONSULTA
+        $likeNombre = "%$nombre%";
         $sql = "SELECT id_receta, nombre, imagen, descripcion 
             FROM recetas 
             WHERE nombre LIKE ? OR descripcion LIKE ? 
@@ -152,7 +153,7 @@ class RecetaRepository extends BaseRepository {
         if (!$statement) { $this->handleError($conn, "preparando búsqueda de receta por nombre"); }
         
         // 4. VINCULAR PARÁMETROS a la consulta
-        $statement->bind_param('ss', $nombre, $nombre);
+        $statement->bind_param('ss', $likeNombre, $likeNombre);
         
         // 5. EJECUTAR CONSULTA
         if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda de receta por nombre"); }
