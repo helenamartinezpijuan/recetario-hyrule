@@ -25,9 +25,6 @@
             <button class="accessibility-option" data-action="font-dyslexic">
                 <span aria-hidden="true">📖</span> Fuente para disléxicos
             </button>
-            <button class="accessibility-option" data-action="high-contrast">
-                <span aria-hidden="true">🌙</span> Alto contraste
-            </button>
             <button class="accessibility-option" data-action="colorblind-protan">
                 <span aria-hidden="true">🎨</span> Modo Protanopia/Deuteranopia
             </button>
@@ -96,18 +93,9 @@ $(document).ready(function() {
         showAccessibilityMessage('Fuente cambiada a OpenDyslexic');
     });
     
-    // Alto contraste
-    $('[data-action="high-contrast"]').on('click', function() {
-        $body.toggleClass('high-contrast');
-        localStorage.setItem('high-contrast', $body.hasClass('high-contrast'));
-        $panel.hide();
-        $toggle.attr('aria-expanded', 'false');
-        showAccessibilityMessage($body.hasClass('high-contrast') ? 'Alto contraste activado' : 'Alto contraste desactivado');
-    });
-    
     // Modo Protanopia/Deuteranopia (rojo-verde)
     $('[data-action="colorblind-protan"]').on('click', function() {
-        $body.removeClass('tritanopia-mode');
+        $body.removeClass('tritanopia-mode high-contrast');
         $body.toggleClass('protanopia-mode');
         localStorage.setItem('colorblind-mode', $body.hasClass('protanopia-mode') ? 'protanopia' : '');
         $panel.hide();
@@ -117,7 +105,7 @@ $(document).ready(function() {
     
     // Modo Tritanopia (azul-amarillo)
     $('[data-action="colorblind-tritan"]').on('click', function() {
-        $body.removeClass('protanopia-mode');
+        $body.removeClass('protanopia-mode high-contrast');
         $body.toggleClass('tritanopia-mode');
         localStorage.setItem('colorblind-mode', $body.hasClass('tritanopia-mode') ? 'tritanopia' : '');
         $panel.hide();
@@ -127,9 +115,8 @@ $(document).ready(function() {
     
     // Restablecer
     $('[data-action="reset"]').on('click', function() {
-        $body.removeClass('font-opendyslexic high-contrast protanopia-mode tritanopia-mode');
+        $body.removeClass('font-opendyslexic protanopia-mode tritanopia-mode');
         localStorage.removeItem('accessibility-font');
-        localStorage.removeItem('high-contrast');
         localStorage.removeItem('colorblind-mode');
         $panel.hide();
         $toggle.attr('aria-expanded', 'false');
@@ -139,9 +126,6 @@ $(document).ready(function() {
     // Cargar preferencias guardadas
     if (localStorage.getItem('accessibility-font') === 'opendyslexic') {
         $body.addClass('font-opendyslexic');
-    }
-    if (localStorage.getItem('high-contrast') === 'true') {
-        $body.addClass('high-contrast');
     }
     const colorblindMode = localStorage.getItem('colorblind-mode');
     if (colorblindMode === 'protanopia') {

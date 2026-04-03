@@ -133,7 +133,7 @@ class RecetaController extends BaseController {
         try {
             // 1. EXTRAER DATOS del formulario
             $id = (int)($getData['id'] ?? 0);
-            if ($id <= 0) { throw new Exception("ID de receta no válido"); }
+            if ($id <= 0) { throw new Exception("ID de receta (ID $id) no válido"); }
 
             // 2. VALIDAR los datos a través del service
             $detalle = $this->service->getRecetaDetalle($id);

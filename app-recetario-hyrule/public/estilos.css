@@ -16,6 +16,8 @@
     --text-dark: #332B2B;
     --text-dark-light: #423232;
     --white: #F2EDD5;
+
+    --font-scale: 1;
 }
 
 body {
@@ -23,11 +25,12 @@ body {
     color: var(--text-dark);
     font-family: 'AmaticSC', sans-serif;
     line-height: 1.5;
-    font-size: 21px;
+    /*font-size: 21px;*/
 }
 
 html {
     font-family: 'AmaticSC', sans-serif;
+    font-size: 100%;
 }
 
 /* ============================================
@@ -77,16 +80,16 @@ html {
     padding: 0;
 }
 
-.main-nav a {
+.main-nav * a {
     color: var(--text-dark);
     text-decoration: none;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     transition: color 0.2s;
 }
 
-.main-nav a:hover,
-.main-nav a.active {
+.main-nav * a:hover,
+.main-nav * a.active {
     color: var(--white);
     text-decoration: underline;
 }
@@ -235,7 +238,7 @@ html {
     border: none;
     cursor: pointer;
     font-family: inherit;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     transition: all 0.2s;
 }
 
@@ -271,14 +274,27 @@ html {
 
 p, .description, .recipe-description, .ingrediente-description,
 .localizacion-description, .efecto-description {
-    font-family: 'PatrickHand', cursive;
-    font-size: 1rem;
+    font-family: 'PatrickHandSC', sans-serif;
+    font-size: calc(1.3rem * var(--font-scale));
     line-height: 1.4;
 }
 
 h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
     font-family: 'AmaticSC', sans-serif;
     font-weight: bold;
+}
+
+body, p, h1, h2, h3, h4, h5, h6, 
+.recipe-title, .ingrediente-title, .efecto-title, .localizacion-title,
+.recipe-description, .ingrediente-description, .efecto-description, .localizacion-description,
+.nav-list a, .btn, .breadcrumb-item, .filter-category, .filters-title {
+    font-size: calc(1.3rem * var(--font-scale));
+}
+h1 {
+    font-size: calc(2.5rem * var(--font-scale));
+}
+h2 {
+    font-size: calc(2rem * var(--font-scale));
 }
 
 /* ============================================
@@ -294,13 +310,13 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 }
 
 .hero h1 {
-    font-size: 4rem;
+    font-size: calc(4rem * var(--font-scale));
     margin-bottom: 1.2rem;
     font-family: 'PermanentMarker', cursive;
 }
 
 .hero p {
-    font-size: 1.2rem;
+    font-size: calc(1.4rem * var(--font-scale));
     max-width: 700px;
     margin: 0 auto 2rem;
 }
@@ -309,7 +325,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
     background-color: var(--primary-green);
     color: #2C2C2C;
     padding: 0.8rem 2rem;
-    font-size: 1.2rem;
+    font-size: calc(1.3rem * var(--font-scale));
     font-weight: bold;
     border-radius: 40px;
 }
@@ -337,7 +353,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 }
 
 .filters-title {
-    font-size: 1.6rem;
+    font-size: calc(1.6rem * var(--font-scale));
     margin-bottom: 1rem;
     color: var(--primary-green-dark);
     border-bottom: 2px solid #66CAF2;
@@ -350,7 +366,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 
 .filter-category {
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: calc(1.3rem * var(--font-scale));
     margin-bottom: 0.5rem;
     color: var(--accent-blue);
 }
@@ -410,9 +426,9 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 }
 
 .page-title {
-    font-size: 2rem;
+    font-size: calc(2rem * var(--font-scale));
     margin-bottom: 1rem;
-    color: var(--primary-green);
+    color: var(--primary-green-dark);
 }
 
 /* Tarjetas (recetas, ingredientes, efectos, localizaciones) */
@@ -452,9 +468,9 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 }
 
 .card-title {
-    font-size: 1.8rem;
+    font-size: calc(1.8rem * var(--font-scale));
     margin-bottom: 0.5rem;
-    color: var(--primary-green);
+    color: var(--primary-green-dark);
 }
 
 .card-icons {
@@ -464,11 +480,11 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 }
 
 .card-icon {
-    font-size: 1.4rem;
+    font-size: calc(1.5rem * var(--font-scale));
 }
 
 .card-description {
-    font-size: 1.2rem;
+    font-size: calc(1.3rem * var(--font-scale));
     margin-bottom: 1rem;
     color: #555;
 }
@@ -555,13 +571,13 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 
 .modal-header h2 {
     margin: 0;
-    color: var(--primary-green);
+    color: var(--primary-green-dark);
 }
 
 .modal-close {
     background: none;
     border: none;
-    font-size: 2rem;
+    font-size: calc(2rem * var(--font-scale));
     cursor: pointer;
     color: var(--primary-green);
 }
@@ -588,13 +604,13 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 }
 
 .detail-title {
-    font-size: 2rem;
-    color: var(--primary-green);
+    font-size: calc(2rem * var(--font-scale));
+    color: var(--primary-green-dark);
     margin-bottom: 0.5rem;
 }
 
 .detail-description {
-    font-size: 1rem;
+    font-size: calc(1.1rem * var(--font-scale));
     line-height: 1.4;
 }
 
@@ -659,7 +675,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 
 @media (max-width: 768px) {
     body {
-        font-size: 16px;
+        font-size: calc(1.2em * var(--font-scale));
     }
     .header-container {
         flex-direction: column;
@@ -671,7 +687,7 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
         gap: 1rem;
     }
     .hero h1 {
-        font-size: 2.5rem;
+        font-size: calc(2.5em * var(--font-scale));
     }
     .recipes-grid,
     .ingredientes-grid,
@@ -750,8 +766,9 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 
 .accessibility-panel h3 {
     margin: 0 0 10px 0;
-    font-size: 16px;
-    color: var(--primary-green);
+    font-size: 20px;
+    text-decoration: underline;
+    color: var(--primary-green-dark);
 }
 
 .accessibility-option {
@@ -762,6 +779,8 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
     cursor: pointer;
     text-align: left;
     transition: background 0.2s;
+    font-family: 'PatrickHandSC';
+    font-size: 16px;
 }
 
 .accessibility-option:hover {
@@ -783,89 +802,42 @@ h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
 .font-opendyslexic,
 .font-opendyslexic *:not(button):not(.btn) {
     font-family: 'OpenDyslexic', monospace !important;
+    --font-scale: 0.85;
 }
 
-p.font-opendyslexic {
-    font-family: 'PatrickHand', cursive;
-    font-size: 0.8rem;
+.font-opendyslexic p,
+.font-opendyslexic .recipe-description,
+.font-opendyslexic .ingrediente-description {
     line-height: 1.4;
-}
-
-h2.font-opendyslexic {
-    font-size: 1.2em;
-}
-h3.font-opendyslexic {
-    font-size: 1em;
-}
-
-
-/* Alto contraste */
-.high-contrast {
-    background-color: #000000 !important;
-    color: #FFFF00 !important;
-}
-
-.high-contrast a,
-.high-contrast button {
-    color: #00FFFF !important;
-    background-color: #000000 !important;
-    border: 1px solid #FFFFFF !important;
-}
-
-.high-contrast img {
-    filter: brightness(0.8) contrast(1.5) !important;
 }
 
 /* Modo Protanopia/Deuteranopia */
 .protanopia-mode {
-    filter: url('#protanopia-filter');
-}
-
-.protanopia-mode .site-header,
-.protanopia-mode .btn-primary {
-    background-color: #4D4D4D !important;
-}
-
-.protanopia-mode .btn-secondary {
-    background-color: #999999 !important;
+    --primary-green: #6B8C42;       /* Verde oliva */
+    --primary-green-dark: #4A6630;        /* Verde oliva oscuro */
+    --accent-blue: #4D4D4D;     /* Gris medio */
+    --accent-blue-light: #666666;     /* Gris claro */
+    --bg-light: #F2EDD5;            /* Mantenemos el fondo claro */
+    --text-dark: #1A1A1A;          /* Texto más oscuro para contraste */
+    --text-dark-light: #333333;
+    --white: #F2EDD5;
 }
 
 /* Modo Tritanopia */
 .tritanopia-mode {
-    filter: url('#tritanopia-filter');
+    --primary-green: #CC9966;       /* Marrón anaranjado */
+    --primary-green-dark: #A67C4A;        /* Marrón más oscuro */
+    --accent-blue: #996633;     /* Marrón medio */
+    --accent-blue-light: #B3804D;     /* Marrón claro */
+    --bg-light: #F2EDD5;            /* Mantenemos el fondo claro */
+    --text-dark: #2B2B2B;          /* Texto oscuro */
+    --text-dark-light: #4A4A4A;
+    --white: #F2EDD5;
 }
-
-.tritanopia-mode .site-header,
-.tritanopia-mode .btn-primary {
-    background-color: #996633 !important;
-}
-
-.tritanopia-mode .btn-secondary {
-    background-color: #CC9966 !important;
-}
-
 
 /* ============================================
    FONTS
    ============================================ */
-.openDyslexic {
-    font-family: 'OpenDyslexic', monospace;
-}
-.permanentMarker {
-    font-family: 'PermanentMarker', cursive;
-}
-.patrickHand {
-    font-family: 'PatrickHand', cursive;
-}
-.lexend {
-    font-family: 'Lexend', sans-serif;
-}
-.datatype {
-    font-family: 'Datatype', monospace;
-}
-.amaticSC {
-    font-family: 'AmaticSC', sans-serif;
-}
 
 /* Open Dyslexic - REGULAR */
 @font-face {
@@ -908,6 +880,13 @@ h3.font-opendyslexic {
 @font-face {
     font-family: 'PatrickHand';
     src: url('../resources/fonts/Patrick_Hand/PatrickHand-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+/* Patrick Hand SC - REGULAR */
+@font-face {
+    font-family: 'PatrickHandSC';
+    src: url('../resources/fonts/Patrick_Hand_SC/PatrickHandSC-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }

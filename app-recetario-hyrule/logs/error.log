@@ -52,3 +52,5 @@
 [2026-04-01 04:29:07] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') ORDER BY ingredientes.nombre' at line 1 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
 [2026-04-01 06:09:59] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
 [2026-04-01 07:23:08] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-04-02 16:08:49] ERROR: ID de receta no válido en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
+[2026-04-02 16:08:58] ERROR: ID de receta no válido en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
