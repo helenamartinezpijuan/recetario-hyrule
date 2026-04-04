@@ -1,21 +1,19 @@
 <?php 
 namespace controllers;
 
-use models\Efecto;
-use models\TipoEfecto;
 use services\EfectoService;
-use repositories\EfectoRepository;
 use helpers\Logger;
 use Exception;
 
+/**
+ * La clase EfectoController se encarga de recibir peticiones del index y conectar con el service para cargar la vista correspondiente, devolviendo respuestas JSON para peticiones AJAX
+ */
 class EfectoController extends BaseController {
 
     private EfectoService $service;
-    private EfectoRepository $repository;
 
     public function __construct() {
         $this->service = new EfectoService();
-        $this->repository = new EfectoRepository();
     }
 
     /**

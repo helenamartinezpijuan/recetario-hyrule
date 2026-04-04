@@ -10,17 +10,16 @@ use Exception;
 class LocalizacionRepository extends BaseRepository {
 
     /**
-     * Buscar todas localizaciones (sin filtros)
-     * @param string $orden Columna de la tabla de la base de datos por la que ordenar el resultado de la consulta
+     * Buscar localizaciones sin aplicar filtros
      * @throws Exception Si hay error en la consultas
      * @return Localizacion[] Array de objetos Localizacion
      */
-    public function obtenerTodos(string $orden = 'nombre'): array {
+    public function obtenerTodos(): array {
         // 1. OBTENER CONEXIÓN
         $conn = $this->getConnection();
 
         // 2. CONSTRUIR CONSULTA
-        $sql = "SELECT id_localizacion, nombre, region, imagen, descripcion FROM localizaciones ORDER BY $orden";
+        $sql = "SELECT id_localizacion, nombre, region, imagen, descripcion FROM localizaciones ORDER BY nombre";
 
         // 3. EJECUTAR CONSULTA con manejo de errores
         $resultado = $conn->query($sql);
@@ -41,7 +40,7 @@ class LocalizacionRepository extends BaseRepository {
             $localizaciones[] = $localizacion;
         }
 
-        // 7. LIMPIEZA
+        // 6. LIMPIEZA
         $resultado->close();
         $conn->close();
     
@@ -106,7 +105,7 @@ class LocalizacionRepository extends BaseRepository {
 
     /**
      * Buscar localizaciones por nombre
-     * @param string $nombre Nombre de la receta introducido por el usuario
+     * @param string $nombre Texto introducido en la barra buscadora de la receta
      * @throws Exception Si hay error en la consulta
      * @return Localizacion[] Array de objetos Localizacion
      */
@@ -115,7 +114,7 @@ class LocalizacionRepository extends BaseRepository {
         $conn = $this->getConnection();
         
         // 2. CONSTRUIR CONSULTA
-        $likeNombre = "%$nombre%";
+        $like_nombre = "%$nombre%";
         $sql = "SELECT id_localizacion, nombre, region, imagen, descripcion 
             FROM localizaciones 
             WHERE nombre LIKE ? OR region LIKE ?
@@ -126,7 +125,7 @@ class LocalizacionRepository extends BaseRepository {
         if (!$statement) { $this->handleError($conn, "preparando búsqueda de localización por nombre"); }
         
         // 4. VINCULAR PARÁMETROS a la consulta
-        $statement->bind_param('ss', $likeNombre, $likeNombre);
+        $statement->bind_param('ss', $like_nombre, $like_nombre);
         
         // 5. EJECUTAR CONSULTA
         if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda de localización por nombre"); }
@@ -148,6 +147,71 @@ class LocalizacionRepository extends BaseRepository {
         }
         
         // 8. LIMPIEZA
+        $statement->close();
+        $conn->close();
+        
+        return $localizaciones;
+    }
+
+    /**
+     * Busca localizaciones aplicando filtros
+     * @param array $regiones_ids Array de ids de las localizaciones
+     * @throws Exception Si hay error en la consulta
+     * @return Localizacion[] Array de objetos Localizacion
+     */
+    public function obtenerPorRegiones(array $regiones_ids): array {
+        // 1. VALIDAR parámetros de entrada
+        if (empty($regiones_ids)) { return []; }
+
+        // 2. OBTENER CONEXIÓN
+        $conn = $this->getConnection();
+        
+        // 3. CONSTRUIR CONSULTA
+        $sql = "SELECT id_localizacion, nombre, region, imagen, descripcion 
+            FROM localizaciones 
+            WHERE 1=1";
+        $tipos = "";
+        $valores = [];
+
+        // 4. AÑADIR FILTROS de regiones
+        if (!empty($regiones_ids)) {
+            $placeholders = implode(',', array_fill(0, count($regiones_ids), '?'));
+            $sql .= " AND region IN ($placeholders)";
+            $tipos .= str_repeat('s', count($regiones_ids));
+            $valores = array_merge($valores, $regiones_ids);
+        }
+        $sql .= " ORDER BY nombre";
+        
+        // 5. PREPARAR CONSULTA parametrizada
+        $statement = $conn->prepare($sql);
+        if (!$statement) { $this->handleError($conn, "preparando búsqueda por regiones"); }
+        
+        // 6. VINCULAR PARÁMETROS si hay filtros
+        if (!empty($valores)) {
+            // Uso de operador splat (...) para evitar un switch(count($valores))
+            $statement->bind_param($tipos, ...$valores);
+        }
+        
+        // 7. EJECUTAR CONSULTA
+        if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda por regiones"); }
+        
+        // 8. OBTENER RESULTADOS
+        $resultado = $statement->get_result();
+        $localizaciones = [];
+        
+        // 9. CREAR objetos Localizacion
+        while ($registro = $resultado->fetch_assoc()) {
+            $localizacion = new Localizacion(
+                $registro["id_localizacion"],
+                $registro["nombre"],
+                $registro["region"],
+                $registro["imagen"],
+                $registro["descripcion"]
+            );
+            $localizaciones[] = $localizacion;
+        }
+        
+        // 10. LIMPIEZA
         $statement->close();
         $conn->close();
         
@@ -226,70 +290,6 @@ class LocalizacionRepository extends BaseRepository {
         $statement->close();
         $conn->close();
     
-        return $localizaciones;
-    }
-
-    /**
-     * Obtener todas las localizaciones de varias regiones
-     * @param array $regiones Regiones de las que obtener sus localizaciones
-     * @return Localizacion[] Array de objetos Localizacion
-     */
-    public function obtenerPorRegiones(array $regiones): array {
-        // 1. VALIDAR parámetros de entrada
-        if (empty($regiones)) { return []; }
-
-        // 2. OBTENER CONEXIÓN
-        $conn = $this->getConnection();
-        
-        // 3. CONSTRUIR CONSULTA
-        $sql = "SELECT id_localizacion, nombre, region, imagen, descripcion 
-            FROM localizaciones 
-            WHERE 1=1";
-        $tipos = "";
-        $valores = [];
-
-        // 4. AÑADIR FILTROS de regiones
-        if (!empty($regiones)) {
-            $placeholders = implode(',', array_fill(0, count($regiones), '?'));
-            $sql .= " AND region IN ($placeholders)";
-            $tipos .= str_repeat('s', count($regiones));
-            $valores = array_merge($valores, $regiones);
-        }
-        $sql .= " ORDER BY nombre";
-        
-        // 5. PREPARAR CONSULTA parametrizada
-        $statement = $conn->prepare($sql);
-        if (!$statement) { $this->handleError($conn, "preparando búsqueda por regiones"); }
-        
-        // 6. VINCULAR PARÁMETROS si hay filtros
-        if (!empty($valores)) {
-            // Uso de operador splat (...) para evitar un switch(count($valores))
-            $statement->bind_param($tipos, ...$valores);
-        }
-        
-        // 7. EJECUTAR CONSULTA
-        if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda por regiones"); }
-        
-        // 8. OBTENER RESULTADOS
-        $resultado = $statement->get_result();
-        $localizaciones = [];
-        
-        // 9. CREAR objetos Localizacion
-        while ($registro = $resultado->fetch_assoc()) {
-            $localizacion = new Localizacion(
-                $registro["id_localizacion"],
-                $registro["nombre"],
-                $registro["region"],
-                $registro["imagen"],
-                $registro["descripcion"]
-            );
-            $localizaciones[] = $localizacion;
-        }
-        
-        // 10. LIMPIEZA
-        $statement->close();
-        $conn->close();
-        
         return $localizaciones;
     }
 

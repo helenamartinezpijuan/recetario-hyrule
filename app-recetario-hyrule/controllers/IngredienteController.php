@@ -1,23 +1,22 @@
 <?php 
 namespace controllers;
 
-use models\Ingrediente;
 use services\IngredienteService;
 use services\LocalizacionService;
-use repositories\IngredienteRepository;
 use helpers\Logger;
 use Exception;
 
+/**
+ * La clase IngredienteController se encarga de recibir peticiones del index y conectar con el service para cargar la vista correspondiente, devolviendo respuestas JSON para peticiones AJAX
+ */
 class IngredienteController extends BaseController {
 
     private IngredienteService $service;
     private LocalizacionService $localizacionService;
-    private IngredienteRepository $repository;
 
     public function __construct() {
         $this->service = new IngredienteService();
         $this->localizacionService = new LocalizacionService();
-        $this->repository = new IngredienteRepository();
     }
 
     /**

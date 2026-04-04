@@ -1,20 +1,19 @@
 <?php 
 namespace controllers;
 
-use models\Localizacion;
 use services\LocalizacionService;
-use repositories\LocalizacionRepository;
 use helpers\Logger;
 use Exception;
 
+/**
+ * La clase LocalizacionController se encarga de recibir peticiones del index y conectar con el service para cargar la vista correspondiente, devolviendo respuestas JSON para peticiones AJAX
+ */
 class LocalizacionController extends BaseController {
 
     private LocalizacionService $service;
-    private LocalizacionRepository $repository;
 
     public function __construct() {
         $this->service = new LocalizacionService();
-        $this->repository = new LocalizacionRepository();
     }
 
     /**
@@ -56,10 +55,8 @@ class LocalizacionController extends BaseController {
             // 1. EXTRAER DATOS del formulario
             $regiones = $postData['regiones'] ?? [];
 
-            // 2. VALIDAR Y NORMALIZAR los datos a través del service
-            $localizaciones = empty($regiones) 
-                ? $this->service->getAllLocalizaciones()
-                : $this->service->getLocalizacionesFiltradas($regiones);
+            // 2. VALIDAR datos a través del service
+            $localizaciones = $this->service->getLocalizacionesFiltradas($regiones);
 
             // 3. PREPARAR DATOS para pasar a Json
             $localizaciones_array = array_map(function($localizacion) {
@@ -86,12 +83,17 @@ class LocalizacionController extends BaseController {
      * @return void
      */
     public function buscarLocalizaciones(array $postData): void {
+        // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON
         header('Content-Type: application/json');
         
         try {
+            // 1. EXTRAER DATOS del formulario
             $nombre = trim($postData['nombre'] ?? '');
+
+            // 2. VALIDAR los datos a través del service
             $localizaciones = $this->service->buscarLocalizacionesPorNombre($nombre);
             
+            // 3. PREPARAR DATOS para pasar a Json
             $localizaciones_array = array_map(function($localizacion) {
                 return [
                     'id_receta' => $localizacion->getIdLocalizacion(),
@@ -101,6 +103,7 @@ class LocalizacionController extends BaseController {
                 ];
             }, $localizaciones);
             
+            // 4. DEVOLVER RESPUESTA
             echo json_encode(['success' => true, 'localizaciones' => $localizaciones_array]);
             
         } catch (Exception $e) {
@@ -111,17 +114,17 @@ class LocalizacionController extends BaseController {
 
     /**
      * Recibe el ID de una localizacion vía GET y devuelve sus detalles completos en JSON
-     * @param array $getData Datos de $_GET
+     * @param array $id_localizacion Datos de $_GET
      * @throws Exception Si el ID de la localizacion no es válido
      * @return void
      */
-    public function obtenerLocalizacion(array $getData): void {
+    public function obtenerLocalizacion(array $id_localizacion): void {
         // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON (no HTML)
         header('Content-Type: application/json');
 
         try {
             // 1. EXTRAER DATOS del formulario
-            $id = (int)($getData['id'] ?? 0);
+            $id = (int)($id_localizacion ?? 0);
             if ($id <= 0) { throw new Exception("ID de localizacion no válido"); }
 
             // 2. VALIDAR Y NORMALIZAR los datos a través del service

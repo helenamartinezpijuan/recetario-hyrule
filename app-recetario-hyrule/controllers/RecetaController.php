@@ -1,28 +1,19 @@
 <?php 
 namespace controllers;
 
-use models\Receta;
 use services\RecetaService;
-use repositories\RecetaRepository;
 use helpers\Logger;
 use Exception;
 
 /**
- * La clase RecetaController se encarga de:
- * - Recibir datos del formulario de búsqueda
- * - Llamar al 'services'
- * - Llamar a 'repositories'
- * - Cargar la vista correspondiente de 'views'
- * - Devolver respuestas JSON para peticiones AJAX
+ * La clase RecetaController se encarga de recibir peticiones del index y conectar con el service para cargar la vista correspondiente, devolviendo respuestas JSON para peticiones AJAX
  */
 class RecetaController extends BaseController {
 
     private RecetaService $service;
-    //private RecetaRepository $repository;
 
     public function __construct() {
         $this->service = new RecetaService();
-        //$this->repository = new RecetaRepository();
     }
 
     /**
@@ -97,12 +88,17 @@ class RecetaController extends BaseController {
      * @return void
      */
     public function buscarRecetas(array $postData): void {
+        // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON
         header('Content-Type: application/json');
         
         try {
+            // 1. EXTRAER DATOS del formulario
             $nombre = trim($postData['nombre'] ?? '');
+
+            // 2. VALIDAR los datos a través del service
             $recetas = $this->service->buscarRecetasPorNombre($nombre);
             
+            // 3. PREPARAR DATOS para pasar a Json
             $recetas_array = array_map(function($receta) {
                 return [
                     'id_receta' => $receta->getIdReceta(),
@@ -112,6 +108,7 @@ class RecetaController extends BaseController {
                 ];
             }, $recetas);
             
+            // 4. DEVOLVER RESPUESTA
             echo json_encode(['success' => true, 'recetas' => $recetas_array]);
             
         } catch (Exception $e) {
@@ -127,13 +124,13 @@ class RecetaController extends BaseController {
      * @return void
      */
     public function obtenerReceta(array $id_receta): void {
-        // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON (no HTML)
+        // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON
         header('Content-Type: application/json');
 
         try {
             // 1. EXTRAER DATOS del formulario
-            $id = (int)($getData['id'] ?? 0);
-            if ($id <= 0) { throw new Exception("ID de receta (ID $id) no válido"); }
+            $id = (int)($id_receta ?? 0);
+            if ($id <= 0) { throw new Exception("ID de receta no válido"); }
 
             // 2. VALIDAR los datos a través del service
             $detalle = $this->service->getRecetaDetalle($id);

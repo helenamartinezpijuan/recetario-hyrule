@@ -157,18 +157,21 @@ html {
 .breadcrumb-item {
     display: inline-flex;
     align-items: center;
+    font-size: calc(1.2rem * var(--font-scale));
 }
 
 .breadcrumb-item:not(:last-child)::after {
     content: ">";
     margin: 0 8px;
     color: var(--accent-blue);
+    font-size: calc(1.2rem * var(--font-scale));
 }
 
 .breadcrumb-item a {
     color: var(--accent-blue);
     text-decoration: none;
     transition: color 0.2s;
+    font-size: calc(1.3rem * var(--font-scale));
 }
 
 .breadcrumb-item a:hover {
@@ -272,29 +275,22 @@ html {
     color: var(--primary-green);
 }
 
-p, .description, .recipe-description, .ingrediente-description,
-.localizacion-description, .efecto-description {
+p, .description, 
+.recipe-description, .ingrediente-description, .localizacion-description, .efecto-description {
     font-family: 'PatrickHandSC', sans-serif;
     font-size: calc(1.3rem * var(--font-scale));
     line-height: 1.4;
 }
 
-h1, h2, h3, h4, .title, .recipe-title, .ingrediente-title {
+.recipe-title, .ingrediente-title, .efecto-title, .localizacion-title {
     font-family: 'AmaticSC', sans-serif;
+    font-size: calc(1.5rem * var(--font-scale));
     font-weight: bold;
 }
 
-body, p, h1, h2, h3, h4, h5, h6, 
-.recipe-title, .ingrediente-title, .efecto-title, .localizacion-title,
-.recipe-description, .ingrediente-description, .efecto-description, .localizacion-description,
-.nav-list a, .btn, .breadcrumb-item, .filter-category, .filters-title {
+.region-tag {
+    font-family: 'AmaticSC', sans-serif;
     font-size: calc(1.3rem * var(--font-scale));
-}
-h1 {
-    font-size: calc(2.5rem * var(--font-scale));
-}
-h2 {
-    font-size: calc(2rem * var(--font-scale));
 }
 
 /* ============================================
@@ -385,6 +381,7 @@ h2 {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-size: calc(1.3rem * var(--font-scale));
 }
 
 /* Subcategorías expandibles */

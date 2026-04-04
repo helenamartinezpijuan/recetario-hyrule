@@ -120,6 +120,9 @@ class LocalizacionService {
      */
     public function getLocalizacionesFiltradas(array $regiones): array {
         try {
+            if (empty($regiones)) {
+                return $this->getAllLocalizaciones();
+            }
             return $this->localizacionRepo->obtenerPorRegiones($regiones);
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
