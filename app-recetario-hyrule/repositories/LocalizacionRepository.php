@@ -155,30 +155,30 @@ class LocalizacionRepository extends BaseRepository {
 
     /**
      * Busca localizaciones aplicando filtros
-     * @param array $regiones_ids Array de ids de las localizaciones
+     * @param array $regiones Array de strings de las localizaciones
      * @throws Exception Si hay error en la consulta
      * @return Localizacion[] Array de objetos Localizacion
      */
-    public function obtenerPorRegiones(array $regiones_ids): array {
+    public function obtenerPorRegiones(array $regiones): array {
         // 1. VALIDAR parámetros de entrada
-        if (empty($regiones_ids)) { return []; }
+        if (empty($regiones)) { return []; }
 
         // 2. OBTENER CONEXIÓN
         $conn = $this->getConnection();
         
         // 3. CONSTRUIR CONSULTA
-        $sql = "SELECT id_localizacion, nombre, region, imagen, descripcion 
-            FROM localizaciones 
-            WHERE 1=1";
+        $sql = "SELECT DISTINCT id_localizacion, nombre, region, imagen, descripcion 
+                    FROM localizaciones 
+                    WHERE 1=1";
         $tipos = "";
         $valores = [];
 
-        // 4. AÑADIR FILTROS de regiones
-        if (!empty($regiones_ids)) {
-            $placeholders = implode(',', array_fill(0, count($regiones_ids), '?'));
-            $sql .= " AND region IN ($placeholders)";
-            $tipos .= str_repeat('s', count($regiones_ids));
-            $valores = array_merge($valores, $regiones_ids);
+        // 4. AÑADIR FILTROS de las regiones
+        if (!empty($regiones)) {
+            $placeholders = implode(',', array_fill(0, count($regiones), '?'));
+            $sql .= " AND region='$placeholders'";
+            $tipos .= str_repeat('s', count($regiones));
+            $valores = array_merge($valores, $regiones);
         }
         $sql .= " ORDER BY nombre";
         

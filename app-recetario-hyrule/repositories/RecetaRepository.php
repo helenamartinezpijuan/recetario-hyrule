@@ -175,7 +175,7 @@ class RecetaRepository extends BaseRepository {
         $tipos = "";
         $valores = [];
 
-        // 4. AÑADIR FILTROS validados de los efectos
+        // 4. AÑADIR FILTROS de los efectos
         if (!empty($efectos_ids)) {
             $placeholders = implode(',', array_fill(0, count($efectos_ids), '?'));
             $sql .= " AND EXISTS (SELECT 1 FROM recetas_efectos 
@@ -185,7 +185,7 @@ class RecetaRepository extends BaseRepository {
             $valores = array_merge($valores, $efectos_ids);
         }
 
-        // 5. AÑADIR FILTROS validados de los ingredientes
+        // 5. AÑADIR FILTROS de los ingredientes
          if (!empty($ingredientes_ids)) {
             $placeholders = implode(',', array_fill(0, count($ingredientes_ids), '?'));
             $sql .= " AND EXISTS (SELECT 1 FROM recetas_ingredientes 
@@ -194,6 +194,8 @@ class RecetaRepository extends BaseRepository {
             $tipos .= str_repeat('i', count($ingredientes_ids));
             $valores = array_merge($valores, $ingredientes_ids);
         }
+        
+        $sql .= " ORDER BY recetas.nombre";
         
         // 6. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);
