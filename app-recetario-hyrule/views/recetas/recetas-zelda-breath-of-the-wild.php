@@ -24,9 +24,11 @@ include __DIR__ . '/../layout/header.php';
     </div>
     
     <div class="page-layout">
+        <!-- Barra lateral de filtros -->
         <aside class="filters-sidebar" aria-label="Filtros de búsqueda">
             <h2 class="filters-title">Filtros</h2>
             
+            <!-- Filtro por efectos -->
             <div class="filter-group">
                 <h3 class="filter-category" id="filter-efectos-heading">Efectos</h3>
                 <ul class="filter-list" aria-labelledby="filter-efectos-heading">
@@ -45,6 +47,7 @@ include __DIR__ . '/../layout/header.php';
                 </ul>
             </div>
             
+            <!-- Filtro por ingredientes -->
             <div class="filter-group">
                 <h3 class="filter-category" id="filter-ingredientes-heading">Ingredientes</h3>
                 <ul class="filter-list" aria-labelledby="filter-ingredientes-heading">
@@ -81,7 +84,8 @@ include __DIR__ . '/../layout/header.php';
             </div>
         </aside>
         
-        <div class="recipes-content">
+        <!-- Contenido principal -->
+        <div class="recetas-content">
             <h1 class="page-title">Todas las recetas</h1>
             
             <div id="loader" class="loader" style="display: none;">
@@ -89,22 +93,22 @@ include __DIR__ . '/../layout/header.php';
                 <p>Cargando recetas...</p>
             </div>
             
-            <div id="recipes-container">
+            <div id="recetas-container">
                 <?php if (!empty($recetas_detalles)): ?>
-                    <div class="recipes-grid" role="list">
+                    <div class="recetas-grid" role="list">
                         <?php foreach ($recetas_detalles as $receta): ?>
-                            <article class="recipe-card" data-id="<?= $receta['id_receta'] ?>">
+                            <article class="receta-card" data-id="<?= $receta['id_receta'] ?>">
                                 <!---------------------------------------------------------------------------------------------------------->
-                                <div class="recipe-card-image">
+                                <div class="receta-card-image">
                                     <img src="<?= BASE_URL ?>/resources/img/recipes/<?= htmlspecialchars($receta['imagen']) ?>" 
                                             alt="Receta: <?= htmlspecialchars($receta['nombre']) ?>"
                                             loading="lazy"
                                             onerror="this.src='<?= BASE_URL ?>/resources/img/recipes/placeholder.jpg'">
                                 </div>
                                 <!---------------------------------------------------------------------------------------------------------->
-                                <div class="recipe-card-content">
-                                    <h2 class="recipe-title"><?= htmlspecialchars($receta['nombre']) ?></h2>
-                                    <div class="recipe-icons" aria-hidden="true">
+                                <div class="receta-card-content">
+                                    <h2 class="receta-title"><?= htmlspecialchars($receta['nombre']) ?></h2>
+                                    <div class="receta-icons" aria-hidden="true">
                                         <?php if (!empty($receta['efectos'])): ?>
                                             <?php foreach ($receta['efectos'] as $efecto): ?>
                                                 <img src="<?= BASE_URL ?>/resources/img/effects/<?= htmlspecialchars($efecto['imagen']) ?>"
@@ -113,12 +117,12 @@ include __DIR__ . '/../layout/header.php';
                                                                 title="<?= htmlspecialchars($efecto['nombre']) ?>">
                                             <?php endforeach; ?>
                                         <?php else: ?>
-                                            <span class="recipe-icon">🍗</span>
-                                            <span class="recipe-icon">🍴</span>
+                                            <span class="receta-icon">🍗</span>
+                                            <span class="receta-icon">🍴</span>
                                         <?php endif; ?>
                                     </div>
-                                    <p class="recipe-description"><?= htmlspecialchars($receta['descripcion']) ?></p>
-                                    <button class="btn btn-link view-recipe" 
+                                    <p class="receta-description"><?= htmlspecialchars($receta['descripcion']) ?></p>
+                                    <button class="btn btn-link view-receta" 
                                             data-id="<?= $receta['id_receta'] ?>"
                                             aria-label="Ver detalles de <?= htmlspecialchars($receta['nombre']) ?>">
                                         Ver Receta
@@ -139,12 +143,12 @@ include __DIR__ . '/../layout/header.php';
     </div>
 </div>
 
-<!-- Modal -->
-<div id="recipe-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display: none;">
+<!-- Modal de detalle de receta -->
+<div id="receta-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-receta-title" style="display: none;">
     <div class="modal-overlay" aria-hidden="true"></div>
     <div class="modal-container">
         <div class="modal-header">
-            <h2 id="modal-title">Receta</h2>
+            <h2 id="modal-receta-title">Receta</h2>
             <button class="modal-close" aria-label="Cerrar modal">&times;</button>
         </div>
         <div class="modal-body">
@@ -152,13 +156,16 @@ include __DIR__ . '/../layout/header.php';
                 <div class="spinner"></div>
                 <p>Cargando detalles...</p>
             </div>
-            <div id="modal-content"></div>
+            <div id="modal-receta-content"></div>
         </div>
     </div>
 </div>
 
 <script>
 $(document).ready(function() {
+    const BASE_URL = '<?= BASE_URL ?>';
+    const $modal = $('#receta-modal');
+
     // Expandir/colapsar categorías
     $('.filter-category-level .category-toggle').on('click', function(e) {
         e.stopPropagation();
@@ -185,7 +192,7 @@ $(document).ready(function() {
         });
         
         $('#loader').show();
-        $('#recipes-container').fadeOut(200);
+        $('#recetas-container').fadeOut(200);
         
         $.ajax({
             url: 'index.php?action=filtrar_recetas',
@@ -197,7 +204,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    renderRecipes(response.recetas);
+                    renderRecetas(response.recetas);
                 } else {
                     showError(response.message || 'Error al cargar las recetas');
                 }
@@ -207,12 +214,12 @@ $(document).ready(function() {
             },
             complete: function() {
                 $('#loader').hide();
-                $('#recipes-container').fadeIn(200);
+                $('#recetas-container').fadeIn(200);
             }
         });
     });
 
-    // Búsqueda por nombre con debounce
+    // Búsqueda por nombre
     let searchTimeout;
     $('#search-input').on('input', function() {
         clearTimeout(searchTimeout);
@@ -220,7 +227,7 @@ $(document).ready(function() {
             const searchTerm = $(this).val();
             
             $('#loader').show();
-            $('#recipes-container').fadeOut(200);
+            $('#recetas-container').fadeOut(200);
             
             $.ajax({
                 url: 'index.php?action=buscar_recetas',
@@ -229,7 +236,7 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-                        renderRecipes(response.recetas);
+                        renderRecetas(response.recetas);
                         // Actualizar breadcrumb
                         if (searchTerm) {
                             $('.breadcrumb-list').html(`
@@ -251,27 +258,27 @@ $(document).ready(function() {
                 },
                 complete: function() {
                     $('#loader').hide();
-                    $('#recipes-container').fadeIn(200);
+                    $('#recetas-container').fadeIn(200);
                 }
             });
         }, 300);
     });
     
+    // Limpiar filtros
     $('#clear-filters').on('click', function() {
         $('.filter-checkbox').prop('checked', false);
         $('#apply-filters').trigger('click');
     });
     
-    const BASE_URL = '<?= BASE_URL ?>';
-    
-    function renderRecipes(recetas) {
-        const container = $('#recipes-container');
+    // Mostrar recetas filtradas
+    function renderRecetas(recetas) {
+        const container = $('#recetas-container');
         if (!recetas || recetas.length === 0) {
             container.html('<div class="no-results"><p>No se encontraron recetas con los filtros seleccionados.</p></div>');
             return;
         }
         
-        let html = '<div class="recipes-grid">';
+        let html = '<div class="recetas-grid">';
         recetas.forEach(receta => {
             // Obtener efectos de la receta
             let efectosHtml = '';
@@ -283,23 +290,23 @@ $(document).ready(function() {
                                         title="${efecto.nombre}">`;
                 });
             } else {
-                efectosHtml = '<span class="recipe-icon">🍽️</span>';
+                efectosHtml = '<span class="receta-icon">🍽️</span>';
             }
 
             html += `
-                <article class="recipe-card" data-id="${receta.id_receta}">
-                    <div class="recipe-card-image">
+                <article class="receta-card" data-id="${receta.id_receta}">
+                    <div class="receta-card-image">
                         <img src="${BASE_URL}/resources/img/recipes/${escapeHtml(receta.imagen)}" 
                             alt="${escapeHtml(receta.nombre)}"
                             onerror="this.src='${BASE_URL}/resources/img/recipes/placeholder.jpg'">
                     </div>
-                    <div class="recipe-card-content">
-                        <h2 class="recipe-title">${escapeHtml(receta.nombre)}</h2>
-                        <div class="recipe-icons" aria-hidden="true">
+                    <div class="receta-card-content">
+                        <h2 class="receta-title">${escapeHtml(receta.nombre)}</h2>
+                        <div class="receta-icons" aria-hidden="true">
                             ${efectosHtml}
                         </div>
-                        <p class="recipe-description">${escapeHtml(receta.descripcion)}</p>
-                        <button class="btn btn-link view-recipe" data-id="${receta.id_receta}">Ver Receta</button>
+                        <p class="receta-description">${escapeHtml(receta.descripcion)}</p>
+                        <button class="btn btn-link view-receta" data-id="${receta.id_receta}">Ver Receta</button>
                     </div>
                 </article>
             `;
@@ -308,18 +315,17 @@ $(document).ready(function() {
         html += '</div>';
         container.html(html);
     }
-    
-    // Modal
-    const $modal = $('#recipe-modal');
-    
-    $(document).on('click', '.view-recipe', function() {
+
+    // Abrir modal de ingrediente
+    $(document).on('click', '.view-receta', function() {
         const recetaId = $(this).data('id');
-        openRecipeModal(recetaId);
+        openRecetaModal(recetaId);
     });
     
-    function openRecipeModal(recetaId) {
+    // Obtener información Json
+    function openRecetaModal(recetaId) {
         $modal.fadeIn(200);
-        $('#modal-content').hide();
+        $('#modal-receta-content').hide();
         $('.modal-loader').show();
         
         $.ajax({
@@ -329,22 +335,22 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    renderRecipeDetail(response.receta);
+                    renderRecetaDetail(response.receta);
                 } else {
-                    $('#modal-content').html(`<div class="error-message"><p>${escapeHtml(response.message || 'Error al cargar la receta')}</p></div>`);
+                    $('#modal-receta-content').html(`<div class="error-message"><p>${escapeHtml(response.message || 'Error al cargar la receta')}</p></div>`);
                 }
             },
             error: function() {
-                $('#modal-content').html('<div class="error-message"><p>Error de conexión. Por favor, intentalo de nuevo mñas tarde.</p></div>');
+                $('#modal-receta-content').html('<div class="error-message"><p>Error de conexión</p></div>');
             },
             complete: function() {
                 $('.modal-loader').hide();
-                $('#modal-content').fadeIn(200);
+                $('#modal-receta-content').fadeIn(200);
             }
         });
     }
     
-    function renderRecipeDetail(receta) {
+    function renderRecetaDetail(receta) {
         let efectosHtml = '<div class="detail-section"><h3>EFECTOS</h3><div class="efectos-grid-mini">';
         if (receta.efectos && receta.efectos.length > 0) {
             receta.efectos.forEach(efecto => {
@@ -368,17 +374,17 @@ $(document).ready(function() {
         
         let ingredientesHtml = '<div class="detail-section"><h3>INGREDIENTES</h3><ul class="ingredientes-list">';
         if (receta.ingredientes && receta.ingredientes.length > 0) {
-            receta.ingredientes.forEach(ing => {
+            receta.ingredientes.forEach(ingrediente => {
                 ingredientesHtml += `
                     <li class="ingrediente-item">
-                        <img src="${BASE_URL}/resources/img/ingredients/${escapeHtml(ing.imagen || 'placeholder.webp')}" 
-                             alt="${escapeHtml(ing.nombre)}"
+                        <img src="${BASE_URL}/resources/img/ingredients/${escapeHtml(ingrediente.imagen)}" 
+                             alt="${escapeHtml(ingrediente.nombre)}"
                              class="ingrediente-mini-img"
                              onerror="this.src='${BASE_URL}/resources/img/ingredients/placeholder.jpg'">
                         <span class="ingrediente-nombre">
-                            <a href="#" class="view-ingrediente" data-id="${ing.id_ingrediente}">${escapeHtml(ing.nombre)}</a>
+                            <a href="#" class="view-ingrediente" data-id="${ingrediente.id_ingrediente}">${escapeHtml(ingrediente.nombre)}</a>
                         </span>
-                        <span class="ingrediente-cantidad">x ${ing.cantidad}</span>
+                        <span class="ingrediente-cantidad">x ${ingrediente.cantidad}</span>
                     </li>
                 `;
             });
@@ -386,7 +392,7 @@ $(document).ready(function() {
         ingredientesHtml += '</ul></div>';
         
         const html = `
-            <div class="recipe-detail">
+            <div class="receta-detail">
                 <div class="detail-header">
                     <div class="detail-image">
                         <img src="${BASE_URL}/resources/img/recipes/${escapeHtml(receta.imagen)}" 
@@ -402,13 +408,13 @@ $(document).ready(function() {
             </div>
         `;
         
-        $('#modal-title').text(receta.nombre);
-        $('#modal-content').html(html);
+        $('#modal-receta-title').text(receta.nombre);
+        $('#modal-receta-content').html(html);
     }
     
     $('.modal-close, .modal-overlay').on('click', function() {
         $modal.fadeOut(200);
-        $('#modal-content').empty();
+        $('#modal-receta-content').empty();
     });
     
     $(document).on('keydown', function(e) {
@@ -417,17 +423,9 @@ $(document).ready(function() {
         }
     });
     
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/&/g, '&amp;')
-                  .replace(/</g, '&lt;')
-                  .replace(/>/g, '&gt;')
-                  .replace(/"/g, '&quot;')
-                  .replace(/'/g, '&#39;');
-    }
-    
+    // Mostrar mensaje de error
     function showError(message) {
-        $('#recipes-container').html(`<div class="error-message"><p>${escapeHtml(message)}</p></div>`);
+        $('#recetas-container').html(`<div class="error-message"><p>${escapeHtml(message)}</p></div>`);
     }
 });
 </script>

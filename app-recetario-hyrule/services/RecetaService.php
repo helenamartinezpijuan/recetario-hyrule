@@ -24,16 +24,8 @@ class RecetaService {
     }
     
     /**
-     * Devuelve array con las categorías de ingredientes y sus ingredientes
-     * @return array ['setas' => [Ingrediente, ...], 'pescados_mariscos' => [...], ...]
-     */
-    public function sortIngredientesPorCategoria(): array {
-        return $this->ingredienteService->sortIngredientesPorCategoria();
-    }
-    
-    /**
      * Obtiene todas las recetas (para la vista principal)
-     * @return array de Receta
+     * @return Receta[]
      */
     public function getAllRecetas(): array {
         try {
@@ -43,24 +35,11 @@ class RecetaService {
             return [];
         }
     }
-    
-    /**
-     * Obtiene todos los tipos de efecto (para los filtros)
-     * @return array de TipoEfecto
-     */
-    public function getAllTiposEfectos(): array {
-        try {
-            return $this->efectoRepo->obtenerTipos();
-        } catch (Exception $e) {
-            Logger::error($e->getMessage(), __FILE__);
-            return [];
-        }
-    }
 
     /**
-     * Busca recetas por nombre
+     * Busca recetas por nombre o descripción
      * @param string $nombre Nombre de la receta buscada
-     * @return array de Receta
+     * @return Receta[]
      */
     public function buscarRecetasPorNombre(string $nombre): array {
         try {
@@ -73,7 +52,7 @@ class RecetaService {
             return [];
         }
     }
-    
+
     /**
      * Obtiene una receta por su ID
      * @param int $id Identificador único de la receta
@@ -87,12 +66,12 @@ class RecetaService {
             return null;
         }
     }
-    
+        
     /**
      * Obtiene recetas filtradas por IDs de efectos e ingredientes
      * @param array $efectos_ids
      * @param array $ingredientes_ids
-     * @return array de objetos Receta
+     * @return Receta[]
      */
     public function getRecetasFiltradas(array $efectos_ids, array $ingredientes_ids): array {
         try {
@@ -100,6 +79,19 @@ class RecetaService {
                 return $this->getAllRecetas();
             }
             return $this->recetaRepo->obtenerPorFiltros($efectos_ids, $ingredientes_ids);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+    
+    /**
+     * Obtiene todos los tipos de efecto (para los filtros)
+     * @return array de TipoEfecto
+     */
+    public function getAllTiposEfectos(): array {
+        try {
+            return $this->efectoRepo->obtenerTipos();
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
             return [];
@@ -122,6 +114,14 @@ class RecetaService {
         $efectos = $this->recetaRepo->obtenerEfectosPorRecetaId($id);
         
         return new RecetaDetalle($receta, $ingredientes, $efectos);
+    }
+
+        /**
+     * Devuelve array con las categorías de ingredientes y sus ingredientes
+     * @return array ['setas' => [Ingrediente, ...], 'pescados_mariscos' => [...], ...]
+     */
+    public function sortIngredientesPorCategoria(): array {
+        return $this->ingredienteService->sortIngredientesPorCategoria();
     }
 }
 

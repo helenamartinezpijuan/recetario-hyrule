@@ -17,34 +17,8 @@ class LocalizacionService {
     }
     
     /**
-     * Devuelve un array asociativo con las localizaciones agrupadas por región, definida por el ENUM de la tabla 'localizaciones'
-     * @return array ['Hebra' => [Localizacion, ...], 'Eldin' => [...], ...]
-     */
-    public function getLocalizacionesPorRegion(): array {
-        try {
-            // 1. OBTENER todas las localizaciones
-            $todos = $this->localizacionRepo->obtenerTodos();
-            // 2. INICIALIZAR ARRAY de regiones vacías
-            $regionesAgrupadas = [];
-
-            // 3. AGRUPAR localizaciones por regiones
-            foreach ($todos as $localizacion) {
-                $region = $localizacion->getRegion();
-                $regionesAgrupadas[$region][] = $localizacion;
-            }
-            return $regionesAgrupadas;
-
-        // 4. CONTROL DE ERRORES en caso de no poder conectar con el repositorio
-        } catch (Exception $e) {
-            Logger::error($e->getMessage(), __FILE__);
-            return [];
-        }
-    
-    }
-    
-    /**
-     * Obtiene todos los localizacions (para la vista principal)
-     * @return array de Localizacion
+     * Obtiene todas las localizacions (para la vista principal)
+     * @return Localizacion[]
      */
     public function getAllLocalizaciones(): array {
         try {
@@ -53,6 +27,54 @@ class LocalizacionService {
             Logger::error($e->getMessage(), __FILE__);
             return [];
         }  
+    }
+
+    /**
+     * Busca localizaciones por nombre o región
+     * @param string $nombre Nombre de la región o localización buscada
+     * @return Localizacion[]
+     */
+    public function buscarLocalizacionesPorNombre(string $nombre): array {
+        try {
+            if (empty(trim($nombre))) {
+                return $this->getAllLocalizaciones();
+            }
+            return $this->localizacionRepo->buscarPorNombre(trim($nombre));
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+    
+    /**
+     * Obtiene una localización por su ID
+     * @param int $id Identificador único de la localización
+     * @return Localizacion|null
+     */
+    public function getLocalizacionPorId(int $id): ?Localizacion {
+        try {
+            return $this->localizacionRepo->obtenerPorId($id);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return null;
+        }
+    }
+        
+    /**
+     * Obtiene localizaciones filtradas por nombre de región
+     * @param array $regiones
+     * @return Localizacion[]
+     */
+    public function getLocalizacionesFiltradas(array $regiones): array {
+        try {
+            if (empty($regiones)) {
+                return $this->getAllLocalizaciones();
+            }
+            return $this->localizacionRepo->obtenerPorRegiones($regiones);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
     }
 
     /**
@@ -83,51 +105,29 @@ class LocalizacionService {
     }
 
     /**
-     * Busca localizaciones por nombre o región
-     * @param string $nombre Nombre de la región o localización buscada
-     * @return array de Localizacion
+     * Devuelve un array asociativo con las localizaciones agrupadas por región, definida por el ENUM de la tabla 'localizaciones'
+     * @return array ['Hebra' => [Localizacion, ...], 'Eldin' => [...], ...]
      */
-    public function buscarLocalizacionesPorNombre(string $nombre): array {
+    public function getLocalizacionesPorRegion(): array {
         try {
-            if (empty(trim($nombre))) {
-                return $this->getAllLocalizaciones();
+            // 1. OBTENER todas las localizaciones
+            $todos = $this->localizacionRepo->obtenerTodos();
+            // 2. INICIALIZAR ARRAY de regiones vacías
+            $regionesAgrupadas = [];
+
+            // 3. AGRUPAR localizaciones por regiones
+            foreach ($todos as $localizacion) {
+                $region = $localizacion->getRegion();
+                $regionesAgrupadas[$region][] = $localizacion;
             }
-            return $this->localizacionRepo->buscarPorNombre(trim($nombre));
+            return $regionesAgrupadas;
+
+        // 4. CONTROL DE ERRORES en caso de no poder conectar con el repositorio
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
             return [];
         }
-    }
     
-    /**
-     * Obtiene una localización por su ID
-     * @param int $id Identificador único de la localización
-     * @return Localizacion|null
-     */
-    public function getLocalizacionPorId(int $id): ?Localizacion {
-        try {
-            return $this->localizacionRepo->obtenerPorId($id);
-        } catch (Exception $e) {
-            Logger::error($e->getMessage(), __FILE__);
-            return null;
-        }
-    }
-    
-    /**
-     * Obtiene localizacions filtrados por región/es
-     * @param array $regiones
-     * @return array de objetos Localizacion
-     */
-    public function getLocalizacionesFiltradas(array $regiones): array {
-        try {
-            if (empty($regiones)) {
-                return $this->getAllLocalizaciones();
-            }
-            return $this->localizacionRepo->obtenerPorRegiones($regiones);
-        } catch (Exception $e) {
-            Logger::error($e->getMessage(), __FILE__);
-            return [];
-        }
     }
 }
 

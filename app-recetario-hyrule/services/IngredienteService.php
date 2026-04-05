@@ -12,8 +12,7 @@ use Exception;
 class IngredienteService {
 
     /**
-     * Categorías de ingredientes y sus rangos de IDs
-     * Las categorías son fijas y no cambian durante la ejecución
+     * Categorías de ingredientes y sus rangos de IDs en la BD
      */
     private const CATEGORIAS_INGREDIENTES = [
         'setas' => [
@@ -38,11 +37,72 @@ class IngredienteService {
         ]
     ];
 
-
     private $ingredienteRepo;
     
     public function __construct() {
         $this->ingredienteRepo = new IngredienteRepository();
+    }
+        
+    /**
+     * Obtiene todos los ingredientes (para la vista principal)
+     * @return Ingrediente[]
+     */
+    public function getAllIngredientes(): array {
+        try {
+            return $this->ingredienteRepo->obtenerTodos();
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }  
+    }
+    
+    /**
+     * Busca ingredientes por nombre o descripción
+     * @param string $nombre Nombre del ingrediente buscado
+     * @return array de Ingrediente
+     */
+    public function buscarIngredientesPorNombre(string $nombre): array {
+        try {
+            if (empty(trim($nombre))) {
+                return $this->getAllIngredientes();
+            }
+            return $this->ingredienteRepo->buscarPorNombre(trim($nombre));
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+        
+    /**
+     * Obtiene un ingrediente por su ID
+     * @param int $id Identificador único del ingrediente
+     * @return Ingrediente|null
+     */
+    public function getIngredientePorId(int $id): ?Ingrediente {
+        try {
+            return $this->ingredienteRepo->obtenerPorId($id);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return null;
+        }
+    }
+        
+    /**
+     * Obtiene ingredientes filtrados por categorías de ingredientes y/o por IDs de localizaciones
+     * @param array $ingredientes_ids IDs de todos los ingredientes de las categorias seleccionadas
+     * @param array $localizaciones_ids
+     * @return Ingrediente[]
+     */
+    public function getIngredientesFiltrados(array $ingredientes_idsv, array $localizaciones_ids): array {
+        try {
+            if (empty($ingredientes_ids) && empty($localizaciones_ids)) {
+                return $this->getAllIngredientes();
+            }
+            return $this->ingredienteRepo->obtenerPorFiltros($ingredientes_ids, $localizaciones_ids);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
     }
 
     /**
@@ -56,7 +116,38 @@ class IngredienteService {
         }
         return $categorias;
     }
-    
+
+    /**
+     * Devuelve array con los IDs de ingredientes pertenecientes a las categorías indicadas
+     * @param array $categorias Array de strings con las categorías a filtrar
+     * @return array Array de IDs de ingredientes
+     */
+    public function getIngredientesPorCategoria($categorias): array {
+        try {
+            if (empty($categorias)) { return $this->getAllIngredientes(); }
+
+            // 1. OBTENER todos los ingredientes
+            $todosPorCategoria = $this->sortIngredientesPorCategoria();
+            $ingredientes_ids = [];
+
+            // 2. RECORRER las categorías seleccionadas y extraer los IDs
+            foreach ($categorias as $categoria) {
+                if (isset($todosPorCategoria[$categoria])) {
+                    foreach ($todosPorCategoria[$categoria] as $ingrediente) {
+                        $ingredientes_ids[] = $ingrediente->getIdIngrediente();
+                    }
+                }
+            }
+            
+            return $ingredientes_ids;
+
+        // 4. CONTROL DE ERRORES en caso de no poder conectar con el repositorio
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+        
     /**
      * Devuelve array con las categorías de ingredientes y sus ingredientes
      * @return array ['setas' => [Ingrediente, ...], 'pescados_mariscos' => [...], ...]
@@ -89,106 +180,11 @@ class IngredienteService {
                 // Si no está en ninguna categoría definida, va a 'varios'
                 if (!$categoriaAsignada) {
                     $categorias['varios'][] = $ingrediente;
-                    $varios_ids[] = $id; // Guardar para posible uso futuro
                 }
             }
             return $categorias;
 
         // 5. CONTROL DE ERRORES en caso de no poder conectar con el repositorio
-        } catch (Exception $e) {
-            Logger::error($e->getMessage(), __FILE__);
-            return [];
-        }
-    }
-
-    /**
-     * Devuelve array con los IDs de ingredientes pertenecientes a las categorías indicadas
-     * @param array $categorias Array de strings con las categorías a filtrar
-     * @return array Array de IDs de ingredientes
-     */
-    public function getIngredientesPorCategoria($categorias): array {
-        try {
-            if (empty($categorias)) { return []; }
-
-            // 1. OBTENER todos los ingredientes
-            $todosPorCategoria = $this->sortIngredientesPorCategoria();
-            $ingredientes_ids = [];
-
-            // 2. RECORRER las categorías seleccionadas y extraer los IDs
-            foreach ($categorias as $categoria) {
-                if (isset($todosPorCategoria[$categoria])) {
-                    foreach ($todosPorCategoria[$categoria] as $ingrediente) {
-                        $ingredientes_ids[] = $ingrediente->getIdIngrediente();
-                    }
-                }
-            }
-            
-            return $ingredientes_ids;
-
-        // 4. CONTROL DE ERRORES en caso de no poder conectar con el repositorio
-        } catch (Exception $e) {
-            Logger::error($e->getMessage(), __FILE__);
-            return [];
-        }
-    }
-    
-    /**
-     * Obtiene todos los ingredientes (para la vista principal)
-     * @return array de Ingrediente
-     */
-    public function getAllIngredientes(): array {
-        try {
-            return $this->ingredienteRepo->obtenerTodos();
-        } catch (Exception $e) {
-            Logger::error($e->getMessage(), __FILE__);
-            return [];
-        }  
-    }
-
-    /**
-     * Busca ingredientes por nombre
-     * @param string $nombre Nombre del Ingrediente buscado
-     * @return array de Ingrediente
-     */
-    public function buscarIngredientesPorNombre(string $nombre): array {
-        try {
-            if (empty(trim($nombre))) {
-                return $this->getAllIngredientes();
-            }
-            return $this->ingredienteRepo->buscarPorNombre(trim($nombre));
-        } catch (Exception $e) {
-            Logger::error($e->getMessage(), __FILE__);
-            return [];
-        }
-    }
-    
-    /**
-     * Obtiene un ingrediente por su ID
-     * @param int $id
-     * @return Ingrediente|null
-     */
-    public function getIngredientePorId(int $id): ?Ingrediente {
-        try {
-            return $this->ingredienteRepo->obtenerPorId($id);
-        } catch (Exception $e) {
-            Logger::error($e->getMessage(), __FILE__);
-            return null;
-        }
-    }
-    
-    /**
-     * Obtiene ingredientes filtrados por categorías de ingredientes y/o por localizaciones
-     * @param array $ingredientes_ids
-     * @param array $localizaciones_ids
-     * @return array de objetos Ingrediente
-     */
-    public function getIngredientesFiltrados(array $ingredientes_ids, array $localizaciones_ids): array {
-        try {
-            if (empty($ingredientes_ids) && empty($localizaciones_ids)) {
-                return $this->getAllIngredientes();
-            }
-
-            return $this->ingredienteRepo->obtenerPorFiltros($ingredientes_ids, $localizaciones_ids);
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
             return [];

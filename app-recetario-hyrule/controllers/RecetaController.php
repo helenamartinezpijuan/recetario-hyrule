@@ -129,7 +129,7 @@ class RecetaController extends BaseController {
 
         try {
             // 1. EXTRAER DATOS del formulario
-            $id = (int)($id_receta ?? 0);
+            $id = (int)($id_receta['id'] ?? 0);
             if ($id <= 0) { throw new Exception("ID de receta no válido"); }
 
             // 2. VALIDAR los datos a través del service

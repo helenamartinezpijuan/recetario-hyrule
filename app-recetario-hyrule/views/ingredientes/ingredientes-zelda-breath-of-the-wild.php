@@ -27,14 +27,7 @@ include __DIR__ . '/../layout/header.php';
         <aside class="filters-sidebar" aria-label="Filtros de búsqueda">
             <h2 class="filters-title">Filtros</h2>
             
-            <!-- Búsqueda por nombre -->
-            <!--<div class="filter-group">
-                <h3 class="filter-category">Buscar</h3>
-                <input type="text" id="search-ingrediente" class="search-input" 
-                       placeholder="Nombre del ingrediente..." aria-label="Buscar ingrediente por nombre">
-            </div>-->
-            
-            <!-- Filtro por categorías -->
+            <!-- Filtro por categorías de ingredientes -->
             <div class="filter-group">
                 <h3 class="filter-category" id="filter-categorias-heading">Categorías</h3>
                 <ul class="filter-list" aria-labelledby="filter-categorias-heading">
@@ -110,10 +103,6 @@ include __DIR__ . '/../layout/header.php';
                                 </div>
                                 <div class="ingrediente-card-content">
                                     <h2 class="ingrediente-title"><?= htmlspecialchars($ingrediente->getNombre()) ?></h2>
-                                    <div class="ingrediente-icons" aria-hidden="true">
-                                        <span class="ingrediente-icon">🥕</span>
-                                        <span class="ingrediente-icon">🍴</span>
-                                    </div>
                                     <p class="ingrediente-description"><?= htmlspecialchars($ingrediente->getDescripcion()) ?></p>
                                     <a href="?action=obtener_ingrediente&id=<?= $ingrediente->getIdIngrediente() ?>" 
                                        class="btn btn-link"
@@ -154,29 +143,13 @@ include __DIR__ . '/../layout/header.php';
 
 <script>
 $(document).ready(function() {
-    // Búsqueda por nombre
-    let searchTimeout;
-    $('#search-ingrediente').on('input', function() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            aplicarFiltros();
-        }, 300);
-    });
-    
+    const BASE_URL = '<?= BASE_URL ?>';
+    const $modal = $('#ingrediente-modal');
+
     // Aplicar filtros
-    $('#apply-filters').on('click', aplicarFiltros);
-    
-    // Limpiar filtros
-    $('#clear-filters').on('click', function() {
-        $('.filter-checkbox').prop('checked', false);
-        $('#search-ingrediente').val('');
-        aplicarFiltros();
-    });
-    
-    function aplicarFiltros() {
+    $('#apply-filters').on('click', function() {
         const categorias = [];
         const localizaciones = [];
-        const nombre = $('#search-ingrediente').val();
         
         $('.categoria-filter:checked').each(function() {
             categorias.push($(this).val());
@@ -213,8 +186,60 @@ $(document).ready(function() {
                 $('#ingredientes-container').fadeIn(200);
             }
         });
-    }
+    });
     
+    // Búsqueda por nombre
+    let searchTimeout;
+    $('#search-input').on('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const searchTerm = $(this).val();
+            
+            $('#loader').show();
+            $('#ingredientes-container').fadeOut(200);
+            
+            $.ajax({
+                url: 'index.php?action=buscar_ingredientes',
+                method: 'POST',
+                data: { nombre: searchTerm },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        renderIngredientes(response.ingredientes);
+                        // Actualizar breadcrumb
+                        if (searchTerm) {
+                            $('.breadcrumb-list').html(`
+                                <li class="breadcrumb-item"><a href="?action=ingredientes">Ingredientes</a></li>
+                                <li class="breadcrumb-item active">Buscando: ${escapeHtml(searchTerm)}</li>
+                            `);
+                        } else {
+                            $('.breadcrumb-list').html(`
+                                <li class="breadcrumb-item"><a href="?action=ingredientes">Ingredientes</a></li>
+                                <li class="breadcrumb-item active">Todas los ingredientes</li>
+                            `);
+                        }
+                    } else {
+                        showError(response.message || 'Error en la búsqueda');
+                    }
+                },
+                error: function() {
+                    showError('Error de conexión con el servidor');
+                },
+                complete: function() {
+                    $('#loader').hide();
+                    $('#recipes-container').fadeIn(200);
+                }
+            });
+        }, 300);
+    });
+    
+    // Limpiar filtros
+    $('#clear-filters').on('click', function() {
+        $('.filter-checkbox').prop('checked', false);
+        $('#apply-filters').trigger('click');
+    });
+    
+    // Mostrar ingredientes filtrados
     function renderIngredientes(ingredientes) {
         const container = $('#ingredientes-container');
         if (!ingredientes || ingredientes.length === 0) {
@@ -223,20 +248,16 @@ $(document).ready(function() {
         }
         
         let html = '<div class="ingredientes-grid">';
-        ingredientes.forEach(ing => {
+        ingredientes.forEach(ingrediente => {
             html += `
-                <article class="ingrediente-card" data-id="${ing.id_ingrediente}">
+                <article class="ingrediente-card" data-id="${ingrediente.id_ingrediente}">
                     <div class="ingrediente-card-image">
-                        <img src="${BASE_URL}/resources/img/ingredients/${escapeHtml(ing.imagen)}" 
-                             alt="${escapeHtml(ing.nombre)}"
+                        <img src="${BASE_URL}/resources/img/ingredients/${escapeHtml(ingrediente.imagen)}" 
+                             alt="${escapeHtml(ingrediente.nombre)}"
                              onerror="this.src='${BASE_URL}/resources/img/ingredients/placeholder.jpg'">
                     </div>
                     <div class="ingrediente-card-content">
-                        <h2 class="ingrediente-title">${escapeHtml(ing.nombre)}</h2>
-                        <div class="ingrediente-icons" aria-hidden="true">
-                            <span class="ingrediente-icon">🥕</span>
-                            <span class="ingrediente-icon">🍴</span>
-                        </div>
+                        <h2 class="ingrediente-title">${escapeHtml(ingrediente.nombre)}</h2>
                         <p class="ingrediente-description">${escapeHtml(ing.descripcion)}</p>
                         <a href="?action=obtener_ingrediente&id=${ing.id_ingrediente}" class="btn btn-link">
                             Ver Ingrediente
@@ -249,29 +270,14 @@ $(document).ready(function() {
         container.html(html);
     }
     
-    function showError(message) {
-        $('#ingredientes-container').html(`<div class="error-message"><p>${escapeHtml(message)}</p></div>`);
-    }
-    
-    const BASE_URL = '<?= BASE_URL ?>';
-    
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/&/g, '&amp;')
-                  .replace(/</g, '&lt;')
-                  .replace(/>/g, '&gt;')
-                  .replace(/"/g, '&quot;')
-                  .replace(/'/g, '&#39;');
-    }
-
     // Abrir modal de ingrediente
     $(document).on('click', '.view-ingrediente', function() {
-        const id = $(this).data('id');
-        openIngredienteModal(id);
+        const ingredienteId = $(this).data('id');
+        openIngredienteModal(ingredienteId);
     });
 
-    function openIngredienteModal(id) {
-        const $modal = $('#ingrediente-modal');
+    // Obtener información Json
+    function openIngredienteModal(ingredienteId) {
         $modal.fadeIn(200);
         $('#modal-ingrediente-content').hide();
         $('.modal-loader').show();
@@ -279,13 +285,13 @@ $(document).ready(function() {
         $.ajax({
             url: 'index.php?action=obtener_ingrediente',
             method: 'GET',
-            data: { id: id },
+            data: { id: ingredienteId },
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
                     renderIngredienteDetail(response.ingrediente);
                 } else {
-                    $('#modal-ingrediente-content').html('<div class="error-message"><p>Error al cargar el ingrediente</p></div>');
+                    $('#modal-ingrediente-content').html(`<div class="error-message"><p>${escapeHtml(response.message || 'Error al cargar el ingrediente')}</p></div>`);
                 }
             },
             error: function() {
@@ -299,51 +305,56 @@ $(document).ready(function() {
     }
 
     function renderIngredienteDetail(ingrediente) {
+        let localizacionesHtml = '<div class="detail-section"><h3>📍 LOCALIZACIONES</h3><ul class="localizaciones-list">';
+        if (ingrediente.localizaciones && ingrediente.localizaciones.length > 0) {
+            ingrediente.localizaciones.forEach(localizacion => {
+                localizacionesHtml += `
+                    <li class="localizacion-item">
+                        <img src="${BASE_URL}/resources/img/localizaciones/${escapeHtml(localizacion.imagen)}" 
+                             alt="${escapeHtml(localizacion.nombre)}"
+                             class="localizacion-mini-img"
+                             onerror="this.src='${BASE_URL}/resources/img/localizaciones/placeholder.jpg'">
+                        <span class="localizacion-nombre">
+                            <a href="#" class="view-localizacion" data-id="${localizacion.id_localizacion}">${escapeHtml(localizacion.nombre)}</a>
+                        </span>
+                        <span class="localizacion-descripcion">x ${localizacion.descripcion}</span>
+                    </li>
+                `;
+            });
+        }
         const html = `
-            <div class="detail-header">
-                <div class="detail-image">
-                    <img src="${BASE_URL}/resources/img/ingredients/${ingrediente.imagen}" alt="${ingrediente.nombre}">
+            <div class="ingrediente-detail">
+                <div class="detail-header">
+                    <div class="detail-image">
+                        <img src="${BASE_URL}/resources/img/ingredients/${escapeHtml(ingrediente.imagen)}" 
+                        alt="${escapeHtml(ingrediente.nombre)}">
+                    </div>
+                    <div class="detail-info">
+                        <h1 class="detail-title">${escapeHtml(ingrediente.nombre)}</h1>
+                        <p class="detail-description">${escapeHtml(ingrediente.descripcion)}</p>
+                    </div>
                 </div>
-                <div class="detail-info">
-                    <h1 class="detail-title">${escapeHtml(ingrediente.nombre)}</h1>
-                    <p class="detail-description">${escapeHtml(ingrediente.descripcion)}</p>
-                </div>
-            </div>
-            <div class="detail-section">
-                <h3>📍 Localizaciones</h3>
-                <div id="ingrediente-localizaciones">
-                    <div class="loader-mini" style="display: block;">Cargando localizaciones...</div>
-                </div>
+                ${localizacionesHtml}
             </div>
         `;
         $('#modal-ingrediente-title').text(ingrediente.nombre);
         $('#modal-ingrediente-content').html(html);
-        
-        // Cargar localizaciones del ingrediente
-        $.ajax({
-            url: 'index.php?action=obtener_localizaciones_por_ingrediente',
-            method: 'GET',
-            data: { id: ingrediente.id_ingrediente },
-            dataType: 'json',
-            success: function(response) {
-                if (response.success && response.localizaciones.length > 0) {
-                    let locHtml = '<ul class="localizaciones-list">';
-                    response.localizaciones.forEach(loc => {
-                        locHtml += `<li>
-                            <strong>${escapeHtml(loc.nombre)}</strong> 
-                            <span class="region-badge">${escapeHtml(loc.region)}</span>
-                        </li>`;
-                    });
-                    locHtml += '</ul>';
-                    $('#ingrediente-localizaciones').html(locHtml);
-                } else {
-                    $('#ingrediente-localizaciones').html('<p>Este ingrediente se encuentra en todo Hyrule.</p>');
-                }
-            },
-            error: function() {
-                $('#ingrediente-localizaciones').html('<p>No se pudieron cargar las localizaciones.</p>');
-            }
-        });
+    }
+    
+    $('.modal-close, .modal-overlay').on('click', function() {
+        $modal.fadeOut(200);
+        $('#modal-ingrediente-content').empty();
+    });
+    
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape' && $modal.is(':visible')) {
+            $modal.fadeOut(200);
+        }
+    });
+
+    // Mostrar mensaje de error
+    function showError(message) {
+        $('#ingredientes-container').html(`<div class="error-message"><p>${escapeHtml(message)}</p></div>`);
     }
 });
 </script>

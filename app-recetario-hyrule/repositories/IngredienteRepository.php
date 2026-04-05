@@ -10,17 +10,16 @@ use Exception;
 class IngredienteRepository extends BaseRepository {
 
     /**
-     * Buscar todos los ingredientes (sin filtros)
-     * @param string $orden Columna de la tabla de la base de datos por la que ordenar el resultado de la consulta
+     * Buscar recetas sin aplicar filtros
      * @throws Exception Si hay error en la consultas
-     * @return Ingrediente[] Array de objetos Ingrediente
+     * @return Ingrediente[]
      */
-    public function obtenerTodos(string $orden = 'nombre'): array {
+    public function obtenerTodos(): array {
         // 1. OBTENER CONEXIÓN
         $conn = $this->getConnection();
 
         // 2. CONSTRUIR CONSULTA
-        $sql = "SELECT id_ingrediente, nombre, imagen, descripcion FROM ingredientes ORDER BY $orden";
+        $sql = "SELECT id_ingrediente, nombre, imagen, descripcion FROM ingredientes ORDER BY nombre";
 
         // 3. EJECUTAR CONSULTA con manejo de errores
         $resultado = $conn->query($sql);
@@ -51,7 +50,7 @@ class IngredienteRepository extends BaseRepository {
      * Buscar ingrediente por su ID
      * @param int $id_ingrediente Identificador único del ingrediente
      * @throws Exception Si hay error en la consulta
-     * @return Ingrediente Objeto Ingrediente con ID = $id_ingrediente
+     * @return Ingrediente
      */
     public function obtenerPorId(int $id_ingrediente): ?Ingrediente {
         // 1. VALIDAR parámetros de entrada
@@ -104,27 +103,27 @@ class IngredienteRepository extends BaseRepository {
 
     /**
      * Buscar ingredientes por nombre
-     * @param string $nombre Nombre del ingrediente introducido por el usuario
+     * @param string $nombre Texto introducido en la barra buscadora de la receta
      * @throws Exception Si hay error en la consulta
-     * @return Ingrediente[] Array de objetos Ingrediente
+     * @return Ingrediente[]
      */
     public function buscarPorNombre(string $nombre): array {
         // 1. OBTENER CONEXIÓN
         $conn = $this->getConnection();
         
         // 2. CONSTRUIR CONSULTA
-        $likeNombre = "%$nombre%";
+        $like_nombre = "%$nombre%";
         $sql = "SELECT id_ingrediente, nombre, imagen, descripcion 
             FROM ingredientes 
             WHERE nombre LIKE ? OR descripcion LIKE ?
-            ORDER BY nombre;";
+            ORDER BY nombre";
         
         // 3. PREPARAR CONSULTA parametrizada
         $statement = $conn->prepare($sql);
         if (!$statement) { $this->handleError($conn, "preparando búsqueda de ingrediente por nombre"); }
 
         // 4. VINCULAR PARÁMETROS a la consulta
-        $statement->bind_param('ss', $likeNombre, $likeNombre);
+        $statement->bind_param('ss', $like_nombre, $like_nombre);
         
         // 5. EJECUTAR CONSULTA
         if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda de ingrediente por nombre"); }
@@ -153,29 +152,28 @@ class IngredienteRepository extends BaseRepository {
 
     /**
      * Buscar ingredientes aplicando filtros
-     * @param array $ingredientes_ids Array de IDs de ingredientes seleccionados
-     * @param array $localizaciones_ids Array de IDs de las localizaciones
-     * @return Ingrediente[] Array de objetos Ingrediente
+     * @param array $ingredientes_ids Array de IDs de ingredientes
+     * @param array $localizaciones_ids Array de IDs de localizaciones
+     * @return Ingrediente[]
      */
     public function obtenerPorFiltros(array $ingredientes_ids, array $localizaciones_ids): array {
-        // 1. OBTENER CONEXIÓN
+        // 1. VALIDAR parámetros de entrada
+        if (empty($ingredientes_ids) && empty($localizaciones_ids)) { return []; }
+
+        // 2. OBTENER CONEXIÓN
         $conn = $this->getConnection();
         
-        // 2. CONSTRUIR CONSULTA
-        $sql = "SELECT DISTINCT ingredientes.id_ingrediente, ingredientes.nombre, ingredientes.imagen, ingredientes.descripcion FROM ingredientes";
+        // 3. CONSTRUIR CONSULTA
+        $sql = "SELECT DISTINCT ingredientes.id_ingrediente, ingredientes.nombre, ingredientes.imagen, ingredientes.descripcion 
+                    FROM ingredientes 
+                    WHERE 1=1";
         $tipos = "";
         $valores = [];
 
-        if (!empty($localizaciones_ids)) {
-            $sql .= " INNER JOIN ingredientes_localizaciones USING(id_ingrediente_localizacion)";
-        }
-
-        $sql .= " WHERE 1=1";
-
-        // 3. AÑADIR FILTRO por IDs de ingredientes
+        // 4. AÑADIR FILTRO de los ingredientes
         if (!empty($ingredientes_ids)) {
             $placeholders = implode(',', array_fill(0, count($ingredientes_ids), '?'));
-            $sql .= " AND ingredientes.id_ingrediente IN ($placeholders)";
+            $sql .= " AND ingredientes.id_ingrediente='$placeholders'";
             $tipos .= str_repeat('i', count($ingredientes_ids));
             $valores = array_merge($valores, $ingredientes_ids);
         }
@@ -183,7 +181,10 @@ class IngredienteRepository extends BaseRepository {
         // 4. AÑADIR FILTROS por localizaciones
          if (!empty($localizaciones_ids)) {
             $placeholders = implode(',', array_fill(0, count($localizaciones_ids), '?'));
-            $sql .= " AND ingredientes_localizaciones.id_localizacion IN ($placeholders))";
+            $sql .= " AND EXISTS (SELECT 1 FROM ingredientes_localizaciones  
+                                WHERE ingredientes_localizaciones.id_ingrediente = ingredientes.id_ingrediente 
+                                AND ingredientes_localizaciones.id_localizacion IN ($placeholders)) 
+                                OR ingredientes_localizaciones.id_localizacion IN (20)"; // ID Región 20: Sin especificar
             $tipos .= str_repeat('i', count($localizaciones_ids));
             $valores = array_merge($valores, $localizaciones_ids);
         }

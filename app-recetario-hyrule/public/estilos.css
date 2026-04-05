@@ -627,12 +627,36 @@ p, .description,
     padding-left: 0;
 }
 
+/******************* MODIFICAR *******************/
 .ingrediente-item {
     display: flex;
     justify-content: space-between;
     padding: 0.3rem 0;
     border-bottom: 1px dashed #ccc;
 }
+.ingrediente-mini-img {
+
+}
+.ingrediente-nombre {
+
+}
+.ingrediente-cantidad {
+    
+}
+
+.localizacion-item {
+}
+
+.localizacion-mini-img {
+
+}
+.localizacion-nombre {
+
+}
+.localizacion-descripcion {
+
+}
+/******************* MODIFICAR *******************/
 
 .loader, .modal-loader {
     text-align: center;

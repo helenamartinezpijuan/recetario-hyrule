@@ -8,11 +8,10 @@ use Exception;
  * La clase LocalizacionRepository se encarga de manejar la lógica de las consultas SQL para la tabla 'localizaciones' de la base de datos
  */
 class LocalizacionRepository extends BaseRepository {
-
     /**
      * Buscar localizaciones sin aplicar filtros
      * @throws Exception Si hay error en la consultas
-     * @return Localizacion[] Array de objetos Localizacion
+     * @return Localizacion[]
      */
     public function obtenerTodos(): array {
         // 1. OBTENER CONEXIÓN
@@ -51,7 +50,7 @@ class LocalizacionRepository extends BaseRepository {
      * Buscar localizacion por su ID
      * @param int $id_localizacion Identificador único de la localización
      * @throws Exception Si hay error en la consulta
-     * @return Localizacion Objeto Localizacion con ID = $id_localizacion
+     * @return Localizacion
      */
     public function obtenerPorId(int $id_localizacion): ?Localizacion {
         // 1. VALIDAR parámetros de entrada
@@ -107,7 +106,7 @@ class LocalizacionRepository extends BaseRepository {
      * Buscar localizaciones por nombre
      * @param string $nombre Texto introducido en la barra buscadora de la receta
      * @throws Exception Si hay error en la consulta
-     * @return Localizacion[] Array de objetos Localizacion
+     * @return Localizacion[]
      */
     public function buscarPorNombre(string $nombre): array {
         // 1. OBTENER CONEXIÓN
@@ -157,7 +156,7 @@ class LocalizacionRepository extends BaseRepository {
      * Busca localizaciones aplicando filtros
      * @param array $regiones Array de strings de las localizaciones
      * @throws Exception Si hay error en la consulta
-     * @return Localizacion[] Array de objetos Localizacion
+     * @return Localizacion[]
      */
     public function obtenerPorRegiones(array $regiones): array {
         // 1. VALIDAR parámetros de entrada
@@ -249,7 +248,7 @@ class LocalizacionRepository extends BaseRepository {
     /**
      * Obtener todas las localizaciones de una región específica
      * @param string $region Región de la que obtener sus localizaciones
-     * @return Localizacion[] Array de objetos Localizacion
+     * @return Localizacion[]
      */
     public function obtenerPorRegion(string $region): array {
         // 1. VALIDAR parámetro de entrada

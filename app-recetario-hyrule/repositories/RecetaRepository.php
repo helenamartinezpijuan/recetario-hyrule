@@ -12,11 +12,10 @@ use Exception;
  * La clase RecetaRepository se encarga de manejar la lógica de las consultas SQL para la tabla 'recetas' de la base de datos
  */
 class RecetaRepository extends BaseRepository {
-
     /**
      * Buscar recetas sin aplicar filtros
      * @throws Exception Si hay error en la consultas
-     * @return Receta[] Array de objetos Receta
+     * @return Receta[]
      */
     public function obtenerTodos(): array {
         // 1. OBTENER CONEXIÓN
@@ -54,7 +53,7 @@ class RecetaRepository extends BaseRepository {
      * Buscar receta por su ID
      * @param int $id_receta Identificador único de la receta
      * @throws Exception Si hay error en la consulta
-     * @return Receta Objeto Receta con ID = $id_receta
+     * @return Receta
      */
     public function obtenerPorId(int $id_receta): ?Receta {
         // 1. VALIDAR parámetros de entrada
@@ -109,7 +108,7 @@ class RecetaRepository extends BaseRepository {
      * Busca recetas por nombre
      * @param string $nombre Texto introducido en la barra buscadora de la receta
      * @throws Exception Si hay error en la consulta
-     * @return Receta[] Array de objetos Receta
+     * @return Receta[]
      */
     public function buscarPorNombre(string $nombre): array {
         // 1. OBTENER CONEXIÓN
@@ -156,10 +155,9 @@ class RecetaRepository extends BaseRepository {
 
     /**
      * Busca recetas aplicando filtros
-     * @param array $efectos_ids Array de ids de los efectos
-     * @param array $ingredientes_ids Array de ids de los ingredientes
-     * @throws Exception Si hay error en la consulta
-     * @return Receta[] Array de objetos Receta
+     * @param array $efectos_ids Array de IDs de efectos
+     * @param array $ingredientes_ids Array de IDs de ingredientes
+     * @return Receta[]
      */
     public function obtenerPorFiltros(array $efectos_ids, array $ingredientes_ids): array {
         // 1. VALIDAR parámetros de entrada
@@ -291,7 +289,7 @@ class RecetaRepository extends BaseRepository {
      * Obtener efectos de una receta
      * @param int $id_receta ID de la receta
      * @throws Exception Si hay error en la consulta
-     * @return Efecto[] Array de objetos Efecto
+     * @return Efecto[]
      */
     public function obtenerEfectosPorRecetaId(int $id_receta): array {
         // 1. VALIDAR parámetros de entrada
@@ -348,7 +346,7 @@ class RecetaRepository extends BaseRepository {
      * Crear nuevo registro de receta en el inventario del usuario
      * @param Receta $receta Objeto Receta a insertar en la base de datos
      * @throws Exception Si hay error en la consulta
-     * @return Receta Objeto Receta con el id_receta
+     * @return Receta
      */
     public function crearReceta(Receta $receta): ?Receta {
         // 1. OBTENER CONEXIÓN

@@ -124,7 +124,7 @@ class LocalizacionController extends BaseController {
 
         try {
             // 1. EXTRAER DATOS del formulario
-            $id = (int)($id_localizacion ?? 0);
+            $id = (int)($id_localizacion['id'] ?? 0);
             if ($id <= 0) { throw new Exception("ID de localizacion no válido"); }
 
             // 2. VALIDAR Y NORMALIZAR los datos a través del service
