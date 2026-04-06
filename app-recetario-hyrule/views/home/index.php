@@ -24,26 +24,22 @@ include __DIR__ . '/../layout/header.php';
         <h2 class="section-title">¿Qué encontrarás aquí?</h2>
         <div class="features-grid">
             <div class="feature-card">
-                <div class="feature-icon">🍲</div>
-                <h3>Más de 100 recetas</h3>
+                <h3>🍲 Más de 100 recetas</h3>
                 <p>Descubre todas las combinaciones de ingredientes para crear platos únicos.</p>
                 <a href="?action=recetas" class="feature-link">Ver recetas →</a>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🥬</div>
-                <h3>Ingredientes de Hyrule</h3>
+                <h3>🥬 Ingredientes de Hyrule</h3>
                 <p>Conoce las propiedades de cada ingrediente y dónde encontrarlos.</p>
                 <a href="?action=ingredientes" class="feature-link">Ver ingredientes →</a>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <h3>Efectos especiales</h3>
+                <h3>⚡ Efectos especiales</h3>
                 <p>Aprende qué efectos tienen los platos y cómo aprovecharlos.</p>
                 <a href="?action=efectos" class="feature-link">Ver efectos →</a>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🗺️</div>
-                <h3>Localizaciones</h3>
+                <h3>🗺️ Localizaciones</h3>
                 <p>Explora las regiones de Hyrule y descubre dónde encontrar ingredientes.</p>
                 <a href="?action=localizaciones" class="feature-link">Ver localizaciones →</a>
             </div>

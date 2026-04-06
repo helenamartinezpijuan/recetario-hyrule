@@ -25,7 +25,6 @@ body {
     color: var(--text-dark);
     font-family: 'AmaticSC', sans-serif;
     line-height: 1.5;
-    /*font-size: 21px;*/
 }
 
 html {
@@ -62,7 +61,7 @@ html {
 }
 
 .logo img {
-    max-height: 80px;
+    max-height: 120px;
     width: auto;
     transition: transform 0.3s, filter 0.3s;
 }
@@ -212,18 +211,18 @@ html {
     padding: 15px 0;
     margin-bottom: 20px;
     text-align: center;
-    font-family: 'Patrick Hand', serif;
 }
 
 .search-input-large {
     width: 80%;
     max-width: 500px;
     padding: 12px 20px;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     border: 2px solid var(--primary-green);
     border-radius: 30px;
     outline: none;
     transition: all 0.3s;
+    font-family: 'PatrickHand', serif;
 }
 
 .search-input-large:focus {
@@ -241,7 +240,7 @@ html {
     border: none;
     cursor: pointer;
     font-family: inherit;
-    font-size: 1.5rem;
+    font-size: calc(1.5rem * var(--font-scale));
     transition: all 0.2s;
 }
 
@@ -306,9 +305,19 @@ p, .description,
 }
 
 .hero h1 {
-    font-size: calc(4rem * var(--font-scale));
+    font-size: calc(4.5rem * var(--font-scale));
     margin-bottom: 1.2rem;
     font-family: 'PermanentMarker', cursive;
+}
+
+.features h2 {
+    font-size: calc(2.5rem * var(--font-scale));
+    margin-bottom: 1rem;
+}
+
+.features h3 {
+    font-size: calc(1.6rem * var(--font-scale));
+    margin-bottom: 0.2rem;
 }
 
 .hero p {
@@ -318,22 +327,12 @@ p, .description,
     padding-bottom: 15px;
 }
 
-
 .feature-link {
     font-size: calc(1.2rem * var(--font-scale));
 }
 
-.btn-get-started {
-    background-color: var(--primary-green);
-    color: #2C2C2C;
-    padding: 0.8rem 2rem;
-    font-size: calc(1.3rem * var(--font-scale));
-    font-weight: bold;
-    border-radius: 40px;
-}
-
-.btn-get-started:hover {
-    background-color: var(--bg-light);
+.btn-hero {
+    font-size: calc(1.7rem * var(--font-scale));
 }
 
 /* =====================================================================
@@ -621,7 +620,7 @@ p, .description,
 }
 
 .detail-description {
-    font-size: calc(1.1rem * var(--font-scale));
+    font-size: calc(1.2rem * var(--font-scale));
     line-height: 1.4;
 }
 
@@ -634,14 +633,15 @@ p, .description,
 .detail-section h3 {
     color: #4E98D9;
     margin-bottom: 0.5rem;
+    font-size: calc(1.5rem * var(--font-scale));
 }
 
 .ingredientes-list {
     list-style: none;
-    padding-left: 0;
+    padding-right: 2rem;
+    padding-left: 2rem;
 }
 
-/******************* MODIFICAR *******************/
 .ingrediente-item {
     display: flex;
     justify-content: space-between;
@@ -649,29 +649,34 @@ p, .description,
     border-bottom: 1px dashed #ccc;
 }
 .ingrediente-mini-img {
-    height: 96px;
+    width: 96px;
 }
 .ingrediente-nombre {
-
+    font-size: calc(1.7rem * var(--font-scale));
+    font-family: 'PatrickHandSC', sans-serif;
 }
 .ingrediente-cantidad {
-    font-size: calc(1.5rem * var(--font-scale));
-    padding-right: 10px; 
+    font-size: calc(2.2rem * var(--font-scale));
 }
 
 .localizacion-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.3rem 0;
+    border-bottom: 1px dashed #ccc;
 }
 
 .localizacion-mini-img {
-    height: 96px;
+    width: 300px;
 }
 .localizacion-nombre {
-
+    font-size: calc(2.2rem * var(--font-scale));
+    font-family: 'AmaticSC', sans-serif;
 }
 .localizacion-descripcion {
-
+    font-size: calc(1.7rem * var(--font-scale));
+    font-family: 'PatrickHandSC', sans-serif;
 }
-/******************* MODIFICAR *******************/
 
 .loader, .modal-loader {
     text-align: center;
@@ -778,8 +783,8 @@ p, .description,
 }
 
 .accessibility-icon {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     display: block;
 }
 
@@ -922,18 +927,6 @@ p, .description,
     src: url('../resources/fonts/Patrick_Hand_SC/PatrickHandSC-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-}
-
-/* Lexend - [Variable] */
-@font-face {
-    font-family: 'Lexend';
-    src: url('../resources/fonts/Lexend/Lexend-VariableFont_wght.ttf') format('truetype');
-}
-
-/* Datatype - [Variable] */
-@font-face {
-    font-family: 'Datatype';
-    src: url('../resources/fonts/Datatype/Datatype-VariableFont_wdth,wght.ttf') format('truetype');
 }
 
 /* Amatic SC - REGULAR */

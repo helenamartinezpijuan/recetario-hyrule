@@ -123,14 +123,6 @@ class RecetaController extends BaseController {
             $recetas = $this->service->buscarRecetasPorNombre($nombre);
             
             // 3. PREPARAR DATOS para pasar a Json
-            /*$recetas_array = array_map(function($receta) {
-                return [
-                    'id_receta' => $receta->getIdReceta(),
-                    'nombre' => $receta->getNombre(),
-                    'imagen' => $receta->getImagen(),
-                    'descripcion' => $receta->getDescripcion()
-                ];
-            }, $recetas);*/
             $recetas_array = [];
             foreach ($recetas as $receta) {
                 $detalle = $this->service->getRecetaDetalle($receta->getIdReceta());
@@ -196,13 +188,13 @@ class RecetaController extends BaseController {
 
             // 3.2. PREPARAR DATOS de ingredientes para JavaScript
             $ingredientes_preparados = [];
-            foreach ($ingredientes_array as $ing) {
+            foreach ($ingredientes_array as $ingrediente) {
                 $ingredientes_preparados[] = [
-                    'id_ingrediente' => $ing['ingrediente']->getIdIngrediente(),
-                    'nombre' => $ing['ingrediente']->getNombre(),
-                    'imagen' => $ing['ingrediente']->getImagen(),
-                    'descripcion' => $ing['ingrediente']->getDescripcion(),
-                    'cantidad' => $ing['cantidad']
+                    'id_ingrediente' => $ingrediente['ingrediente']->getIdIngrediente(),
+                    'nombre' => $ingrediente['ingrediente']->getNombre(),
+                    'imagen' => $ingrediente['ingrediente']->getImagen(),
+                    'descripcion' => $ingrediente['ingrediente']->getDescripcion(),
+                    'cantidad' => $ingrediente['cantidad']
                 ];
             }
 

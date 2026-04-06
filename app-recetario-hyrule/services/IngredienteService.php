@@ -105,6 +105,15 @@ class IngredienteService {
         }
     }
 
+    public function getIngredientesLocalizaciones(int $id_ingrediente): array {
+        try {
+            return $this->ingredienteRepo->obtenerLocalizaciones($id_ingrediente);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
+
     /**
      * Devuelve el array de categorías (para usar en las vistas)
      * @return array Las categorías con sus nombres para mostrar

@@ -5,6 +5,7 @@ include __DIR__ . '/../layout/header.php';
 ?>
 
 <div class="container">
+    <!-- Breadcrumb -->
     <nav class="breadcrumb" aria-label="Ruta de navegación">
         <ol class="breadcrumb-list">
             <li class="breadcrumb-item"><a href="?action=efectos">Efectos</a></li>
@@ -16,6 +17,7 @@ include __DIR__ . '/../layout/header.php';
         ← Volver
     </button>
     
+    <!-- Contenido principal -->
     <h1 class="page-title">Efectos de los platos</h1>
     <p class="page-description">Los platos cocinados en Hyrule pueden tener efectos especiales que te ayudarán en tu aventura.</p>
     
@@ -25,9 +27,8 @@ include __DIR__ . '/../layout/header.php';
             <?php foreach ($efectos as $efecto): ?>
                 <article class="efecto-card">
                     <div class="efecto-card-image">
-                        <img src="<?= BASE_URL ?>/resources/img/effects/<?= strtolower($efecto->getTipoEfecto()->getNombre()) ?>.png" 
-                             alt="<?= htmlspecialchars($efecto->getTipoEfecto()->getNombre()) ?>"
-                             onerror="this.src='<?= BASE_URL ?>/resources/img/effects/default.png'">
+                        <img src="<?= BASE_URL ?>/resources/img/effects/<?= $efecto->getImagen() ?>" 
+                             alt="<?= htmlspecialchars($efecto->getTipoEfecto()->getNombre()) ?>">
                     </div>
                     <div class="efecto-card-content">
                         <h2 class="efecto-title"><?= htmlspecialchars($efecto->getTipoEfecto()->getNombre()) ?></h2>

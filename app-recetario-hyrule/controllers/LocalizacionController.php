@@ -97,7 +97,7 @@ class LocalizacionController extends BaseController {
             // 3. PREPARAR DATOS para pasar a Json
             $localizaciones_array = array_map(function($localizacion) {
                 return [
-                    'id_receta' => $localizacion->getIdLocalizacion(),
+                    'id_localizacion' => $localizacion->getIdLocalizacion(),
                     'nombre' => $localizacion->getNombre(),
                     'region' => $localizacion->getRegion(),
                     'imagen' => $localizacion->getImagen(),
@@ -142,6 +142,7 @@ class LocalizacionController extends BaseController {
                 'localizacion' => [
                     'id_localizacion' => $localizacion->getIdLocalizacion(),
                     'nombre' => $localizacion->getNombre(),
+                    'region' => $localizacion->getRegion(),
                     'imagen' => $localizacion->getImagen(),
                     'descripcion' => $localizacion->getDescripcion()
                 ]

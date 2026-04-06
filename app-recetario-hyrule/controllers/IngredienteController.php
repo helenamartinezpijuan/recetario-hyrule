@@ -139,16 +139,31 @@ class IngredienteController extends BaseController {
             if (!$ingrediente) {
                 Logger::error("Ingrediente no encontrado con id $id", __FILE__);
                 echo json_encode(['success' => false, 'message' => 'Ingrediente no encontrado']);
+                return;
             }
 
-            // 3. DEVOLVER RESPUESTA
+            // 3. PREPARAR DATOS para pasar a Json
+            $localizaciones_array = $this->service->getIngredientesLocalizaciones($id);
+            $localizaciones_filtradas = [];
+            foreach ($localizaciones_array as $localizacion) {
+                $localizaciones_filtradas[] = [
+                    'id_localizacion' => $localizacion->getIdLocalizacion(),
+                    'nombre' => $localizacion->getNombre(),
+                    'region' => $localizacion->getRegion(),
+                    'imagen' => $localizacion->getImagen(),
+                    'descripcion' => $localizacion->getDescripcion()
+                ];
+            }
+
+            // 4. DEVOLVER RESPUESTA
             echo json_encode([
                 'success' => true,
                 'ingrediente' => [
                     'id_ingrediente' => $ingrediente->getIdIngrediente(),
                     'nombre' => $ingrediente->getNombre(),
                     'imagen' => $ingrediente->getImagen(),
-                    'descripcion' => $ingrediente->getDescripcion()
+                    'descripcion' => $ingrediente->getDescripcion(),
+                    'localizaciones' => $localizaciones_filtradas
                 ]
             ]);
 

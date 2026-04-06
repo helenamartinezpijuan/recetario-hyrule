@@ -322,9 +322,10 @@ $(document).ready(function() {
         let localizacionesHtml = '<div class="detail-section"><h3>📍 LOCALIZACIONES</h3><ul class="localizaciones-list">';
         if (ingrediente.localizaciones && ingrediente.localizaciones.length > 0) {
             ingrediente.localizaciones.forEach(localizacion => {
+                const regionSlug = localizacion.region.toLowerCase().replace(/ /g, '-');
                 localizacionesHtml += `
                     <li class="localizacion-item">
-                        <img src="${BASE_URL}/resources/img/locations/${escapeHtml(localizacion.imagen)}" 
+                        <img src="${BASE_URL}/resources/img/locations/${regionSlug}/${escapeHtml(localizacion.imagen)}" 
                              alt="${escapeHtml(localizacion.nombre)}"
                              class="localizacion-mini-img"
                              onerror="this.src='${BASE_URL}/resources/img/locations/hyrule.jpg'">

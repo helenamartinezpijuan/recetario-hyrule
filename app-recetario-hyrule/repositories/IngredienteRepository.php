@@ -2,6 +2,7 @@
 namespace repositories;
 
 use models\Ingrediente;
+use models\Localizacion;
 use Exception;
 
 /**
@@ -54,7 +55,7 @@ class IngredienteRepository extends BaseRepository {
      */
     public function obtenerPorId(int $id_ingrediente): ?Ingrediente {
         // 1. VALIDAR parámetros de entrada
-        if ($id_ingrediente <= 0) { throw new Exception("No se puede buscar un ingrediente sin ID"); }
+        if ($id_ingrediente < 0) { throw new Exception("No se puede buscar un ingrediente sin ID"); }
 
         // 2. OBTENER CONEXIÓN
         $conn = $this->getConnection();
@@ -225,7 +226,57 @@ class IngredienteRepository extends BaseRepository {
         return $ingredientes;
     }
 
+    /**
+     * Buscar localizaciones donde encontrar un ingrediente
+     * @param int $id_ingrediente 
+     * @return Localizacion[]
+     */
+    public function obtenerLocalizaciones(int $id_ingrediente): array {
+        // 1. VALIDAR parámetros de entrada
+        if ($id_ingrediente < 0) { return []; }
 
+        // 2. OBTENER CONEXIÓN
+        $conn = $this->getConnection();
+        
+        // 3. CONSTRUIR CONSULTA
+        $sql = "SELECT DISTINCT localizaciones.id_localizacion, localizaciones.nombre, localizaciones.region, localizaciones.imagen, localizaciones.descripcion 
+                    FROM localizaciones
+                    INNER JOIN ingredientes_localizaciones USING(id_localizacion) 
+                    WHERE ingredientes_localizaciones.id_ingrediente=? 
+                    ORDER BY ingredientes.nombre";
+        
+        // 4. PREPARAR CONSULTA parametrizada
+        $statement = $conn->prepare($sql);
+        if (!$statement) { $this->handleError($conn, "preparando búsqueda de localizaciones de ingredientes por ID"); }
+
+        // 5. VINCULAR PARÁMETROS a la consulta
+        $statement->bind_param("i", $id_ingrediente);
+
+        // 6. EJECUTAR CONSULTA con manejo de errores
+        if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda de localizaciones de ingrediente por ID"); }
+
+        // 7. OBTENER RESULTADOS
+        $resultado = $statement->get_result();
+        $localizaciones = [];
+        
+        // 9. CREAR objetos Ingrediente
+        while ($registro = $resultado->fetch_assoc()) {
+            $localizacion = new Localizacion(
+                $registro["id_localizacion"],
+                $registro["nombre"],
+                $registro["region"],
+                $registro["imagen"],
+                $registro["descripcion"]
+            );
+            $localizaciones[] = $localizacion;
+        }
+        
+        // 10. LIMPIEZA
+        $statement->close();
+        $conn->close();
+        
+        return $localizaciones;
+    }
 }
 
 ?>

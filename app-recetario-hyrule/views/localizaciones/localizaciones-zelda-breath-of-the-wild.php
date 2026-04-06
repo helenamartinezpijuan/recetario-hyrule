@@ -273,13 +273,14 @@ $(document).ready(function() {
         });
     }
     
-    // Mostrar localizacions filtradas
+    // Mostrar localizacions modal
     function renderLocalizacionDetail(localizacion) {
+        const regionSlug = localizacion.region.toLowerCase().replace(/ /g, '-');
         const html = `
             <div class="localizacion-detail">
                 <div class="detail-header">
                     <div class="detail-image">
-                        <img src="${BASE_URL}/resources/img/locations/${escapeHtml(localizacion.imagen)}" 
+                        <img src="${BASE_URL}/resources/img/locations/${regionSlug}/${escapeHtml(localizacion.imagen)}" 
                              alt="${escapeHtml(localizacion.nombre)}">
                     </div>
                     <div class="detail-info">

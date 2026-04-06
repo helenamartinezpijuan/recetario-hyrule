@@ -102,8 +102,7 @@ include __DIR__ . '/../layout/header.php';
                                 <div class="receta-card-image">
                                     <img src="<?= BASE_URL ?>/resources/img/recipes/<?= htmlspecialchars($receta['imagen']) ?>" 
                                             alt="Receta: <?= htmlspecialchars($receta['nombre']) ?>"
-                                            loading="lazy"
-                                            onerror="this.src='<?= BASE_URL ?>/resources/img/recipes/placeholder.png'">
+                                            loading="lazy">
                                 </div>
                                 <!---------------------------------------------------------------------------------------------------------->
                                 <div class="receta-card-content">
@@ -113,8 +112,7 @@ include __DIR__ . '/../layout/header.php';
                                             <?php foreach ($receta['efectos'] as $efecto): ?>
                                                 <img src="<?= BASE_URL ?>/resources/img/effects/<?= htmlspecialchars($efecto['imagen']) ?>"
                                                                 alt="<?= htmlspecialchars($efecto['nombre']) ?>"  
-                                                                class='efecto-icon-mini'
-                                                                title="<?= htmlspecialchars($efecto['nombre']) ?>">
+                                                                class='efecto-icon-mini'>
                                             <?php endforeach; ?>
                                         <?php else: ?>
                                             <span class="receta-icon">🍗</span>
@@ -297,8 +295,7 @@ $(document).ready(function() {
                 <article class="receta-card" data-id="${receta.id_receta}">
                     <div class="receta-card-image">
                         <img src="${BASE_URL}/resources/img/recipes/${escapeHtml(receta.imagen)}" 
-                            alt="${escapeHtml(receta.nombre)}"
-                            onerror="this.src='${BASE_URL}/resources/img/recipes/placeholder.png'">
+                            alt="${escapeHtml(receta.nombre)}">
                     </div>
                     <div class="receta-card-content">
                         <h2 class="receta-title">${escapeHtml(receta.nombre)}</h2>
@@ -355,18 +352,28 @@ $(document).ready(function() {
         let efectosHtml = '<div class="detail-section"><h3>EFECTOS</h3><div class="efectos-grid-mini">';
         if (receta.efectos && receta.efectos.length > 0) {
             receta.efectos.forEach(efecto => {
-                efectosHtml += `
-                    <div class="efecto-mini-card">
-                        <img src="${BASE_URL}/resources/img/effects/${escapeHtml(efecto.imagen || (efecto.nombre.toLowerCase() + '.png'))}" 
-                            alt="${escapeHtml(efecto.nombre)}"
-                            class="efecto-mini-img"
-                            onerror="this.src='${BASE_URL}/resources/img/effects/default.png'">
-                        <div class="efecto-mini-info">
-                            <strong>${escapeHtml(efecto.nombre)}</strong>
-                            <p>${escapeHtml(efecto.descripcion)}</p>
+                if (efecto.imagen == "") {
+                    efectosHtml += `
+                        <div class="efecto-mini-card">
+                            <div class="efecto-mini-info">
+                                <strong>${escapeHtml(efecto.nombre)}</strong>
+                                <p>${escapeHtml(efecto.descripcion)}</p>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                } else {
+                    efectosHtml += `
+                        <div class="efecto-mini-card">
+                            <img src="${BASE_URL}/resources/img/effects/${escapeHtml(efecto.imagen)}" 
+                                alt="${escapeHtml(efecto.nombre)}"
+                                class="efecto-mini-img">
+                            <div class="efecto-mini-info">
+                                <strong>${escapeHtml(efecto.nombre)}</strong>
+                                <p>${escapeHtml(efecto.descripcion)}</p>
+                            </div>
+                        </div>
+                    `;
+                }
             });
         } else {
             efectosHtml += '<p>Sin efecto</p>';
@@ -380,10 +387,9 @@ $(document).ready(function() {
                     <li class="ingrediente-item">
                         <img src="${BASE_URL}/resources/img/ingredients/${escapeHtml(ingrediente.imagen)}" 
                              alt="${escapeHtml(ingrediente.nombre)}"
-                             class="ingrediente-mini-img"
-                             onerror="this.src='${BASE_URL}/resources/img/ingredients/placeholder.png'">
+                             class="ingrediente-mini-img">
                         <span class="ingrediente-nombre">
-                            <a href="#" class="view-ingrediente" data-id="${ingrediente.id_ingrediente}">${escapeHtml(ingrediente.nombre)}</a>
+                            ${escapeHtml(ingrediente.nombre)}
                         </span>
                         <span class="ingrediente-cantidad">x ${ingrediente.cantidad}</span>
                     </li>
