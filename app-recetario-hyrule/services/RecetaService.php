@@ -4,8 +4,8 @@ namespace services;
 use models\Receta;
 use models\RecetaDetalle;
 use repositories\RecetaRepository;
-use repositories\EfectoRepository;
 use services\IngredienteService;
+use services\EfectoService;
 use helpers\Logger;
 use Exception;
 
@@ -15,12 +15,12 @@ use Exception;
 class RecetaService {
     private $recetaRepo;
     private $ingredienteService;
-    private $efectoRepo;
+    private $efectoService;
     
     public function __construct() {
         $this->recetaRepo = new RecetaRepository();
         $this->ingredienteService = new IngredienteService();
-        $this->efectoRepo = new EfectoRepository();
+        $this->efectoService = new EfectoService();
     }
     
     /**
@@ -91,7 +91,7 @@ class RecetaService {
      */
     public function getAllTiposEfectos(): array {
         try {
-            return $this->efectoRepo->obtenerTipos();
+            return $this->efectoService->getAllTiposEfectos();
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
             return [];

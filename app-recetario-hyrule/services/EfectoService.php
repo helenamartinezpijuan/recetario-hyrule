@@ -18,7 +18,7 @@ class EfectoService {
     
     /**
      * Obtiene todos los efectos (para la vista principal)
-     * @return array de Efecto
+     * @return Efecto[]
      */
     public function getAllEfectos(): array {
         try {
@@ -28,23 +28,10 @@ class EfectoService {
             return [];
         }
     }
-    
-    /**
-     * Obtiene todos los tipos de efecto (para filtros)
-     * @return array de TipoEfecto
-     */
-    public function getAllTiposEfectos(): array {
-        try {
-            return $this->efectoRepo->obtenerTipos();
-        } catch (Exception $e) {
-            Logger::error($e->getMessage(), __FILE__);
-            return [];
-        }
-    }
-    
+        
     /**
      * Busca efectos por nombre del tipo de efecto
-     * @param string $nombre Nombre del Efecto buscado
+     * @param string $nombre Nombre del efecto buscado
      * @return Efecto[]
      */
     public function buscarEfectosPorNombre(string $nombre): array {
@@ -58,10 +45,10 @@ class EfectoService {
             return [];
         }
     }
-    
+        
     /**
      * Obtiene un efecto por su ID
-     * @param int $id
+     * @param int $id Identificador único del efecto
      * @return Efecto|null
      */
     public function getEfectoPorId(int $id): ?Efecto {
@@ -70,6 +57,19 @@ class EfectoService {
         } catch (Exception $e) {
             Logger::error($e->getMessage(), __FILE__);
             return null;
+        }
+    }
+    
+    /**
+     * Obtiene todos los tipos de efecto (para filtros)
+     * @return array de TipoEfecto
+     */
+    public function getAllTiposEfectos(): array {
+        try {
+            return $this->efectoRepo->obtenerTipos();
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
         }
     }
 

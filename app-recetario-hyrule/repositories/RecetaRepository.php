@@ -53,7 +53,7 @@ class RecetaRepository extends BaseRepository {
      * Buscar receta por su ID
      * @param int $id_receta Identificador único de la receta
      * @throws Exception Si hay error en la consulta
-     * @return Receta
+     * @return Receta|null
      */
     public function obtenerPorId(int $id_receta): ?Receta {
         // 1. VALIDAR parámetros de entrada

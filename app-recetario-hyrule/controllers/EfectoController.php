@@ -73,17 +73,17 @@ class EfectoController extends BaseController {
 
     /**
      * Recibe el ID de un efecto vía GET y devuelve sus detalles completos en JSON
-     * @param array $getData Datos de $_GET
+     * @param array $id_efecto Datos de $_GET
      * @throws Exception Si el ID del efecto no es válido
      * @return void
      */
-    public function obtenerEfecto(array $getData): void {
+    public function obtenerEfecto(array $id_efecto): void {
         // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON (no HTML)
         header('Content-Type: application/json');
 
         try {
             // 1. EXTRAER DATOS del formulario
-            $id = (int)($getData['id'] ?? 0);
+            $id = (int)($id_efecto['id'] ?? 0);
             if ($id <= 0) { throw new Exception("ID de efecto no válido"); }
 
             // 2. VALIDAR Y NORMALIZAR los datos a través del service

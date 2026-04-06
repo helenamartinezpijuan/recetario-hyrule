@@ -276,13 +276,13 @@ html {
 }
 
 p, .description, 
-.recipe-description, .ingrediente-description, .localizacion-description, .efecto-description {
+.receta-description, .ingrediente-description, .localizacion-description, .efecto-description {
     font-family: 'PatrickHandSC', sans-serif;
     font-size: calc(1.3rem * var(--font-scale));
     line-height: 1.4;
 }
 
-.recipe-title, .ingrediente-title, .efecto-title, .localizacion-title {
+.receta-title, .ingrediente-title, .efecto-title, .localizacion-title {
     font-family: 'AmaticSC', sans-serif;
     font-size: calc(1.5rem * var(--font-scale));
     font-weight: bold;
@@ -415,7 +415,7 @@ p, .description,
 }
 
 /* Contenido principal (tarjetas) */
-.recipes-content,
+.recetas-content,
 .ingredientes-content,
 .efectos-content,
 .localizaciones-content {
@@ -429,7 +429,7 @@ p, .description,
 }
 
 /* Tarjetas (recetas, ingredientes, efectos, localizaciones) */
-.recipes-grid,
+.recetas-grid,
 .ingredientes-grid,
 .efectos-grid {
     display: grid;
@@ -437,7 +437,7 @@ p, .description,
     gap: 1.5rem;
 }
 
-.recipe-card, .ingrediente-card, .efecto-card, .localizacion-card {
+.receta-card, .ingrediente-card, .efecto-card, .localizacion-card {
     background-color: var(--white);
     /*border: 1px solid var(--primary-green);*/
 }
@@ -562,7 +562,7 @@ p, .description,
     align-items: center;
     padding: 1rem 1.5rem;
     border-bottom: 2px solid #66CAF2;
-    background-color: #fff;
+    background-color: var(--white);
     border-radius: 20px 20px 0 0;
 }
 
@@ -580,7 +580,7 @@ p, .description,
 }
 
 .modal-body {
-    padding: 1.5rem;
+    padding: 2rem; /* BEFORE: 1.5rem */
 }
 
 .detail-header {
@@ -641,7 +641,8 @@ p, .description,
 
 }
 .ingrediente-cantidad {
-    
+    font-size: calc(1.5rem * var(--font-scale));
+    padding-right: 10px; 
 }
 
 .localizacion-item {
@@ -710,7 +711,7 @@ p, .description,
     .hero h1 {
         font-size: calc(2.5em * var(--font-scale));
     }
-    .recipes-grid,
+    .recetas-grid,
     .ingredientes-grid,
     .efectos-grid,
     .localizaciones-grid {
@@ -732,7 +733,7 @@ p, .description,
         text-align: center;
     }
     .detail-image img {
-        width: 150px;
+        width: 100px; /* BEFORE: 150px */
     }
 }
 
@@ -827,7 +828,7 @@ p, .description,
 }
 
 .font-opendyslexic p,
-.font-opendyslexic .recipe-description,
+.font-opendyslexic .receta-description,
 .font-opendyslexic .ingrediente-description {
     line-height: 1.4;
 }

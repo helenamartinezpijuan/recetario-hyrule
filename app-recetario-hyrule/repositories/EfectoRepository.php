@@ -11,17 +11,16 @@ use Exception;
 class EfectoRepository extends BaseRepository {
 
     /**
-     * Buscar todos los efectos
-     * @param string $orden Columna de la tabla de la base de datos por la que ordenar el resultado de la consulta
+     * Buscar efectos sin aplicar filtros
      * @throws Exception Si hay error en la consultas
-     * @return Efecto[] Array de objetos Efecto
+     * @return Efecto[]
      */
-    public function obtenerTodos(string $orden = 'id_efecto'): array {
+    public function obtenerTodos(): array {
         // 1. OBTENER CONEXIÓN
         $conn = $this->getConnection();
 
         // 2. CONSTRUIR CONSULTA
-        $sql = "SELECT id_efecto, id_tipo_efecto, imagen, descripcion FROM efectos ORDER BY $orden";
+        $sql = "SELECT id_efecto, id_tipo_efecto, imagen, descripcion FROM efectos ORDER BY id_efecto";
 
         // 3. EJECUTAR CONSULTA con manejo de errores
         $resultado = $conn->query($sql);
@@ -54,7 +53,7 @@ class EfectoRepository extends BaseRepository {
      * Buscar efecto por su ID
      * @param int $id_efecto Identificador único del efecto
      * @throws Exception Si hay error en la consulta
-     * @return Efecto|null Objeto Efecto con ID = $id_efecto
+     * @return Efecto|null
      */
     public function obtenerPorId(int $id_efecto): ?Efecto {
         // 1. VALIDAR parámetros de entrada
@@ -109,16 +108,16 @@ class EfectoRepository extends BaseRepository {
 
     /**
      * Buscar efectos por nombre
-     * @param string $nombre Nombre del efecto introducido por el usuario
+     * @param string $nombre Texto introducido en la barra buscadora del efecto
      * @throws Exception Si hay error en la consulta
-     * @return Efecto[] Array de objetos Efecto
+     * @return Efecto[]
      */
     public function buscarPorNombre(string $nombre): array {
         // 1. OBTENER CONEXIÓN
         $conn = $this->getConnection();
         
         // 2. CONSTRUIR CONSULTA
-        $likeNombre = "%$nombre%";
+        $like_nombre = "%$nombre%";
         $sql = "SELECT efectos.id_efecto, efectos.id_tipo_efecto, efectos.imagen efectos.descripcion, tipos_efectos.nombre 
             FROM efectos 
             INNER JOIN tipos_efectos USING(id_tipo_efecto) 
@@ -130,7 +129,7 @@ class EfectoRepository extends BaseRepository {
         if (!$statement) { $this->handleError($conn, "preparando búsqueda de efecto por nombre"); }
         
         // 4. VINCULAR PARÁMETROS a la consulta
-        $statement->bind_param('ss', $likeNombre, $likeNombre);
+        $statement->bind_param('ss', $like_nombre, $like_nombre);
         
         // 5. EJECUTAR CONSULTA
         if (!$statement->execute()) { $this->handleError($statement, "ejecutando búsqueda de efecto por nombre"); }
