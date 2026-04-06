@@ -129,6 +129,15 @@ class LocalizacionService {
         }
     
     }
+
+    public function getLocalizacionesPorIngredienteId(int $id): array {
+        try {
+            return $this->localizacionRepo->obtenerPorIngredienteId($id);
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            return [];
+        }
+    }
 }
 
 ?>

@@ -293,20 +293,28 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    renderIngredienteDetail(response.ingrediente);
+                    const ingrediente = response.ingrediente;
+                    // Luego cargar localizaciones
+                    cargarLocalizacionesIngrediente(ingredienteId, function(localizaciones) {
+                        ingrediente.localizaciones = localizaciones;
+                        renderIngredienteDetail(ingrediente);
+                    });
                 } else {
                     $('#modal-ingrediente-content').html(`<div class="error-message"><p>${escapeHtml(response.message || 'Error al cargar el ingrediente')}</p></div>`);
+                    $('.modal-loader').hide();
+                    $('#modal-ingrediente-content').fadeIn(200);
                 }
             },
             error: function() {
                 $('#modal-ingrediente-content').html('<div class="error-message"><p>Error de conexión</p></div>');
+                $('.modal-loader').hide();
+                $('#modal-ingrediente-content').fadeIn(200);
             },
             complete: function() {
                 $('.modal-loader').hide();
                 $('#modal-ingrediente-content').fadeIn(200);
             }
         });
-        cargarLocalizacionesIngrediente(ingredienteId);
     }
 
     // Mostrar información de ingrediente en HTML

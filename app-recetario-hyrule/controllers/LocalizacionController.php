@@ -99,6 +99,7 @@ class LocalizacionController extends BaseController {
                 return [
                     'id_receta' => $localizacion->getIdLocalizacion(),
                     'nombre' => $localizacion->getNombre(),
+                    'region' => $localizacion->getRegion(),
                     'imagen' => $localizacion->getImagen(),
                     'descripcion' => $localizacion->getDescripcion()
                 ];
@@ -151,6 +152,41 @@ class LocalizacionController extends BaseController {
             echo json_encode([
                 'success' => false,
                 'message' => 'Error al cargar los detalles de la localización'
+            ]);
+        }
+    }
+
+    
+    public function obtenerLocalizacionesPorIngrediente(array $id_ingrediente): void {
+        // Cabecera HTTP que informa al navegador que el contenido devuelto es JSON (no HTML)
+        header('Content-Type: application/json');
+
+        try {
+            // 1. EXTRAER DATOS del formulario
+            $id = (int)($getData['id'] ?? 0);
+            if ($id <= 0) { throw new Exception("ID de ingrediente no válido"); }
+
+            // 2. VALIDAR Y NORMALIZAR los datos a través del service
+            $localizaciones = $this->service->getLocalizacionesPorIngredienteId($id);
+
+            // 3. PREPARAR DATOS para pasar a Json
+            $localizaciones_array = array_map(function($localizacion) {
+                return [
+                    'id_localizacion' => $localizacion->getIdLocalizacion(),
+                    'nombre' => $localizacion->getNombre(),
+                    'imagen' => $localizacion->getImagen(),
+                    'descripcion' => $localizacion->getDescripcion()
+                ];
+            }, $localizaciones);
+
+            // 4. DEVOLVER RESPUESTA
+            echo json_encode(['success' => true, 'localizaciones' => $localizaciones_array]);
+
+        } catch (Exception $e) {
+            Logger::error($e->getMessage(), __FILE__);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error al buscar los detalles de la localización por ID de ingrediente'
             ]);
         }
     }

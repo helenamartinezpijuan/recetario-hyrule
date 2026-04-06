@@ -292,6 +292,52 @@ class LocalizacionRepository extends BaseRepository {
         return $localizaciones;
     }
 
+    public function obtenerPorIngredienteId(int $id_ingrediente): array {
+        // 1. VALIDAR parámetros de entrada
+        if ($id_ingrediente <= 0) { throw new Exception("No se puede buscar una localización de ingrediente sin ID de ingrediente"); }
+
+        // 2. OBTENER CONEXIÓN
+        $conn = $this->getConnection();
+
+        // 3. CONSTRUIR CONSULTA
+        $sql = "SELECT localizaciones.id_localizacion, localizaciones.nombre, localizaciones.imagen, localizaciones.descripcion 
+                FROM ingredientes_localizaciones 
+                INNER JOIN localizaciones USING(id_localizacion) 
+                WHERE ingredientes_localizaciones.id_ingrediente = ? 
+                ORDER BY localizaciones.nombre";
+
+        // 4. PREPARAR CONSULTA parametrizada
+        $statement = $conn->prepare($sql);
+        if (!$statement) { $this->handleError($conn, "preparando obtención de localizaciones por ingrediente"); }
+
+        // 5. VINCULAR PARÁMETROS a la consulta
+        $statement->bind_param("i", $id_ingrediente);
+
+        // 6. EJECUTAR CONSULTA con manejo de errores
+        if (!$statement->execute()) { $this->handleError($statement, "ejecutando obtención de localizaciones por ingrediente"); }
+
+        // 7. OBTENER RESULTADOS
+        $resultado = $statement->get_result();
+        $localizaciones = [];
+
+        // 8. CREAR objetos Localizacion
+        while ($registro = $resultado->fetch_assoc()) {
+            $localizacion = new Efecto(
+                $registro['id_localizacion'],
+                $registro['nombre'],
+                $registro['imagen'],
+                $registro['descripcion']
+            );
+            $localizaciones[] = $localizacion;
+        }
+
+        // 9. LIMPIEZA
+        $statement->close();
+        $conn->close();
+    
+        return $localizaciones;
+    }
+
 }
 
 ?>

@@ -210,7 +210,7 @@ class IngredienteRepository extends BaseRepository {
         // 9. CREAR objetos Ingrediente
         while ($registro = $resultado->fetch_assoc()) {
             $ingrediente = new Ingrediente(
-                $registro["id_receta"],
+                $registro["id_ingrediente"],
                 $registro["nombre"],
                 $registro["imagen"],
                 $registro["descripcion"]

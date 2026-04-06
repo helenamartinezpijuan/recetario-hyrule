@@ -124,7 +124,7 @@ class IngredienteService {
      */
     public function getIngredientesPorCategoria($categorias): array {
         try {
-            if (empty($categorias)) { return $this->getAllIngredientes(); }
+            if (empty($categorias)) { return []; }
 
             // 1. OBTENER todos los ingredientes
             $todosPorCategoria = $this->sortIngredientesPorCategoria();
