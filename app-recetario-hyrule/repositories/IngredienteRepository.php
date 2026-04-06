@@ -170,23 +170,22 @@ class IngredienteRepository extends BaseRepository {
         $tipos = "";
         $valores = [];
 
+        // 4. AÑADIR FILTROS por localizaciones
+            if (!empty($localizaciones_ids)) {
+            $placeholders = implode(',', array_fill(0, count($localizaciones_ids), '?'));
+            $sql .= " AND EXISTS (SELECT 1 FROM ingredientes_localizaciones  
+                                    WHERE ingredientes_localizaciones.id_ingrediente = ingredientes.id_ingrediente 
+                                    AND ingredientes_localizaciones.id_localizacion IN ($placeholders))";
+            $tipos .= str_repeat('i', count($localizaciones_ids));
+            $valores = array_merge($valores, $localizaciones_ids);
+        }
+
         // 4. AÑADIR FILTRO de los ingredientes
         if (!empty($ingredientes_ids)) {
             $placeholders = implode(',', array_fill(0, count($ingredientes_ids), '?'));
-            $sql .= " AND ingredientes.id_ingrediente='$placeholders'";
+            $sql .= " AND ingredientes.id_ingrediente IN ($placeholders)";
             $tipos .= str_repeat('i', count($ingredientes_ids));
             $valores = array_merge($valores, $ingredientes_ids);
-        }
-
-        // 4. AÑADIR FILTROS por localizaciones
-         if (!empty($localizaciones_ids)) {
-            $placeholders = implode(',', array_fill(0, count($localizaciones_ids), '?'));
-            $sql .= " AND EXISTS (SELECT 1 FROM ingredientes_localizaciones  
-                                WHERE ingredientes_localizaciones.id_ingrediente = ingredientes.id_ingrediente 
-                                AND ingredientes_localizaciones.id_localizacion IN ($placeholders)) 
-                                OR ingredientes_localizaciones.id_localizacion IN (20)"; // ID Región 20: Sin especificar
-            $tipos .= str_repeat('i', count($localizaciones_ids));
-            $valores = array_merge($valores, $localizaciones_ids);
         }
 
         $sql .= " ORDER BY ingredientes.nombre";

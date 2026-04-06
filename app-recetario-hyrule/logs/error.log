@@ -55,3 +55,12 @@
 [2026-04-02 16:08:49] ERROR: ID de receta no válido en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
 [2026-04-02 16:08:58] ERROR: ID de receta no válido en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
 [2026-04-04 14:29:40] ERROR: ID de receta (ID 0) no válido en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/controllers/RecetaController.php
+[2026-04-06 05:41:16] ERROR: Unknown column 'ingredientes_localizaciones.id_localizacion' in 'WHERE' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-04-06 05:41:21] ERROR: Unknown column 'ingredientes_localizaciones.id_localizacion' in 'WHERE' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-04-06 05:41:25] ERROR: Unknown column 'ingredientes_localizaciones.id_localizacion' in 'WHERE' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-04-06 05:41:29] ERROR: Unknown column 'ingredientes_localizaciones.id_localizacion' in 'WHERE' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-04-06 05:41:55] ERROR: Unknown column 'ingredientes_localizaciones.id_localizacion' in 'WHERE' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-04-06 05:41:58] ERROR: Unknown column 'ingredientes_localizaciones.id_localizacion' in 'WHERE' en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-04-06 06:34:01] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE 1=1 AND ingredientes.id_ingrediente IN (?,?,?,?,?,?,?,?,?,?,?,?) ORDER ...' at line 3 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-04-06 06:34:05] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE 1=1 AND ingredientes.id_ingrediente IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?...' at line 3 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php
+[2026-04-06 06:34:05] ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE 1=1 AND ingredientes.id_ingrediente IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?...' at line 3 en /home/vol1_6/infinityfree.com/if0_41455627/htdocs/services/IngredienteService.php

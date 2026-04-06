@@ -32,9 +32,6 @@ include __DIR__ . '/../layout/header.php';
                     <div class="efecto-card-content">
                         <h2 class="efecto-title"><?= htmlspecialchars($efecto->getTipoEfecto()->getNombre()) ?></h2>
                         <p class="efecto-description"><?= htmlspecialchars($efecto->getDescripcion()) ?></p>
-                        <a href="?action=obtener_efecto&id=<?= $efecto->getIdEfecto() ?>" class="btn btn-link">
-                            Ver recetas con este efecto →
-                        </a>
                     </div>
                 </article>
             <?php endforeach; ?>

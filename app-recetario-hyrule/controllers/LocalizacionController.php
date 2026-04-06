@@ -63,6 +63,7 @@ class LocalizacionController extends BaseController {
                 return [
                     'id_localizacion' => $localizacion->getIdLocalizacion(),
                     'nombre' => $localizacion->getNombre(),
+                    'region' => $localizacion->getRegion(),
                     'imagen' => $localizacion->getImagen(),
                     'descripcion' => $localizacion->getDescripcion()
                 ];

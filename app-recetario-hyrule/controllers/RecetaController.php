@@ -64,14 +64,38 @@ class RecetaController extends BaseController {
             $recetas = $this->service->getRecetasFiltradas($efectos_ids, $ingredientes_ids);
 
             // 3. PREPARAR DATOS para pasar a Json
-            $recetas_array = array_map(function($receta) {
+            /*$recetas_array = array_map(function($receta) {
                 return [
                     'id_receta' => $receta->getIdReceta(),
                     'nombre' => $receta->getNombre(),
                     'imagen' => $receta->getImagen(),
                     'descripcion' => $receta->getDescripcion()
                 ];
-            }, $recetas);
+            }, $recetas);*/
+            $recetas_array = [];
+            foreach ($recetas as $receta) {
+                $detalle = $this->service->getRecetaDetalle($receta->getIdReceta());
+                if ($detalle) {
+                    $recetaData = $detalle->getReceta();
+                    $efectos = $detalle->getEfectos();
+                    $efectosPreparados = [];
+                    foreach ($efectos as $efecto) {
+                        $efectosPreparados[] = [
+                            'id_efecto' => $efecto->getIdEfecto(),
+                            'nombre' => $efecto->getTipoEfecto()->getNombre(),
+                            'imagen' => $efecto->getImagen(),
+                            'descripcion' => $efecto->getDescripcion(),
+                        ];
+                    }
+                    $recetas_array[] = [
+                        'id_receta' => $recetaData->getIdReceta(),
+                        'nombre' => $recetaData->getNombre(),
+                        'imagen' => $recetaData->getImagen(),
+                        'descripcion' => $recetaData->getDescripcion(),
+                        'efectos' => $efectosPreparados,
+                    ];
+                }
+            }
 
             // 4. DEVOLVER RESPUESTA
             echo json_encode(['success' => true, 'recetas' => $recetas_array]);
@@ -99,15 +123,39 @@ class RecetaController extends BaseController {
             $recetas = $this->service->buscarRecetasPorNombre($nombre);
             
             // 3. PREPARAR DATOS para pasar a Json
-            $recetas_array = array_map(function($receta) {
+            /*$recetas_array = array_map(function($receta) {
                 return [
                     'id_receta' => $receta->getIdReceta(),
                     'nombre' => $receta->getNombre(),
                     'imagen' => $receta->getImagen(),
                     'descripcion' => $receta->getDescripcion()
                 ];
-            }, $recetas);
-            
+            }, $recetas);*/
+            $recetas_array = [];
+            foreach ($recetas as $receta) {
+                $detalle = $this->service->getRecetaDetalle($receta->getIdReceta());
+                if ($detalle) {
+                    $recetaData = $detalle->getReceta();
+                    $efectos = $detalle->getEfectos();
+                    $efectosPreparados = [];
+                    foreach ($efectos as $efecto) {
+                        $efectosPreparados[] = [
+                            'id_efecto' => $efecto->getIdEfecto(),
+                            'nombre' => $efecto->getTipoEfecto()->getNombre(),
+                            'imagen' => $efecto->getImagen(),
+                            'descripcion' => $efecto->getDescripcion(),
+                        ];
+                    }
+                    $recetas_array[] = [
+                        'id_receta' => $recetaData->getIdReceta(),
+                        'nombre' => $recetaData->getNombre(),
+                        'imagen' => $recetaData->getImagen(),
+                        'descripcion' => $recetaData->getDescripcion(),
+                        'efectos' => $efectosPreparados,
+                    ];
+                }
+            }
+
             // 4. DEVOLVER RESPUESTA
             echo json_encode(['success' => true, 'recetas' => $recetas_array]);
             

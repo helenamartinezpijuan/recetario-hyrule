@@ -93,7 +93,7 @@ class IngredienteService {
      * @param array $localizaciones_ids
      * @return Ingrediente[]
      */
-    public function getIngredientesFiltrados(array $ingredientes_idsv, array $localizaciones_ids): array {
+    public function getIngredientesFiltrados(array $ingredientes_ids, array $localizaciones_ids): array {
         try {
             if (empty($ingredientes_ids) && empty($localizaciones_ids)) {
                 return $this->getAllIngredientes();

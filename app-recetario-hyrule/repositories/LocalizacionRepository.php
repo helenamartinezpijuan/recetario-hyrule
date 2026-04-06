@@ -175,7 +175,7 @@ class LocalizacionRepository extends BaseRepository {
         // 4. AÑADIR FILTROS de las regiones
         if (!empty($regiones)) {
             $placeholders = implode(',', array_fill(0, count($regiones), '?'));
-            $sql .= " AND region='$placeholders'";
+            $sql .= " AND region IN ($placeholders)";
             $tipos .= str_repeat('s', count($regiones));
             $valores = array_merge($valores, $regiones);
         }

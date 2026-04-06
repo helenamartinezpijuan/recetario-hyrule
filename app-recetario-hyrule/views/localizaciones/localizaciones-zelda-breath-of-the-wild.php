@@ -66,7 +66,7 @@ include __DIR__ . '/../layout/header.php';
                 <?php if (!empty($localizaciones)): ?>
                     <div class="localizaciones-grid" role="list">
                         <?php foreach ($localizaciones as $localizacion): ?>
-                            <article class="localizacion-card" data-id="<?= $localizacion['id_localizacion'] ?>">
+                            <article class="localizacion-card" data-id="<?= $localizacion->getIdLocalizacion() ?>">
                                 <!---------------------------------------------------------------------------------------------------------->    
                                 <div class="localizacion-card-image">
                                     <img src="<?= BASE_URL ?>/resources/img/locations/<?= strtolower(str_replace(' ', '-', $localizacion->getRegion())) ?>/<?= htmlspecialchars($localizacion->getImagen()) ?>" 
@@ -79,10 +79,11 @@ include __DIR__ . '/../layout/header.php';
                                     <span class="region-tag"><?= htmlspecialchars($localizacion->getRegion()) ?></span>
                                     <h2 class="localizacion-title"><?= htmlspecialchars($localizacion->getNombre()) ?></h2>
                                     <p class="localizacion-description"><?= htmlspecialchars($localizacion->getDescripcion()) ?></p>
-                                    <a href="?action=obtener_localizacion&id=<?= $localizacion->getIdLocalizacion() ?>" 
-                                       class="btn btn-link">
-                                        Ver ingredientes de esta zona →
-                                    </a>
+                                    <button class="btn btn-link view-localizacion" 
+                                            data-id="<?= $localizacion->getIdLocalizacion() ?>"
+                                            aria-label="Ver detalles de <?= htmlspecialchars($localizacion->getNombre()) ?>">
+                                        Ver Localización
+                                    </button>
                                 </div>
                             </article>
                         <?php endforeach; ?>
@@ -207,6 +208,7 @@ $(document).ready(function() {
     // Mostrar localizaciones filtradas
     function renderLocalizaciones(localizaciones) {
         const container = $('#localizaciones-container');
+
         if (!localizaciones || localizaciones.length === 0) {
             container.html('<div class="no-results"><p>No se encontraron localizaciones con los filtros seleccionados.</p></div>');
             return;
@@ -214,20 +216,20 @@ $(document).ready(function() {
         
         let html = '<div class="localizaciones-grid">';
         localizaciones.forEach(localizacion => {
+            const regionSlug = localizacion.region.toLowerCase().replace(/ /g, '-');
             html += `
                 <article class="localizacion-card" data-id="${localizacion.id_localizacion}">
                     <div class="localizacion-card-image">
-                        <img src="${BASE_URL}/resources/img/locations/${escapeHtml(localizacion.imagen)}" 
+                        <img src="${BASE_URL}/resources/img/locations/${regionSlug}/${escapeHtml(localizacion.imagen)}" 
                             alt="${escapeHtml(localizacion.nombre)}"
                             onerror="this.src='${BASE_URL}/resources/img/localizacion/hyrule.jpg'">
                     </div>
                     <div class="localizacion-card-content">
                         <h2 class="localizacion-title">${escapeHtml(localizacion.nombre)}</h2>
                         <div class="localizacion-icons" aria-hidden="true">
-                            ${efectosHtml}
                         </div>
                         <p class="localizacion-description">${escapeHtml(localizacion.descripcion)}</p>
-                        <button class="btn btn-link view-localizacion" data-id="${localizacion.id_localizacion}">Ver Localizaci</button>
+                        <button class="btn btn-link view-localizacion" data-id="${localizacion.id_localizacion}">Ver Localización</button>
                     </div>
                 </article>
             `;

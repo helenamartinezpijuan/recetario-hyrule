@@ -97,19 +97,21 @@ include __DIR__ . '/../layout/header.php';
                     <div class="ingredientes-grid">
                         <?php foreach ($ingredientes as $ingrediente): ?>
                             <article class="ingrediente-card" data-id="<?= $ingrediente->getIdIngrediente() ?>">
+                                <!---------------------------------------------------------------------------------------------------------->
                                 <div class="ingrediente-card-image">
                                     <img src="<?= BASE_URL ?>/resources/img/ingredients/<?= htmlspecialchars($ingrediente->getImagen()) ?>" 
                                          alt="<?= htmlspecialchars($ingrediente->getNombre()) ?>"
                                          loading="lazy">
                                 </div>
+                                <!---------------------------------------------------------------------------------------------------------->
                                 <div class="ingrediente-card-content">
                                     <h2 class="ingrediente-title"><?= htmlspecialchars($ingrediente->getNombre()) ?></h2>
                                     <p class="ingrediente-description"><?= htmlspecialchars($ingrediente->getDescripcion()) ?></p>
-                                    <a href="?action=obtener_ingrediente&id=<?= $ingrediente->getIdIngrediente() ?>" 
-                                       class="btn btn-link"
-                                       aria-label="Ver detalles de <?= htmlspecialchars($ingrediente->getNombre()) ?>">
+                                    <button class="btn btn-link view-ingrediente" 
+                                            data-id="<?= $ingrediente->getIdIngrediente() ?>"
+                                            aria-label="Ver detalles de <?= htmlspecialchars($ingrediente->getNombre()) ?>">
                                         Ver Ingrediente
-                                    </a>
+                                    </button>
                                 </div>
                             </article>
                         <?php endforeach; ?>
@@ -151,6 +153,7 @@ $(document).ready(function() {
     $('#apply-filters').on('click', function() {
         const categorias = [];
         const localizaciones = [];
+        const nombre = $('#search-input').val();
         
         $('.categoria-filter:checked').each(function() {
             categorias.push($(this).val());
@@ -234,7 +237,7 @@ $(document).ready(function() {
                 },
                 complete: function() {
                     $('#loader').hide();
-                    $('#recipes-container').fadeIn(200);
+                    $('#ingredientes-container').fadeIn(200);
                 }
             });
         }, 300);
@@ -259,10 +262,10 @@ $(document).ready(function() {
                     </div>
                     <div class="ingrediente-card-content">
                         <h2 class="ingrediente-title">${escapeHtml(ingrediente.nombre)}</h2>
-                        <p class="ingrediente-description">${escapeHtml(ing.descripcion)}</p>
-                        <a href="?action=obtener_ingrediente&id=${ing.id_ingrediente}" class="btn btn-link">
+                        <p class="ingrediente-description">${escapeHtml(ingrediente.descripcion)}</p>
+                        <button class="btn btn-link view-ingrediente" data-id="${ingrediente.id_ingrediente}">
                             Ver Ingrediente
-                        </a>
+                        </button>
                     </div>
                 </article>
             `;
@@ -303,6 +306,7 @@ $(document).ready(function() {
                 $('#modal-ingrediente-content').fadeIn(200);
             }
         });
+        cargarLocalizacionesIngrediente(ingredienteId);
     }
 
     // Mostrar información de ingrediente en HTML
@@ -341,6 +345,26 @@ $(document).ready(function() {
         `;
         $('#modal-ingrediente-title').text(ingrediente.nombre);
         $('#modal-ingrediente-content').html(html);
+    }
+
+    // Función auxiliar para cargar las localizaciones de los ingredientes (para vista modal)
+    function cargarLocalizacionesIngrediente(ingredienteId, callback) {
+        $.ajax({
+            url: 'index.php?action=obtener_localizaciones_por_ingrediente',
+            method: 'GET',
+            data: { id: ingredienteId },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    callback(response.localizaciones);
+                } else {
+                    callback([]);
+                }
+            },
+            error: function() {
+                callback([]);
+            }
+        });
     }
     
     // Cerrar modal

@@ -315,6 +315,12 @@ p, .description,
     font-size: calc(1.4rem * var(--font-scale));
     max-width: 700px;
     margin: 0 auto 2rem;
+    padding-bottom: 15px;
+}
+
+
+.feature-link {
+    font-size: calc(1.2rem * var(--font-scale));
 }
 
 .btn-get-started {
@@ -442,6 +448,10 @@ p, .description,
     /*border: 1px solid var(--primary-green);*/
 }
 
+.receta-card-image img, .ingrediente-card-image img, .efecto-card-image img, .localizacion-card-image img {
+    
+}
+
 .card {
     background-color: #fff;
     border-radius: 20px;
@@ -521,6 +531,10 @@ p, .description,
     text-align: center;
 }
 
+.page-description {
+    margin-bottom: 20px;
+}
+
 /* ============================================
    MODAL (detalle de receta)
    ============================================ */
@@ -591,7 +605,7 @@ p, .description,
 }
 
 .detail-image img {
-    width: 200px;
+    width: 150px;
     border-radius: 16px;
     object-fit: cover;
 }
@@ -635,7 +649,7 @@ p, .description,
     border-bottom: 1px dashed #ccc;
 }
 .ingrediente-mini-img {
-
+    height: 96px;
 }
 .ingrediente-nombre {
 
@@ -649,7 +663,7 @@ p, .description,
 }
 
 .localizacion-mini-img {
-
+    height: 96px;
 }
 .localizacion-nombre {
 
@@ -731,9 +745,6 @@ p, .description,
         flex-direction: column;
         align-items: center;
         text-align: center;
-    }
-    .detail-image img {
-        width: 100px; /* BEFORE: 150px */
     }
 }
 

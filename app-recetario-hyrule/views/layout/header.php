@@ -61,7 +61,22 @@
     <main class="main-content">
 
 <script>
-// Widget de accesibilidad
+    /**
+     * Convierte caracteres especiales HTML en entidades HTML para prevenir ataques XSS.
+     * 
+     * @param {string} str - Cadena de texto
+     * @returns {string} Cadena limpia, segura para insertar en HTML
+     */
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, '&amp;')   // Ampersand
+            .replace(/</g, '&lt;')    // Menor que
+            .replace(/>/g, '&gt;')    // Mayor que
+            .replace(/"/g, '&quot;')  // Comillas dobles
+            .replace(/'/g, '&#39;');  // Comilla simple (apóstrofe)
+    }
+
 // Widget de accesibilidad
 $(document).ready(function() {
     const $toggle = $('#accessibility-toggle');
@@ -197,22 +212,6 @@ $(document).ready(function() {
         });
         html += '</ol>';
         $('.breadcrumb').html(html);
-    }
-    
-    /**
-     * Convierte caracteres especiales HTML en entidades HTML para prevenir ataques XSS.
-     * 
-     * @param {string} str - Cadena de texto
-     * @returns {string} Cadena limpia, segura para insertar en HTML
-     */
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str
-            .replace(/&/g, '&amp;')   // Ampersand
-            .replace(/</g, '&lt;')    // Menor que
-            .replace(/>/g, '&gt;')    // Mayor que
-            .replace(/"/g, '&quot;')  // Comillas dobles
-            .replace(/'/g, '&#39;');  // Comilla simple (apóstrofe)
     }
 });
 </script>
