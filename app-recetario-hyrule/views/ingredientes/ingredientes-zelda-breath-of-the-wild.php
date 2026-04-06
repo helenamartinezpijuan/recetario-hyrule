@@ -349,9 +349,9 @@ $(document).ready(function() {
                         <p class="detail-description">${escapeHtml(ingrediente.descripcion)}</p>
                     </div>
                 </div>
-                ${localizacionesHtml}
             </div>
         `;
+        //${localizacionesHtml}</div>`;
         $('#modal-ingrediente-title').text(ingrediente.nombre);
         $('#modal-ingrediente-content').html(html);
     }
