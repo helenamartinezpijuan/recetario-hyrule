@@ -5,6 +5,7 @@ include __DIR__ . '/../layout/header.php';
 ?>
 
 <div class="container">
+    <!-- Breadcrumb -->
     <nav class="breadcrumb" aria-label="Ruta de navegación">
         <ol class="breadcrumb-list">
             <li class="breadcrumb-item"><a href="?action=ingredientes">Ingredientes</a></li>
@@ -187,6 +188,12 @@ $(document).ready(function() {
             }
         });
     });
+        
+    // Limpiar filtros
+    $('#clear-filters').on('click', function() {
+        $('.filter-checkbox').prop('checked', false);
+        $('#apply-filters').trigger('click');
+    });
     
     // Búsqueda por nombre
     let searchTimeout;
@@ -232,13 +239,7 @@ $(document).ready(function() {
             });
         }, 300);
     });
-    
-    // Limpiar filtros
-    $('#clear-filters').on('click', function() {
-        $('.filter-checkbox').prop('checked', false);
-        $('#apply-filters').trigger('click');
-    });
-    
+
     // Mostrar ingredientes filtrados
     function renderIngredientes(ingredientes) {
         const container = $('#ingredientes-container');
@@ -254,7 +255,7 @@ $(document).ready(function() {
                     <div class="ingrediente-card-image">
                         <img src="${BASE_URL}/resources/img/ingredients/${escapeHtml(ingrediente.imagen)}" 
                              alt="${escapeHtml(ingrediente.nombre)}"
-                             onerror="this.src='${BASE_URL}/resources/img/ingredients/placeholder.jpg'">
+                             onerror="this.src='${BASE_URL}/resources/img/ingredients/placeholder.png'">
                     </div>
                     <div class="ingrediente-card-content">
                         <h2 class="ingrediente-title">${escapeHtml(ingrediente.nombre)}</h2>
@@ -304,16 +305,17 @@ $(document).ready(function() {
         });
     }
 
+    // Mostrar información de ingrediente en HTML
     function renderIngredienteDetail(ingrediente) {
         let localizacionesHtml = '<div class="detail-section"><h3>📍 LOCALIZACIONES</h3><ul class="localizaciones-list">';
         if (ingrediente.localizaciones && ingrediente.localizaciones.length > 0) {
             ingrediente.localizaciones.forEach(localizacion => {
                 localizacionesHtml += `
                     <li class="localizacion-item">
-                        <img src="${BASE_URL}/resources/img/localizaciones/${escapeHtml(localizacion.imagen)}" 
+                        <img src="${BASE_URL}/resources/img/locations/${escapeHtml(localizacion.imagen)}" 
                              alt="${escapeHtml(localizacion.nombre)}"
                              class="localizacion-mini-img"
-                             onerror="this.src='${BASE_URL}/resources/img/localizaciones/placeholder.jpg'">
+                             onerror="this.src='${BASE_URL}/resources/img/locations/hyrule.jpg'">
                         <span class="localizacion-nombre">
                             <a href="#" class="view-localizacion" data-id="${localizacion.id_localizacion}">${escapeHtml(localizacion.nombre)}</a>
                         </span>
@@ -341,11 +343,11 @@ $(document).ready(function() {
         $('#modal-ingrediente-content').html(html);
     }
     
+    // Cerrar modal
     $('.modal-close, .modal-overlay').on('click', function() {
         $modal.fadeOut(200);
         $('#modal-ingrediente-content').empty();
     });
-    
     $(document).on('keydown', function(e) {
         if (e.key === 'Escape' && $modal.is(':visible')) {
             $modal.fadeOut(200);

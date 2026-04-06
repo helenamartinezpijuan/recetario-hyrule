@@ -103,7 +103,7 @@ include __DIR__ . '/../layout/header.php';
                                     <img src="<?= BASE_URL ?>/resources/img/recipes/<?= htmlspecialchars($receta['imagen']) ?>" 
                                             alt="Receta: <?= htmlspecialchars($receta['nombre']) ?>"
                                             loading="lazy"
-                                            onerror="this.src='<?= BASE_URL ?>/resources/img/recipes/placeholder.jpg'">
+                                            onerror="this.src='<?= BASE_URL ?>/resources/img/recipes/placeholder.png'">
                                 </div>
                                 <!---------------------------------------------------------------------------------------------------------->
                                 <div class="receta-card-content">
@@ -219,6 +219,12 @@ $(document).ready(function() {
         });
     });
 
+    // Limpiar filtros
+    $('#clear-filters').on('click', function() {
+        $('.filter-checkbox').prop('checked', false);
+        $('#apply-filters').trigger('click');
+    });
+
     // Búsqueda por nombre
     let searchTimeout;
     $('#search-input').on('input', function() {
@@ -264,12 +270,6 @@ $(document).ready(function() {
         }, 300);
     });
     
-    // Limpiar filtros
-    $('#clear-filters').on('click', function() {
-        $('.filter-checkbox').prop('checked', false);
-        $('#apply-filters').trigger('click');
-    });
-    
     // Mostrar recetas filtradas
     function renderRecetas(recetas) {
         const container = $('#recetas-container');
@@ -298,7 +298,7 @@ $(document).ready(function() {
                     <div class="receta-card-image">
                         <img src="${BASE_URL}/resources/img/recipes/${escapeHtml(receta.imagen)}" 
                             alt="${escapeHtml(receta.nombre)}"
-                            onerror="this.src='${BASE_URL}/resources/img/recipes/placeholder.jpg'">
+                            onerror="this.src='${BASE_URL}/resources/img/recipes/placeholder.png'">
                     </div>
                     <div class="receta-card-content">
                         <h2 class="receta-title">${escapeHtml(receta.nombre)}</h2>
@@ -316,7 +316,7 @@ $(document).ready(function() {
         container.html(html);
     }
 
-    // Abrir modal de ingrediente
+    // Abrir modal de receta
     $(document).on('click', '.view-receta', function() {
         const recetaId = $(this).data('id');
         openRecetaModal(recetaId);
@@ -350,6 +350,7 @@ $(document).ready(function() {
         });
     }
     
+    // Mostrar información de receta en HTML
     function renderRecetaDetail(receta) {
         let efectosHtml = '<div class="detail-section"><h3>EFECTOS</h3><div class="efectos-grid-mini">';
         if (receta.efectos && receta.efectos.length > 0) {
@@ -380,7 +381,7 @@ $(document).ready(function() {
                         <img src="${BASE_URL}/resources/img/ingredients/${escapeHtml(ingrediente.imagen)}" 
                              alt="${escapeHtml(ingrediente.nombre)}"
                              class="ingrediente-mini-img"
-                             onerror="this.src='${BASE_URL}/resources/img/ingredients/placeholder.jpg'">
+                             onerror="this.src='${BASE_URL}/resources/img/ingredients/placeholder.png'">
                         <span class="ingrediente-nombre">
                             <a href="#" class="view-ingrediente" data-id="${ingrediente.id_ingrediente}">${escapeHtml(ingrediente.nombre)}</a>
                         </span>
@@ -412,11 +413,11 @@ $(document).ready(function() {
         $('#modal-receta-content').html(html);
     }
     
+    // Cerrar modal
     $('.modal-close, .modal-overlay').on('click', function() {
         $modal.fadeOut(200);
         $('#modal-receta-content').empty();
     });
-    
     $(document).on('keydown', function(e) {
         if (e.key === 'Escape' && $modal.is(':visible')) {
             $modal.fadeOut(200);

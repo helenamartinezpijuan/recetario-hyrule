@@ -15,16 +15,11 @@ include __DIR__ . '/../layout/header.php';
     <button id="back-button" class="btn-back" style="display: none;" aria-label="Volver atrás">
         ← Volver
     </button>
-
-    <!-- Barra buscador -->
-    <div class="search-bar-container">
-        <input type="text" id="search-input" class="search-input-large" 
-            placeholder="🔍 Buscar efectos..." aria-label="Buscar efectos por nombre">
-    </div>
     
     <h1 class="page-title">Efectos de los platos</h1>
     <p class="page-description">Los platos cocinados en Hyrule pueden tener efectos especiales que te ayudarán en tu aventura.</p>
     
+    <div id="efectos-container">
     <div class="efectos-grid">
         <?php if (!empty($efectos)): ?>
             <?php foreach ($efectos as $efecto): ?>
@@ -48,6 +43,7 @@ include __DIR__ . '/../layout/header.php';
                 <p>No se encontraron efectos.</p>
             </div>
         <?php endif; ?>
+    </div>
     </div>
 </div>
 
