@@ -257,8 +257,7 @@ $(document).ready(function() {
                 <article class="ingrediente-card" data-id="${ingrediente.id_ingrediente}">
                     <div class="ingrediente-card-image">
                         <img src="${BASE_URL}/resources/img/ingredients/${escapeHtml(ingrediente.imagen)}" 
-                             alt="${escapeHtml(ingrediente.nombre)}"
-                             onerror="this.src='${BASE_URL}/resources/img/ingredients/placeholder.png'">
+                             alt="${escapeHtml(ingrediente.nombre)}">
                     </div>
                     <div class="ingrediente-card-content">
                         <h2 class="ingrediente-title">${escapeHtml(ingrediente.nombre)}</h2>
@@ -349,9 +348,9 @@ $(document).ready(function() {
                         <p class="detail-description">${escapeHtml(ingrediente.descripcion)}</p>
                     </div>
                 </div>
+                ${localizacionesHtml}
             </div>
         `;
-        //${localizacionesHtml}</div>`;
         $('#modal-ingrediente-title').text(ingrediente.nombre);
         $('#modal-ingrediente-content').html(html);
     }

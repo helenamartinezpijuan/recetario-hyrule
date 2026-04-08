@@ -110,9 +110,13 @@ include __DIR__ . '/../layout/header.php';
                                     <div class="receta-icons" aria-hidden="true">
                                         <?php if (!empty($receta['efectos'])): ?>
                                             <?php foreach ($receta['efectos'] as $efecto): ?>
-                                                <img src="<?= BASE_URL ?>/resources/img/effects/<?= htmlspecialchars($efecto['imagen']) ?>"
+                                                <?php if ($efecto['id_efecto'] != 12): ?>
+                                                    <img src="<?= BASE_URL ?>/resources/img/effects/<?= htmlspecialchars($efecto['imagen']) ?>"
                                                                 alt="<?= htmlspecialchars($efecto['nombre']) ?>"  
                                                                 class='efecto-icon-mini'>
+                                                <?php else: ?>
+                                                    <p class="alt-efecto">Sin efecto</p>
+                                                <?php endif; ?>
                                             <?php endforeach; ?>
                                         <?php else: ?>
                                             <span class="receta-icon">🍗</span>
@@ -282,10 +286,15 @@ $(document).ready(function() {
             let efectosHtml = '';
             if (receta.efectos && receta.efectos.length > 0) {
                 receta.efectos.slice(0, 3).forEach(efecto => {
-                    efectosHtml += `<img src="${BASE_URL}/resources/img/effects/${efecto.imagen}" 
+                    if (efecto.id_efecto != 12) {
+                        efectosHtml += `<img src="${BASE_URL}/resources/img/effects/${efecto.imagen}" 
                                         alt="${efecto.nombre}" 
                                         class="efecto-icon-mini"
                                         title="${efecto.nombre}">`;
+                    } else {
+                        efectosHtml += `<p class="alt-efecto">Sin efecto</p>`;
+                    }
+                    
                 });
             } else {
                 efectosHtml = '<span class="receta-icon">🍽️</span>';
@@ -352,28 +361,18 @@ $(document).ready(function() {
         let efectosHtml = '<div class="detail-section"><h3>EFECTOS</h3><div class="efectos-grid-mini">';
         if (receta.efectos && receta.efectos.length > 0) {
             receta.efectos.forEach(efecto => {
-                if (efecto.imagen == "") {
-                    efectosHtml += `
-                        <div class="efecto-mini-card">
-                            <div class="efecto-mini-info">
-                                <strong>${escapeHtml(efecto.nombre)}</strong>
-                                <p>${escapeHtml(efecto.descripcion)}</p>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    efectosHtml += `
-                        <div class="efecto-mini-card">
-                            <img src="${BASE_URL}/resources/img/effects/${escapeHtml(efecto.imagen)}" 
-                                alt="${escapeHtml(efecto.nombre)}"
-                                class="efecto-mini-img">
-                            <div class="efecto-mini-info">
-                                <strong>${escapeHtml(efecto.nombre)}</strong>
-                                <p>${escapeHtml(efecto.descripcion)}</p>
-                            </div>
-                        </div>
-                    `;
+                efectosHtml += `<div class="efecto-mini-card">`;
+                if (efecto.id_efecto != 12) {
+                    efectosHtml += `<img src="${BASE_URL}/resources/img/effects/${escapeHtml(efecto.imagen)}" 
+                                        alt="${escapeHtml(efecto.nombre)}"
+                                        class="efecto-mini-img">`;
                 }
+                efectosHtml += `
+                    <div class="efecto-mini-info">
+                        <strong>${escapeHtml(efecto.nombre)}</strong>
+                        <p>${escapeHtml(efecto.descripcion)}</p>
+                    </div>
+                </div>`;
             });
         } else {
             efectosHtml += '<p>Sin efecto</p>';

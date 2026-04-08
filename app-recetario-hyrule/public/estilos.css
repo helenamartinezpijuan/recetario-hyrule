@@ -287,6 +287,13 @@ p, .description,
     font-weight: bold;
 }
 
+.efecto-icon-mini {
+    background-color: var(--primary-green);
+    border-radius: 50%;
+    padding: 5px;
+    height: 30px;
+}
+
 .region-tag {
     font-family: 'AmaticSC', sans-serif;
     font-size: calc(1.3rem * var(--font-scale));
@@ -449,6 +456,11 @@ p, .description,
 
 .receta-card-image img, .ingrediente-card-image img, .efecto-card-image img, .localizacion-card-image img {
     
+}
+
+p.alt-efecto {
+    font-family: 'AmaticSC', sans-serif;
+    font-size: calc(1.2rem * var(--font-scale));
 }
 
 .card {

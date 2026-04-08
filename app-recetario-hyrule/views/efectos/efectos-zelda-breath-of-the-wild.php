@@ -27,8 +27,12 @@ include __DIR__ . '/../layout/header.php';
             <?php foreach ($efectos as $efecto): ?>
                 <article class="efecto-card">
                     <div class="efecto-card-image">
-                        <img src="<?= BASE_URL ?>/resources/img/effects/<?= $efecto->getImagen() ?>" 
-                             alt="<?= htmlspecialchars($efecto->getTipoEfecto()->getNombre()) ?>">
+                        <?php if ($efecto->getIdEfecto() != 12): ?>
+                            <img src="<?= BASE_URL ?>/resources/img/effects/<?= $efecto->getImagen() ?>" 
+                                alt="<?= htmlspecialchars($efecto->getTipoEfecto()->getNombre()) ?>">
+                        <?php else: ?>
+                            <p class="alt-efecto">Sin efecto</p>
+                        <?php endif; ?>
                     </div>
                     <div class="efecto-card-content">
                         <h2 class="efecto-title"><?= htmlspecialchars($efecto->getTipoEfecto()->getNombre()) ?></h2>

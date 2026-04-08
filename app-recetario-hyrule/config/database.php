@@ -5,10 +5,10 @@ namespace config;
  * La clase Database se encarga de obtener la conexión a la base de datos
  */
 class Database {
-    private static $host = 'sql200.infinityfree.com';   // Free hosting site InfinityFree
-    private static $database = 'if0_41455627_db_recetario_hyrule';
-    private static $username = 'if0_41455627';
-    private static $password = '****'; // Contraseña oculta
+    private static $host = '';   // Free hosting site InfinityFree 
+    private static $database = ''; // InfinityFree database
+    private static $username = ''; // InfinityFree username
+    private static $password = ''; // InfinityFree password
 
     public static function getConnection() {
         $conn = new \mysqli(self::$host, self::$username, self::$password, self::$database);
