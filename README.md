@@ -1,8 +1,9 @@
 # Recetario de Hyrule 🍲⚔️
 
 > *Una guía (casi) completa de cocina para los aventureros de Hyrule*
+[Échale un vistazo a la web](https://recetario-hyrule.infinityfreeapp.com/)
 
-[![Estado del proyecto](https://img.shields.io/badge/estado-en%20desarrollo-yellow)]()
+[![Estado del proyecto](https://img.shields.io/badge/estado-en%90desarrollo-green)]()
 [![PHP](https://img.shields.io/badge/PHP-8.x-777BB4)]()
 
 ![logo diseñado a partir de la propiedad intelectual de Nintendo. Muestra un círculo rodeado por el título "Recetario de Hyrule" y en el interior un tocón de arbol rodeado de comida. Debajo del logo hay una cara chibi de Link diciendo: "We need to cook, Zelda": ](app-recetario-hyrule/resources/img/logo-draft-1.png)
@@ -24,13 +25,13 @@
 
 ## 🎯 Acerca del proyecto
 
-**Recetario de Hyrule** es una aplicación web diseñada para ayudar a los jugadores de *The Legend of Zelda: Breath of the Wild* a descubrir y gestionar las recetas disponibles en el juego. Desarrollada como proyecto final para el curso de **Implantación de Aplicaciones Web en Entornos Internet, Intranet y Extranet**, esta herramienta permite:
+**Recetario de Hyrule** es una aplicación web diseñada para ayudar a los jugadores de *The Legend of Zelda: Breath of the Wild* a descubrir y gestionar las recetas disponibles en el juego. Desarrollada como proyecto final del módulo de **Implantación de Aplicaciones Web en Entornos Internet, Intranet y Extranet** para el certificado de **Desarrollo de aplicaciones web**. Esta herramienta permite:
 
 - Consultar más de **100 recetas** del juego
 - Filtrar platos por **efectos** y **ingredientes**
 - Localizar **dónde encontrar cada ingrediente** en el mapa de Hyrule
-- Gestionar un **inventario personal** de ingredientes
-- Descubrir qué recetas puedes cocinar con lo que tienes
+- *Gestionar un **inventario personal** de ingredientes* (pendiente de implementar)
+- *Descubrir qué recetas puedes cocinar con lo que tienes* (pendiente de implementar)
 
 ### ¿Por qué este proyecto?
 
@@ -52,11 +53,11 @@ El proyecto está inspirado en la rica gastronomía de Hyrule, donde cada ingred
 
 ### Para todos los usuarios
 - 🔍 **Búsqueda avanzada** de recetas por nombre, efecto o ingrediente
-- 📋 **Listados completos** de todas las recetas e ingredientes
+- 📋 **Listados completos** de todas las recetas e ingredientes base
 - 🗺️ **Localización de ingredientes** en las distintas regiones de Hyrule
 - 🖼️ **Galería visual** con imágenes de cada plato e ingrediente
 
-### Para usuarios registrados
+### *Para usuarios registrados (pendiente de implementar)*
 - 📦 **Inventario personal**: guarda los ingredientes que has recolectado
 - 🧪 **Simulador de cocina**: prueba qué recetas puedes hacer sin consumir ingredientes
 - ✅ **Seguimiento de recetas**: marca las que ya has cocinado
@@ -74,7 +75,7 @@ El proyecto está inspirado en la rica gastronomía de Hyrule, donde cada ingred
 | Tecnología | Uso |
 |------------|-----|
 | **HTML5** | Estructura semántica de las páginas |
-| **CSS3** | Estilos, diseño responsivo y animaciones |
+| **CSS3** | Estilos y diseño responsivo |
 | **JavaScript / jQuery** | Interactividad y peticiones asíncronas |
 | **PHP 8.x** | Lógica del servidor y gestión de sesiones |
 | **MySQL** | Almacenamiento de recetas, ingredientes y usuarios |
@@ -93,11 +94,12 @@ La base de datos está diseñada para reflejar las relaciones del juego:
 ├── 📄 ingredientes         (82 ingredientes con efectos y localizaciones)
 ├── 📄 efectos              (12 tipos: Gélido, Recio, Vivaz, etc.)
 ├── 📄 localizaciones       (20 regiones de Hyrule)
-├── 📄 usuarios             (registro y autenticación)
-├── 📄 inventarios          (relación usuario - ingrediente)
 ├── 📄 recetas_ingredientes (qué ingredientes necesita cada receta)
 ├── 📄 recetas_efectos      (qué efecto produce cada receta)
 └── 📄 ingredientes_localizaciones (dónde encontrar cada ingrediente)
+// pendiente de implementar
+├── 📄 usuarios             (registro y autenticación)
+└── 📄 inventarios          (relación usuario - ingrediente)
 ```
 
 ### Datos incluidos
@@ -161,23 +163,20 @@ La base de datos está diseñada para reflejar las relaciones del juego:
 ### Explorar ingredientes
 1. Ve a la sección "Ingredientes"
 2. Busca por nombre o filtra por región
-3. Haz clic en cualquier ingrediente para ver dónde encontrarlo
+3. Haz clic en cualquier ingrediente para ver su información
 
-### Gestionar tu inventario (requiere registro)
-1. Regístrate con un correo y contraseña
-2. Desde tu perfil, añade los ingredientes que tienes
-3. Usa "Mis recetas posibles" para ver qué puedes cocinar
+### Consultar efectos y localizaciones
+1. En la sección "efectos" puedes consultar qué hace cada uno
+2. En la sección "localizaciones" tienes una vista detallada de cada una, filtradas por región
 
 ---
 
 ## 🔮 Próximas mejoras
 
-- [ ] Implementar el sistema de **variantes de recetas por efecto** (ya diseñado, pendiente de integración)
+- [ ] Implementar el sistema de **variantes de recetas por efecto**
 - [ ] Añadir **mapa interactivo** con localizaciones de ingredientes
-- [ ] Permitir **valoraciones y comentarios** de usuarios
-- [ ] Crear **sistema de retos semanales** ("Cocina 3 recetas con efecto Recio")
+- [ ] Permitir **tener un inventario personalizado** para los usuarios
 - [ ] Soporte para **múltiples idiomas** (español/inglés)
-- [ ] **API pública** para que otras aplicaciones accedan a los datos
 
 ---
 
@@ -217,4 +216,4 @@ Este proyecto es de código abierto bajo la licencia **CC BY-NC-SA**.
 
 ---
 
-*"It's dangerous to go alone! Take this — and a good meal."* 🗡️🍎
+*"It's dangerous to go alone! Take this apple."* 🗡️🍎
